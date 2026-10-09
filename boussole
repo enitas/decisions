@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Boussole Décisionnelle v11.1 — Suite Cognitive & Neuro-Inclusive</title>
+    <title>Boussole Décisionnelle v11.4 — Suite Cognitive & Souveraine</title>
     <!-- Optimisation PWA / Écran d'accueil mobile -->
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -276,13 +276,6 @@
             text-align: center;
         }
 
-        .metric-value {
-            font-size: 1.15rem;
-            font-weight: bold;
-            margin-top: 4px;
-            color: var(--accent);
-        }
-
         .insight-item {
             padding: 12px 16px;
             margin-bottom: 12px;
@@ -359,6 +352,30 @@
         .badge-ado { background: rgba(16, 185, 129, 0.2); color: var(--success); }
         .badge-audhd { background: rgba(20, 184, 166, 0.2); color: var(--teal); }
         .badge-ifs { background: rgba(251, 113, 133, 0.2); color: var(--rose); }
+
+        /* Style Animation Box Breathing */
+        .breath-circle-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 180px;
+            margin: 20px 0;
+        }
+        .breath-circle {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: rgba(56, 189, 248, 0.15);
+            border: 2px solid var(--accent);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            font-size: 0.85rem;
+            font-weight: bold;
+            color: var(--accent);
+            transition: transform 4s ease-in-out, background 4s ease-in-out;
+        }
     </style>
 </head>
 <body>
@@ -366,7 +383,7 @@
 <div class="container">
 
     <div class="top-bar">
-        <div class="brand">🧭 BOUSSOLE DÉCISIONNELLE v11.1</div>
+        <div class="brand">🧭 BOUSSOLE DÉCISIONNELLE v11.4</div>
         <div class="controls">
             <button class="secondary" style="padding: 5px 10px; font-size: 0.75rem;" onclick="toggleDysFont()" id="dys-font-btn">Police Dys</button>
             <button class="secondary" style="padding: 5px 10px; font-size: 0.75rem;" onclick="toggleLowStim()" id="low-stim-btn">Mode Épuré</button>
@@ -375,8 +392,8 @@
 
     <!-- VUE 0 : ACCUEIL ET SÉLECTION DU PROTOCOLE -->
     <div class="view active" id="view-home">
-        <h1>Méta-Diagnostic & Suite Cognitive (DSM-5-TR / RDoC / ACT / IFS)</h1>
-        <div class="subtitle">Outils souverains de discernement, de décharge mentale et de régulation pour profils neurodivergents et situations de crise.</div>
+        <h1>Méta-Diagnostic & Suite Souveraine (DSM-5-TR / RDoC / ACT / IFS)</h1>
+        <div class="subtitle">Outils de discernement, de décharge mentale, de régulation somatique et de sécurité pour profils neurodivergents.</div>
 
         <div class="mode-grid">
             <div class="mode-card" style="border-color: rgba(244, 63, 94, 0.4);" onclick="startProtocol('flash')">
@@ -399,15 +416,19 @@
                 <h3>🌪️ Décharge Cognitive (Brain Dump) <span class="badge badge-tdah">Libre</span></h3>
                 <p>Bloc-notes souverain pour vider tout le bruit mental de votre tête et décharger votre mémoire de travail avant d'agir.</p>
             </div>
+            <div class="mode-card" style="border-color: rgba(16, 185, 129, 0.4);" onclick="openBreathingView()">
+                <h3>🫁 Régulation Somatique (Box Breathing) <span class="badge badge-ado">Apaisement</span></h3>
+                <p>Exercice visuel guidé de cohérence et de respiration (4-4-4-4) pour abaisser l'hyper-activation sympathique.</p>
+            </div>
             <div class="mode-card" style="border-color: rgba(245, 158, 11, 0.4);" onclick="openTimerView()">
-                <h3>⏳ Minuteur de Décantation (72h) <span class="badge badge-psy">Sécurité</span></h3>
-                <p>Verrouillage temporaire de décantation pour les décisions à forte impulsion dopaminergique ou hypomaniaque.</p>
+                <h3>⏳ Minuteur de Décantation (24h-72h) <span class="badge badge-psy">Notifications</span></h3>
+                <p>Verrouillage temporaire modulable avec alerte sonore et notification native à l'expiration.</p>
             </div>
             <div class="mode-card" onclick="startProtocol('parent')">
                 <h3>👨‍👩‍👧 Espace Parent & Éducateur <span class="badge badge-psy">Décodeur</span></h3>
                 <p>Grille d'observation comportementale pour décoder le shutdown, la surcharge sensorielle TSA/TDAH ou la dérégulation chez l'enfant.</p>
             </div>
-            <div class="mode-card" style="border-color: rgba(20, 184, 166, 0.4);" onclick="switchView('view-resources')">
+            <div class="mode-card" style="grid-column: span 2; border-color: rgba(20, 184, 166, 0.4);" onclick="switchView('view-resources')">
                 <h3>📚 Hub de Ressources & Auto-Évaluations <span class="badge badge-teal">Répertoire</span></h3>
                 <p>Accès direct aux liens et téléchargements des échelles cliniques validées (ASRS, PHQ-9, AQ, GAD-7, ISI, etc.).</p>
             </div>
@@ -415,6 +436,29 @@
 
         <div class="btn-group">
             <button class="secondary" onclick="openHistory()">Consulter le Coffre-Fort Local (Vault)</button>
+        </div>
+    </div>
+
+    <!-- VUE : RÉGULATION SOMATIQUE (BOX BREATHING) -->
+    <div class="view" id="view-breathing">
+        <h1>Régulation Somatique & Cohérence (Box Breathing)</h1>
+        <div class="subtitle">Suivez le rythme du cercle pour réguler votre système nerveux autonome avant de prendre une décision.</div>
+
+        <div class="diagnostic-card" style="text-align: center; padding: 20px;">
+            <div id="breath-status" style="font-size: 1.1rem; font-weight: bold; color: var(--accent); margin-bottom: 10px;">Cliquez sur Démarrer pour lancer l'exercice</div>
+            
+            <div class="breath-circle-container">
+                <div class="breath-circle" id="breath-circle">Prêt</div>
+            </div>
+
+            <div id="breath-controls" style="margin-top: 15px;">
+                <button onclick="startBreathingExercise()">Démarrer la respiration</button>
+                <button class="danger" onclick="stopBreathingExercise()" style="margin-left: 10px;">Arrêter</button>
+            </div>
+        </div>
+
+        <div class="btn-group">
+            <button class="secondary" onclick="returnHome()">Retour à l'accueil</button>
         </div>
     </div>
 
@@ -434,25 +478,28 @@
         </div>
     </div>
 
-    <!-- VUE : MINUTEUR DE DÉCANTATION 72H -->
+    <!-- VUE : MINUTEUR DE DÉCANTATION AVEC NOTIFICATIONS -->
     <div class="view" id="view-timer">
-        <h1>Minuteur de Décantation (Règle des 72h)</h1>
-        <div class="subtitle">Suspension volontaire de signature ou d'engagement impulsif pour protéger votre système nerveux.</div>
+        <h1>Minuteur de Décantation & Notifications</h1>
+        <div class="subtitle">Suspension volontaire d'engagement impulsif. Une notification et un signal sonore retentiront à la fin du sas.</div>
 
         <div class="diagnostic-card" style="text-align: center; padding: 30px;">
             <div id="timer-display" style="font-size: 2.2rem; font-weight: bold; color: var(--amber); margin-bottom: 15px;">00h : 00m : 00s</div>
             <div id="timer-status" style="font-size: 0.95rem; color: var(--text-muted); margin-bottom: 20px;">Aucun verrouillage de décantation actif.</div>
+            
+            <div style="margin-bottom: 20px; max-width: 320px; margin-left: auto; margin-right: auto; text-align: left;">
+                <label for="timer-duration-select">Choisir la durée du sas :</label>
+                <select id="timer-duration-select">
+                    <option value="24">24 heures (Sas court)</option>
+                    <option value="48">48 heures (Sas intermédiaire)</option>
+                    <option value="72" selected>72 heures (Sas standard anti-pulsion)</option>
+                </select>
+            </div>
+
             <div id="timer-controls">
-                <button onclick="startDecantationTimer()">Lancer un sas de décantation de 72h</button>
+                <button onclick="startDecantationTimer()">Lancer le sas & Activer l'alerte</button>
                 <button class="danger" onclick="cancelDecantationTimer()" style="margin-left: 10px;">Réinitialiser</button>
             </div>
-        </div>
-
-        <div class="diagnostic-card">
-            <h3>Pourquoi ce sas ?</h3>
-            <p style="font-size: 0.88rem; line-height: 1.5; color: var(--text-muted); margin: 0;">
-                En cas d'hyperfocus monotropique, d'impulsion TDAH ou de tension de type PDA, le cortex préfrontal a besoin d'un délai biologique minimum pour que l'intensité chimique retombe avant toute décision irréversible.
-            </p>
         </div>
 
         <div class="btn-group">
@@ -720,7 +767,7 @@
             </div>
             <div class="metric-box">
                 <div>Risque Acting-Out</div>
-                <div class="metric-value" id="res-acting">--</div>
+                <div class="metric-value" id="res-acting" style="font-size: 0.95rem; font-weight: bold; color: var(--warning); margin-top: 4px;">--</div>
             </div>
         </div>
 
@@ -759,9 +806,15 @@
     <!-- VUE 3 : COFFRE-FORT HISTORIQUE (VAULT) -->
     <div class="view" id="view-history">
         <h1>Coffre-Fort Local (Sovereign Vault)</h1>
-        <div class="subtitle">Historique de vos diagnostics stockés exclusivement en local (`localStorage`). Aucune donnée ne quitte votre appareil.</div>
+        <div class="subtitle">Historique de vos diagnostics stockés exclusivement en local (`localStorage`). Sauvegardez ou restaurez vos données.</div>
         
-        <div id="history-list" style="margin-bottom: 20px; max-height: 400px; overflow-y: auto;">
+        <div style="display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap;">
+            <button class="secondary" onclick="exportVault()">Exporter tout le Coffre-Fort (JSON)</button>
+            <button class="secondary" onclick="document.getElementById('import-file').click()">Importer un Coffre-Fort</button>
+            <input type="file" id="import-file" accept=".json" style="display: none;" onchange="importVault(event)">
+        </div>
+
+        <div id="history-list" style="margin-bottom: 20px; max-height: 380px; overflow-y: auto;">
             <!-- Injecté dynamiquement -->
         </div>
 
@@ -778,11 +831,21 @@
     let currentStep = 1;
     let totalSteps = 7;
     let currentData = {};
+    let breathingTimer = null;
+    let timerTimeout = null;
 
     function switchView(viewId) {
         document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
         document.getElementById(viewId).classList.add('active');
         window.scrollTo({top: 0, behavior: 'smooth'});
+        
+        if (viewId !== 'view-breathing') stopBreathingExercise();
+        if (viewId !== 'view-timer') {
+            if (timerTimeout) {
+                clearTimeout(timerTimeout);
+                timerTimeout = null;
+            }
+        }
     }
 
     function toggleLowStim() {
@@ -817,31 +880,128 @@
         URL.revokeObjectURL(url);
     }
 
-    // Gestion du Minuteur de Décantation 72h
+    // Module Box Breathing (Régulation Somatique)
+    function openBreathingView() {
+        switchView('view-breathing');
+        resetBreathingUI();
+    }
+
+    function resetBreathingUI() {
+        document.getElementById('breath-status').innerText = "Cliquez sur Démarrer pour lancer l'exercice";
+        document.getElementById('breath-circle').innerText = "Prêt";
+        document.getElementById('breath-circle').style.transform = "scale(1)";
+    }
+
+    function startBreathingExercise() {
+        if (breathingTimer) clearInterval(breathingTimer);
+        const statusEl = document.getElementById('breath-status');
+        const circleEl = document.getElementById('breath-circle');
+        
+        let step = 0;
+        const cycle = () => {
+            if (step === 0) {
+                statusEl.innerText = "1. Inspirez profondément par le nez (4 secondes)";
+                circleEl.innerText = "Inspirez";
+                circleEl.style.transform = "scale(1.35)";
+                circleEl.style.borderColor = "var(--accent)";
+            } else if (step === 1) {
+                statusEl.innerText = "2. Retenez votre souffle (4 secondes)";
+                circleEl.innerText = "Retenez";
+                circleEl.style.borderColor = "var(--amber)";
+            } else if (step === 2) {
+                statusEl.innerText = "3. Expirez lentement par la bouche (4 secondes)";
+                circleEl.innerText = "Expirez";
+                circleEl.style.transform = "scale(1)";
+                circleEl.style.borderColor = "var(--teal)";
+            } else if (step === 3) {
+                statusEl.innerText = "4. Poumon vide, attendez (4 secondes)";
+                circleEl.innerText = "Attendez";
+                circleEl.style.borderColor = "var(--text-muted)";
+            }
+            step = (step + 1) % 4;
+        };
+
+        cycle();
+        breathingTimer = setInterval(cycle, 4000);
+    }
+
+    function stopBreathingExercise() {
+        if (breathingTimer) {
+            clearInterval(breathingTimer);
+            breathingTimer = null;
+        }
+        resetBreathingUI();
+    }
+
+    // Gestion du Minuteur de Décantation avec Audio & Notifications
     function openTimerView() {
         switchView('view-timer');
+        if ("Notification" in window && Notification.permission !== "granted") {
+            Notification.requestPermission();
+        }
         updateTimerDisplay();
     }
 
+    function playSoftBeep() {
+        try {
+            const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            const oscillator = audioCtx.createOscillator();
+            const gainNode = audioCtx.createGain();
+            oscillator.type = 'sine';
+            oscillator.frequency.setValueAtTime(523.25, audioCtx.currentTime); // C5
+            gainNode.gain.setValueAtTime(0.15, audioCtx.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 1.5);
+            oscillator.connect(gainNode);
+            gainNode.connect(audioCtx.destination);
+            oscillator.start();
+            oscillator.stop(audioCtx.currentTime + 1.5);
+        } catch(e) { console.log(e); }
+    }
+
+    function triggerNativeNotification() {
+        playSoftBeep();
+        if ("Notification" in window && Notification.permission === "granted") {
+            new Notification("🧭 Boussole Décisionnelle", {
+                body: "Le sas de décantation est expiré. Votre système nerveux a bénéficié du délai nécessaire. Vous pouvez réévaluer votre choix.",
+            });
+        }
+    }
+
     function startDecantationTimer() {
-        const targetTime = new Date().getTime() + (72 * 60 * 60 * 1000);
+        if ("Notification" in window && Notification.permission !== "granted") {
+            Notification.requestPermission();
+        }
+        const hoursSelect = document.getElementById('timer-duration-select').value;
+        const hours = parseInt(hoursSelect, 10) || 72;
+        const targetTime = new Date().getTime() + (hours * 60 * 60 * 1000);
         localStorage.setItem('depth_compass_timer', targetTime);
+        localStorage.removeItem('depth_compass_notified');
         updateTimerDisplay();
     }
 
     function cancelDecantationTimer() {
+        if (timerTimeout) {
+            clearTimeout(timerTimeout);
+            timerTimeout = null;
+        }
         localStorage.removeItem('depth_compass_timer');
+        localStorage.removeItem('depth_compass_notified');
         updateTimerDisplay();
     }
 
     function updateTimerDisplay() {
+        if (timerTimeout) {
+            clearTimeout(timerTimeout);
+            timerTimeout = null;
+        }
+
         const target = localStorage.getItem('depth_compass_timer');
         const display = document.getElementById('timer-display');
         const status = document.getElementById('timer-status');
 
         if (!target) {
-            display.innerText = "00h : 00m : 00s";
-            status.innerText = "Aucun verrouillage de décantation actif.";
+            if (display) display.innerText = "00h : 00m : 00s";
+            if (status) status.innerText = "Aucun verrouillage de décantation actif.";
             return;
         }
 
@@ -849,23 +1009,70 @@
         const distance = target - now;
 
         if (distance < 0) {
-            display.innerText = "TERMINÉ (72h écoulées)";
-            status.innerText = "Le sas de décantation est expiré. Vous pouvez réévaluer la situation.";
+            if (display) display.innerText = "TERMINÉ (Sas écoulé)";
+            if (status) status.innerText = "Le sas de décantation est expiré. Vous pouvez réévaluer la situation.";
+            if (!localStorage.getItem('depth_compass_notified')) {
+                localStorage.setItem('depth_compass_notified', 'true');
+                triggerNativeNotification();
+            }
             localStorage.removeItem('depth_compass_timer');
         } else {
-            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const hours = Math.floor(distance / (1000 * 60 * 60));
             const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
             const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-            display.innerText = `${String(hours).padStart(2, '0')}h : ${String(minutes).padStart(2, '0')}m : ${String(seconds).padStart(2, '0')}s`;
-            status.innerText = "⏳ Sas de décantation en cours. Engagement et signatures proscrits.";
-            setTimeout(updateTimerDisplay, 1000);
+            if (display) display.innerText = `${String(hours).padStart(2, '0')}h : ${String(minutes).padStart(2, '0')}m : ${String(seconds).padStart(2, '0')}s`;
+            if (status) status.innerText = "⏳ Sas de décantation en cours. Engagement et signatures proscrits.";
+            timerTimeout = setTimeout(updateTimerDisplay, 1000);
         }
+    }
+
+    // Sauvegarde & Restauration du Coffre-Fort (Vault Backup / Restore)
+    function exportVault() {
+        const data = localStorage.getItem('depth_compass_vault') || '[]';
+        const blob = new Blob([data], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'coffre-fort-boussole-backup.json';
+        a.click();
+        URL.revokeObjectURL(url);
+    }
+
+    function importVault(event) {
+        const file = event.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            try {
+                const parsed = JSON.parse(e.target.result);
+                if (Array.isArray(parsed)) {
+                    localStorage.setItem('depth_compass_vault', JSON.stringify(parsed));
+                    alert("Coffre-fort restauré avec succès !");
+                    openHistory();
+                } else {
+                    alert("Format de fichier JSON invalide.");
+                }
+            } catch(err) {
+                alert("Erreur lors de la lecture du fichier.");
+            }
+            event.target.value = ''; // Reset file input
+        };
+        reader.readAsText(file);
     }
 
     function startProtocol(type) {
         currentProtocol = type;
         currentStep = 1;
         currentData = { protocol: type };
+        
+        // Réinitialise les boutons de l'étape 2 (au cas où ils auraient été modifiés par le mode Flash)
+        const btnGroup = document.querySelector('#step-2 .btn-group');
+        if (btnGroup) {
+            btnGroup.innerHTML = `
+                <button class="secondary" onclick="prevWizardStep(2)">Précédent</button>
+                <button onclick="nextWizardStep(2)">Suivant</button>
+            `;
+        }
         
         if (type === 'flash') {
             totalSteps = 3;
@@ -973,6 +1180,15 @@
         updateProgress();
     }
 
+    function makeVisualGauge(percent, colorHex) {
+        return `
+            <div style="font-size: 1.15rem; font-weight: bold; margin-top: 4px; color: ${colorHex};">${percent}%</div>
+            <div style="background: var(--border); border-radius: 4px; height: 6px; width: 100%; margin-top: 6px; overflow: hidden;">
+                <div style="background: ${colorHex}; width: ${percent}%; height: 100%; border-radius: 4px;"></div>
+            </div>
+        `;
+    }
+
     function runCompleteAnalysis() {
         if (currentProtocol !== 'flash') {
             currentData.reset = document.getElementById('q-reset').value.trim();
@@ -1019,7 +1235,7 @@
             integrity = 15;
             nervous = 20;
             setRiskLevel("CRITIQUE (Urgence Médicale)", 4);
-            insights += `<div class="insight-item insight-warning">🚨 <strong>ALERTE SENTINELLE CLINIQUE :</strong> Épuisement allostatique lourd ou détresse profonde. Cet outil ne remplace pas un suivi médical/psychiatrique. En cas de détresse aiguë, contactez immédiatement le 15 (SAMU) ou le 112.</div>`;
+            insights += `<div class="insight-item insight-warning">🚨 <strong>ALERTE SENTINELLE CLINIQUE :</strong> Épuisement allostatique lourd ou détresse profonde. En cas de détresse aiguë, contactez immédiatement le 15 (SAMU) ou le 112.</div>`;
         }
 
         if (currentData.ifsPart === 'firefighter') {
@@ -1125,9 +1341,9 @@
         history.push(currentData);
         localStorage.setItem('depth_compass_vault', JSON.stringify(history));
 
-        document.getElementById('res-integrity').innerText = `${integrity}%`;
-        document.getElementById('res-nervous').innerText = `${nervous}%`;
-        document.getElementById('res-loyalty').innerText = `${loyalty}%`;
+        document.getElementById('res-integrity').innerHTML = makeVisualGauge(integrity, '#38bdf8');
+        document.getElementById('res-nervous').innerHTML = makeVisualGauge(nervous, '#10b981');
+        document.getElementById('res-loyalty').innerHTML = makeVisualGauge(loyalty, '#c084fc');
         document.getElementById('res-acting').innerText = actingRisk;
         document.getElementById('res-profile-text').innerHTML = profile;
         document.getElementById('res-insights').innerHTML = insights;
@@ -1165,7 +1381,7 @@
                 listEl.innerHTML += `
                     <div class="history-item">
                         <div>
-                            <strong>${item.decision ? item.decision.substring(0, 45) : 'Bilan'}&hellip;${protoTag}</strong><br>
+                            <strong>${item.decision ? item.decision.substring(0, 40) : 'Bilan'}&hellip;${protoTag}</strong><br>
                             <small style="color: var(--text-muted);">${new Date(item.results.date).toLocaleDateString()} — Intégrité : ${item.results.integrity}% — Risque : ${item.results.actingRisk}</small>
                         </div>
                         <button class="secondary" style="padding: 6px 12px; font-size: 0.8rem;" onclick="loadHistoryItem(${index})">Revoir</button>
@@ -1183,9 +1399,9 @@
 
         currentData = item;
 
-        document.getElementById('res-integrity').innerText = `${item.results.integrity}%`;
-        document.getElementById('res-nervous').innerText = `${item.results.nervous}%`;
-        document.getElementById('res-loyalty').innerText = `${item.results.loyalty}%`;
+        document.getElementById('res-integrity').innerHTML = makeVisualGauge(item.results.integrity, '#38bdf8');
+        document.getElementById('res-nervous').innerHTML = makeVisualGauge(item.results.nervous, '#10b981');
+        document.getElementById('res-loyalty').innerHTML = makeVisualGauge(item.results.loyalty, '#c084fc');
         document.getElementById('res-acting').innerText = item.results.actingRisk;
         document.getElementById('res-profile-text').innerHTML = item.results.profile;
         document.getElementById('res-insights').innerHTML = item.results.insights;
@@ -1228,7 +1444,7 @@
     }
 
     function downloadMarkdown() {
-        const md = `# BILAN CLINIQUE DE DISCERNEMENT DÉCISIONNEL (v11.1)
+        const md = `# BILAN CLINIQUE DE DISCERNEMENT DÉCISIONNEL (v11.4)
 Date : ${new Date().toLocaleDateString()}
 Protocole : ${currentData.protocol || 'Standard'}
 
