@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Boussole Décisionnelle v7.0 — Neurosciences & Méta-Diagnostic Clinique</title>
+    <title>Boussole Décisionnelle v9.0 — Neurosciences, IFS & Méta-Diagnostic</title>
     <style>
         :root {
             --bg-color: #030508;
@@ -19,6 +19,7 @@
             --amber: #f59e0b;
             --teal: #14b8a6;
             --indigo: #818cf8;
+            --rose: #fb7185;
             --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
         }
 
@@ -36,6 +37,7 @@
             --amber: #a3a3a3;
             --teal: #a3a3a3;
             --indigo: #a3a3a3;
+            --rose: #a3a3a3;
         }
 
         body.low-stim * {
@@ -307,6 +309,12 @@
             border-left: 4px solid var(--indigo);
         }
 
+        .insight-rose {
+            color: var(--rose);
+            background: rgba(251, 113, 133, 0.1);
+            border-left: 4px solid var(--rose);
+        }
+
         .progress {
             font-size: 0.75rem;
             color: var(--text-muted);
@@ -360,10 +368,12 @@
             letter-spacing: 0.5px;
             margin-left: 6px;
         }
+        .badge-flash { background: rgba(244, 63, 94, 0.2); color: var(--warning); }
         .badge-tdah { background: rgba(56, 189, 248, 0.2); color: var(--accent); }
         .badge-psy { background: rgba(192, 132, 252, 0.2); color: var(--purple); }
         .badge-ado { background: rgba(16, 185, 129, 0.2); color: var(--success); }
         .badge-audhd { background: rgba(20, 184, 166, 0.2); color: var(--teal); }
+        .badge-ifs { background: rgba(251, 113, 133, 0.2); color: var(--rose); }
     </style>
 </head>
 <body>
@@ -371,7 +381,7 @@
 <div class="container">
 
     <div class="top-bar">
-        <div class="brand">🧭 BOUSSOLE DÉCISIONNELLE v7.0</div>
+        <div class="brand">🧭 BOUSSOLE DÉCISIONNELLE v9.0</div>
         <div class="controls">
             <button class="secondary" style="padding: 5px 12px; font-size: 0.78rem;" onclick="toggleLowStim()" id="low-stim-btn">Mode Épuré (Anti-Surcharge)</button>
         </div>
@@ -379,10 +389,14 @@
 
     <!-- VUE 0 : ACCUEIL ET SÉLECTION DU PROTOCOLE -->
     <div class="view active" id="view-home">
-        <h1>Méta-Diagnostic & Discernement Clinique (DSM-5-TR / CIM-11 / Neurosciences)</h1>
-        <div class="subtitle">Analyse multidimensionnelle basée sur le codage prédictif, la théorie polyvagale, le monotropisme attentionnel, la réactivité d'autonomie (PDA) et la mentalisation.</div>
+        <h1>Méta-Diagnostic & Discernement Clinique (DSM-5-TR / RDoC / IFS / Polyvagal)</h1>
+        <div class="subtitle">Cadre clinique expert : Modèle des Systèmes Familiaux Intérieurs (IFS), Récompense-Effort (RDoC NIMH), Double Empathie et Métabolisme décisionnel.</div>
 
         <div class="mode-grid">
+            <div class="mode-card" style="border-color: rgba(244, 63, 94, 0.4);" onclick="startProtocol('flash')">
+                <h3>⚡ Mode Flash / Crise Aiguë <span class="badge badge-flash">3 étapes (2 min)</span></h3>
+                <p>Évaluation ultrarapide pour les états d'urgence, de saturation intense, de panique ou d'impulsion de rupture immédiate.</p>
+            </div>
             <div class="mode-card" onclick="startProtocol('standard')">
                 <h3>Bifurcation & Choix Stratégique</h3>
                 <p>Analyse approfondie des choix majeurs (carrière, vie affective, exil) confrontés au deuil et aux loyautés invisibles.</p>
@@ -391,9 +405,9 @@
                 <h3>Neurodivergence, AuDHD & Cognition <span class="badge badge-audhd">Avancé</span></h3>
                 <p>Évaluation du biais dopaminergique, du tunnel monotropique, du masking, de la réactivité au rejet (RSD), du PDA et du sommeil.</p>
             </div>
-            <div class="mode-card" onclick="startProtocol('crisis')">
-                <h3>Crise, Acting-Out & Urgence</h3>
-                <p>Évaluation des impulsions de rupture, des pulsions de fuite en avant et de la réactivité sous stress neurobiologique intense.</p>
+            <div class="mode-card" onclick="startProtocol('ifs')">
+                <h3>Cartographie IFS (Systèmes Intérieurs) <span class="badge badge-rose">Nouveau</span></h3>
+                <p>Définir quelle « Partie » prend la décision : Manager (Perfectionnisme), Pompier (Impulsion/Anesthésie) ou le Soi central.</p>
             </div>
             <div class="mode-card" onclick="startProtocol('sabotage')">
                 <h3>Auto-Sabotage & Masochisme Moral</h3>
@@ -402,10 +416,6 @@
             <div class="mode-card" onclick="startProtocol('ado')">
                 <h3>🧒 Parcours Adolescent (13-17 ans) <span class="badge badge-ado">Adapté</span></h3>
                 <p>Questionnaire visuel déstigmatisé (météo du corps, pression des pairs, choix sous tension) avec enregistrement local discret.</p>
-            </div>
-            <div class="mode-card" onclick="startProtocol('parent')">
-                <h3>👨‍👩‍👧 Espace Parent & Éducateur <span class="badge badge-psy">Décodeur</span></h3>
-                <p>Grille d'observation comportementale pour décoder le shutdown, la surcharge sensorielle TSA/TDAH ou la dérégulation chez l'enfant.</p>
             </div>
         </div>
 
@@ -443,10 +453,10 @@
             </div>
         </div>
 
-        <!-- ÉTAPE 2 : MODULE NEURO-PSYCHIATRIQUE AVANCÉ (TDAH / TSA / AuDHD / MONOTROPISME / PDA) -->
+        <!-- ÉTAPE 2 : MODULE NEURO-PSYCHIATRIQUE & RDOC NIMH -->
         <div class="step" id="step-2">
-            <h1>2. Profilage Neurobiologique & Modèles Attentionnels</h1>
-            <div class="subtitle">Analyse du tunnel attentionnel (Monotropisme), du besoin d'autonomie (PDA) et des circuits dopaminergiques.</div>
+            <h1>2. Profilage Neurobiologique & Balance Effort/Récompense (RDoC)</h1>
+            <div class="subtitle">Analyse des circuits dopaminergiques, du calcul effort/gain (NIMH), du monotropisme et du PDA.</div>
             
             <label for="q-stimulation">Cette décision répond-elle à un besoin de stimulation, d'évasion ou de déblocage ?</label>
             <select id="q-stimulation">
@@ -456,9 +466,16 @@
                 <option value="audhd_burnout">Burnout Autistique (AuDHD) : besoin frénétique de tout couper pour stopper l'épuisement par masquage</option>
             </select>
 
+            <label for="q-rdoc-cost">RDoC NIMH : Comment votre cerveau évalue-t-il l'effort requis par rapport à la récompense ?</label>
+            <select id="q-rdoc-cost">
+                <option value="balanced">Évaluation réaliste : la récompense vaut l'effort requis sur la durée</option>
+                <option value="underestimated">Biais d'enthousiasme : sous-estimation massive des efforts et de la pénibilité à venir</option>
+                <option value="anhedonia">Anhédonie / Épuisement : sensation que tout effort exige une énergie surhumaine et insurmontable</option>
+            </select>
+
             <label for="q-pda">Cette décision est-elle déclenchée par une sensation d'injonction, d'obligation ou de perte de contrôle (PDA) ?</label>
             <select id="q-pda">
-                <option value="no">Non, le choix est initié librement sans sentiment de contrainte forcée</option>
+                <option value="no">Non, le choix est initié freely sans sentiment de contrainte forcée</option>
                 <option value="pda_reactive">Oui, c'est un rejet instinctif d'une attente, d'une règle ou d'une demande perçue comme intolérable</option>
             </select>
 
@@ -488,13 +505,21 @@
             </div>
         </div>
 
-        <!-- ÉTAPE 3 : L'OMBRE & LE MASOCHISME MORAL -->
+        <!-- ÉTAPE 3 : MODÈLE IFS & L'OMBRE -->
         <div class="step" id="step-3">
-            <h1>3. L'Ombre & la Fonction Cachée de l'Acte</h1>
-            <div class="subtitle">Mettre en lumière ce que l'ego tente de fuir, de neutraliser ou de punir inconsciemment.</div>
+            <h1>3. Cartographie IFS (Internal Family Systems) & Fonction de l'Acte</h1>
+            <div class="subtitle">Identifier quelle « Partie » de votre personnalité pilote la décision (Dr Richard Schwartz).</div>
             
+            <label for="q-ifs-part">Quelle Partie de votre système intérieur semble prendre les commandes ?</label>
+            <select id="q-ifs-part">
+                <option value="self">Le Soi Central (Self) : Calme, clarté, curiosité, compassion, confiance</option>
+                <option value="manager">Un Manager : Partie perfectionniste, contrôlante, anticipatrice pour éviter le chaos</option>
+                <option value="firefighter">Un Pompier : Partie impulsive qui veut éteindre d'urgence une douleur par la fuite ou la rupture</option>
+                <option value="exile">Un Exilé : Partie vulnérable, effrayée, abandonnée ou blessée qui crie au secours</option>
+            </select>
+
             <label for="q-shadow">Quel besoin secret, quelle honte, culpabilité ou évitement cet acte cherche-t-il à apaiser ?</label>
-            <textarea id="q-shadow" rows="4" placeholder="Ex: C'est une façon de me punir d'avoir échoué, de devancer un rejet imminent en sabotant la situation, ou d'échapper à une honte..."></textarea>
+            <textarea id="q-shadow" rows="3" placeholder="Ex: C'est une façon de me punir d'avoir échoué, de devancer un rejet imminent en sabotant la situation..."></textarea>
             
             <div class="btn-group">
                 <button class="secondary" onclick="prevWizardStep(3)">Précédent</button>
@@ -502,13 +527,19 @@
             </div>
         </div>
 
-        <!-- ÉTAPE 4 : DYNAMIQUE SYSTÉMIQUE & LOYAUTÉS INVISIBLES -->
+        <!-- ÉTAPE 4 : SYSTÉMIQUE & DOUBLE EMPATHIE -->
         <div class="step" id="step-4">
-            <h1>4. Le Système & les Loyautés Invisibles</h1>
-            <div class="subtitle">L'influence inconsciente des contrats familiaux, transgénérationnels et sociaux.</div>
+            <h1>4. Systémique & Problème de la Double Empathie</h1>
+            <div class="subtitle">L'influence des loyautés invisibles et le décodage des décalages de neurotypes (Damian Milton).</div>
             
+            <label for="q-double-empathy">Ce conflit/choix provient-il d'un décalage de communication entre neurotypes différents ?</label>
+            <select id="q-double-empathy">
+                <option value="no">Non, le problème ne repose pas sur une mauvaise interprétation réciproque</option>
+                <option value="gap">Oui, malentendu bilatéral : mon intention directe est perçue comme de la rudesse ou mon besoin de retrait comme de l'indifférence</option>
+            </select>
+
             <label for="q-system">Si vous accomplissez cet acte, qui dans votre histoire familiale ou sociale auriez-vous l'impression de trahir ?</label>
-            <textarea id="q-system" rows="4" placeholder="Ex: Mes parents qui ont tout sacrifié pour moi, mon groupe d'origine qui réprouve la réussite individuelle..."></textarea>
+            <textarea id="q-system" rows="3" placeholder="Ex: Mes parents qui ont tout sacrifié pour moi, mon groupe d'origine qui réprouve la réussite..."></textarea>
             
             <div class="btn-group">
                 <button class="secondary" onclick="prevWizardStep(4)">Précédent</button>
@@ -525,7 +556,7 @@
             <textarea id="q-grief" rows="3" placeholder="Ex: Renoncer au confort de la certitude, faire le deuil de mon image idéale..."></textarea>
 
             <label for="q-jonas">Complexe de Jonas : En quoi accéder à votre pleine souveraineté vous effraie-t-il ?</label>
-            <textarea id="q-jonas" rows="3" placeholder="Ex: Si je réussis pleinement, je devrai assumer la responsabilité totale de ma vie sans pouvoir blâmer le contexte..."></textarea>
+            <textarea id="q-jonas" rows="3" placeholder="Ex: Si je réussis pleinement, je devrai assumer la responsabilité totale de ma vie..."></textarea>
 
             <div class="btn-group">
                 <button class="secondary" onclick="prevWizardStep(5)">Précédent</button>
@@ -533,10 +564,10 @@
             </div>
         </div>
 
-        <!-- ÉTAPE 6 : SOMATOGRAPHIE POLYVAGALE & CHARGE ALLOSTATIQUE -->
+        <!-- ÉTAPE 6 : SOMATOGRAPHIE POLYVAGALE & ÉNERGIE MÉTABOLIQUE -->
         <div class="step" id="step-6">
-            <h1>6. Réponse Somatique & Charge Allostatique</h1>
-            <div class="subtitle">Analyse neuro-somatique du système nerveux autonome et évaluation de la réserve métabolique.</div>
+            <h1>6. Réponse Somatique & Métabolisme Décisionnel</h1>
+            <div class="subtitle">Analyse neuro-somatique du système nerveux autonome et facteurs métaboliques.</div>
             
             <label for="q-somatics">Comment votre corps enregistre-t-il la projection viscérale de ce choix ?</label>
             <select id="q-somatics">
@@ -565,7 +596,7 @@
             <div class="subtitle">Élimination des coûts irrécupérables et de l'aliénation au regard d'autrui.</div>
             
             <label for="q-reset">Si vous étiez sur une île déserte, sans passé à justifier et sans témoin à impressionner, feriez-vous ce choix ?</label>
-            <textarea id="q-reset" rows="4" placeholder="Ex: Non, je réalise que je le fais pour prouver quelque شيء à mon entourage... ou Oui, c'est mon alignement profond..."></textarea>
+            <textarea id="q-reset" rows="4" placeholder="Ex: Non, je réalise que je le fais pour prouver quelque chose à mon entourage... ou Oui, c'est mon alignement profond..."></textarea>
 
             <div class="btn-group">
                 <button class="secondary" onclick="prevWizardStep(7)">Précédent</button>
@@ -600,7 +631,7 @@
         </div>
 
         <div class="diagnostic-card">
-            <h3>Synthèse Psychodynamique Globale</h3>
+            <h3>Synthèse Psychodynamique & IFS Globale</h3>
             <div id="res-profile-text" style="line-height: 1.6; font-size: 0.95rem; margin-bottom: 10px;"></div>
         </div>
 
@@ -651,6 +682,7 @@
 <script>
     let currentProtocol = 'standard';
     let currentStep = 1;
+    let totalSteps = 7;
     let currentData = {};
 
     function switchView(viewId) {
@@ -673,13 +705,16 @@
         currentStep = 1;
         currentData = { protocol: type };
         
-        if (type === 'ado') {
+        if (type === 'flash') {
+            totalSteps = 3;
+            document.getElementById('lbl-decision').innerText = "⚡ Urgence : Quelle est la décision brute que vous voulez prendre tout de suite ?";
+            document.getElementById('q-decision').placeholder = "Ex: Tout quitter maintenant / Répondre immédiatement par la colère / Partir...";
+        } else if (type === 'ado') {
+            totalSteps = 7;
             document.getElementById('lbl-decision').innerText = "Quel est le choix, la décision ou le problème qui te préoccupe ?";
             document.getElementById('q-decision').placeholder = "Ex: Arrêter les cours / M'embrouiller avec un pote / Quitter une activité...";
-        } else if (type === 'parent') {
-            document.getElementById('lbl-decision').innerText = "Quel est le comportement problématique observé chez l'enfant ?";
-            document.getElementById('q-decision').placeholder = "Ex: Crise de colère au retour de l'école / Isolement mutique / Refus des devoirs...";
         } else {
+            totalSteps = 7;
             document.getElementById('lbl-decision').innerText = "Quelle est la décision ou l'acte stratégique envisagé ?";
             document.getElementById('q-decision').placeholder = "Ex: Tout plaquer / Quitter cette relation / Lancer ce projet fou...";
         }
@@ -695,7 +730,7 @@
     }
 
     function updateProgress() {
-        document.getElementById('progress-indicator').innerText = `Étape ${currentStep} sur 7`;
+        document.getElementById('progress-indicator').innerText = `Étape ${currentStep} sur ${totalSteps}`;
     }
 
     function nextWizardStep(step) {
@@ -703,16 +738,27 @@
             currentData.decision = document.getElementById('q-decision').value.trim();
             currentData.urgency = document.getElementById('q-urgency').value;
             if (!currentData.decision) { alert("Veuillez saisir votre réponse."); return; }
+            
+            if (currentProtocol === 'flash') {
+                document.getElementById('step-1').classList.remove('active');
+                currentStep = 2;
+                document.getElementById('step-6').classList.add('active');
+                updateProgress();
+                return;
+            }
         } else if (step === 2) {
             currentData.stimulation = document.getElementById('q-stimulation').value;
+            currentData.rdocCost = document.getElementById('q-rdoc-cost').value;
             currentData.pda = document.getElementById('q-pda').value;
             currentData.monotropism = document.getElementById('q-monotropism').value;
             currentData.trigger = document.getElementById('q-trigger').value;
             currentData.mania = document.getElementById('q-mania').value;
         } else if (step === 3) {
+            currentData.ifsPart = document.getElementById('q-ifs-part').value;
             currentData.shadow = document.getElementById('q-shadow').value.trim();
             if (!currentData.shadow) { alert("Veuillez remplir cette section."); return; }
         } else if (step === 4) {
+            currentData.doubleEmpathy = document.getElementById('q-double-empathy').value;
             currentData.system = document.getElementById('q-system').value.trim();
             if (!currentData.system) { alert("Veuillez remplir cette section."); return; }
         } else if (step === 5) {
@@ -722,6 +768,19 @@
         } else if (step === 6) {
             currentData.somatics = document.getElementById('q-somatics').value;
             currentData.reserves = document.getElementById('q-reserves').value;
+            
+            if (currentProtocol === 'flash') {
+                document.getElementById('step-6').classList.remove('active');
+                currentStep = 3;
+                document.getElementById('step-2').classList.add('active');
+                updateProgress();
+                const btnGroup = document.querySelector('#step-2 .btn-group');
+                btnGroup.innerHTML = `
+                    <button class="secondary" onclick="prevWizardStep(2)">Précédent</button>
+                    <button onclick="runCompleteAnalysis()">LANCER L'ANALYSE FLASH D'URGENCE</button>
+                `;
+                return;
+            }
         }
 
         document.getElementById(`step-${currentStep}`).classList.remove('active');
@@ -731,6 +790,20 @@
     }
 
     function prevWizardStep(step) {
+        if (currentProtocol === 'flash') {
+            if (currentStep === 3) {
+                document.getElementById('step-2').classList.remove('active');
+                currentStep = 2;
+                document.getElementById('step-6').classList.add('active');
+            } else if (currentStep === 2) {
+                document.getElementById('step-6').classList.remove('active');
+                currentStep = 1;
+                document.getElementById('step-1').classList.add('active');
+            }
+            updateProgress();
+            return;
+        }
+
         document.getElementById(`step-${currentStep}`).classList.remove('active');
         currentStep--;
         document.getElementById(`step-${currentStep}`).classList.add('active');
@@ -738,8 +811,24 @@
     }
 
     function runCompleteAnalysis() {
-        currentData.reset = document.getElementById('q-reset').value.trim();
-        if (!currentData.reset) { alert("Veuillez répondre au test de la page blanche."); return; }
+        if (currentProtocol !== 'flash') {
+            currentData.reset = document.getElementById('q-reset').value.trim();
+            if (!currentData.reset) { alert("Veuillez répondre au test de la page blanche."); return; }
+        } else {
+            currentData.stimulation = document.getElementById('q-stimulation').value;
+            currentData.rdocCost = document.getElementById('q-rdoc-cost').value;
+            currentData.pda = document.getElementById('q-pda').value;
+            currentData.monotropism = document.getElementById('q-monotropism').value;
+            currentData.trigger = document.getElementById('q-trigger').value;
+            currentData.mania = document.getElementById('q-mania').value;
+            currentData.ifsPart = 'firefighter';
+            currentData.doubleEmpathy = 'no';
+            currentData.shadow = "Évaluation Flash (Étape simplifiée)";
+            currentData.system = "Évaluation Flash (Étape simplifiée)";
+            currentData.grief = "Évaluation Flash (Étape simplifiée)";
+            currentData.jonas = "Évaluation Flash (Étape simplifiée)";
+            currentData.reset = "Évaluation Flash (Étape simplifiée)";
+        }
 
         let integrity = 75;
         let nervous = 80;
@@ -758,7 +847,12 @@
             }
         }
 
-        // 1. Sentinelle Clinique Critique (Désespoir / Épuisement Allostatique)
+        // Mode Flash Banner
+        if (currentProtocol === 'flash') {
+            insights += `<div class="insight-item insight-warning">⚡ <strong>ÉVALUATION FLASH D'URGENCE :</strong> Diagnostic accéléré centré sur la régulation somatique immédiate.</div>`;
+        }
+
+        // 1. Sentinelle Clinique Critique
         if (currentData.reserves === 'critical' || currentData.urgency === 'despair') {
             integrity = 15;
             nervous = 20;
@@ -766,77 +860,86 @@
             insights += `<div class="insight-item insight-warning">🚨 <strong>ALERTE SENTINELLE CLINIQUE :</strong> Épuisement allostatique lourd ou détresse profonde. Cet outil ne remplace pas un suivi médical/psychiatrique. En cas de détresse aiguë, contactez immédiatement le 15 (SAMU) ou le 112.</div>`;
         }
 
-        // 2. Détection PDA (Pervasive Drive for Autonomy / Réactivité d'Autonomie)
-        if (currentData.pda === 'pda_reactive') {
+        // 2. Modèle IFS (Internal Family Systems)
+        if (currentData.ifsPart === 'firefighter') {
             integrity -= 25;
-            setRiskLevel("ÉLEVÉ (Réaction de Rejet Autonomique)", 3);
-            insights += `<div class="insight-item insight-indigo">⚡ <strong>Alerte PDA (Besoin d'Autonomie Exacerbé) :</strong> Le choix est motivé par la fuite d'une contrainte perçue comme une menace d'asservissement. Risque de détruire une situation viable simplement pour reprendre le contrôle.</div>`;
-            microActions.push("Désamorcer le sentiment d'obligation : reformuler la situation comme une option neutre et non comme un ordre.");
+            setRiskLevel("ÉLEVÉ (Impulsion Pompier IFS)", 3);
+            insights += `<div class="insight-item insight-rose">🔥 <strong>Défense IFS Pompier :</strong> La décision est drivée par une Partie Pompier qui tente d'éteindre une douleur affective intolérable par la rupture nette ou la fuite.</div>`;
+        } else if (currentData.ifsPart === 'manager') {
+            integrity -= 15;
+            insights += `<div class="insight-item insight-amber">🛡️ <strong>Contrôle IFS Manager :</strong> La décision provient d'une posture de sur-contrôle ou de perfectionnisme pour anticiper un danger.</div>`;
+        } else if (currentData.ifsPart === 'self') {
+            insights += `<div class="insight-item insight-success">✨ <strong>Alignement du Soi Central (Self) :</strong> La décision est portée depuis une posture de clarté, de calme et de confiance intime.</div>`;
         }
 
-        // 3. Détection Monotropisme / Tunnel Attentionnel
-        if (currentData.monotropism === 'tunnel') {
+        // 3. Problème de la Double Empathie (Damian Milton)
+        if (currentData.doubleEmpathy === 'gap') {
+            loyalty -= 20;
+            insights += `<div class="insight-item insight-indigo">💬 <strong>Décalage de la Double Empathie :</strong> Le conflit repose sur une interprétation erronée bilatérale du neurotype d'autrui. Ne tranchez pas sur la relation sans un décodage neutre explicite.</div>`;
+        }
+
+        // 4. Valence Effort-Récompense (RDoC NIMH)
+        if (currentData.rdocCost === 'underestimated') {
+            integrity -= 15;
+            insights += `<div class="insight-item insight-amber">⚖️ <strong>Biais Effort-Récompense (RDoC) :</strong> Le cerveau sous-estime la pénibilité des tâches répétitives à venir. Lister la routine sur 6 mois.</div>`;
+        } else if (currentData.rdocCost === 'anhedonia') {
+            nervous -= 25;
+            insights += `<div class="insight-item insight-warning">🥀 <strong>Anhédonie / Saturation :</strong> Tout effort apparaît disproportionné en raison d'un déficit d'énergie métabolique.</div>`;
+        }
+
+        // 5. Détection PDA (Pervasive Drive for Autonomy)
+        if (currentData.pda === 'pda_reactive') {
             integrity -= 20;
-            insights += `<div class="insight-item insight-teal">🎯 <strong>Hyperfocus / Tunnel Monotropique :</strong> Votre attention est verrouillée sur un seul axe. Capacité temporairement réduite à évaluer la vue d'ensemble.</div>`;
-            microActions.push("Forcer un changement d'environnement physique pendant 24h pour briser la boucle attentionnelle.");
+            setRiskLevel("ÉLEVÉ (Réaction de Rejet Autonomique)", 3);
+            insights += `<div class="insight-item insight-indigo">⚡ <strong>Alerte PDA (Besoin d'Autonomie Exacerbé) :</strong> Le choix est motivé par la fuite d'une contrainte perçue comme une menace d'asservissement.</div>`;
+            microActions.push("Désamorcer le sentiment d'obligation : reformuler la situation comme une option neutre.");
         }
 
-        // 4. Détection Virage Hypomaniaque (DSM-5-TR)
+        // 6. Monotropisme / Tunnel Attentionnel
+        if (currentData.monotropism === 'tunnel') {
+            integrity -= 15;
+            insights += `<div class="insight-item insight-teal">🎯 <strong>Hyperfocus / Tunnel Monotropique :</strong> Votre attention est verrouillée sur un seul axe.</div>`;
+            microActions.push("Forcer un changement d'environnement physique pendant 24h.");
+        }
+
+        // 7. Détection Virage Hypomaniaque
         if (currentData.mania === 'mania') {
             integrity -= 30;
             setRiskLevel("ÉLEVÉ (Impulsion Hypomaniaque)", 3);
-            insights += `<div class="insight-item insight-purple">⚡ <strong>Dépistage Hypomanie / Exaltation :</strong> Réduction du besoin de sommeil et sentiment de toute-puissance. Risque majeur d'évaluation du risque à zéro. Gel décisionnel de 14 jours recommandé.</div>`;
+            insights += `<div class="insight-item insight-purple">⚡ <strong>Dépistage Hypomanie / Exaltation :</strong> Réduction du besoin de sommeil et sentiment de toute-puissance. Gel décisionnel de 14 jours recommandé.</div>`;
         } else if (currentData.mania === 'dsps_fatigue') {
             nervous -= 20;
-            insights += `<div class="insight-item insight-amber">🌙 <strong>Facteur Chronobiologique / Retard de Phase (DSPS) :</strong> Le sommeil décalé fragilise la régulation émotionnelle préfrontale nocturne. Évitez les décisions prises après 22h.</div>`;
+            insights += `<div class="insight-item insight-amber">🌙 <strong>Facteur Chronobiologique / Retard de Phase (DSPS) :</strong> Évitez les décisions prises après 22h.</div>`;
         }
 
-        // 5. Détection Dopaminergique TDAH / AuDHD & Burnout Autistique
+        // 8. Détection Dopaminergique TDAH / AuDHD & Burnout Autistique
         if (currentData.stimulation === 'audhd_burnout') {
             integrity -= 25;
             nervous -= 30;
             setRiskLevel("ÉLEVÉ (Surcharge AuDHD)", 3);
-            insights += `<div class="insight-item insight-teal">🧩 <strong>Burnout Autistique & Surcharge Sensorielle (AuDHD) :</strong> La décision de tout couper est une réponse d'urgence face à une saturation par masquage social continu. Priorisez l'isolation sensorielle neutre.</div>`;
-            microActions.push("Mettre en place un espace de diète sensorielle (chambre obscure, casque anti-bruit) pendant 48 heures.");
+            insights += `<div class="insight-item insight-teal">🧩 <strong>Burnout Autistique & Surcharge Sensorielle (AuDHD) :</strong> Réponse d'urgence face à une saturation par masquage social continu.</div>`;
+            microActions.push("Diète sensorielle (chambre obscure, casque anti-bruit) pendant 48 heures.");
         } else if (currentData.stimulation === 'high' || currentData.stimulation === 'escape') {
             integrity -= 20;
             setRiskLevel("MODÉRÉ (Impulsion Dopaminergique)", 2);
-            insights += `<div class="insight-item insight-amber">🧠 <strong>Alerte Dopaminergique TDAH :</strong> Le choix est aimanté par la recherche de nouveauté ou la fuite de l'ennui. Appliquez la Règle des 72h.</div>`;
-            microActions.push("Appliquer une période de décantation obligatoire de 72h sans signature ni engagement.");
+            insights += `<div class="insight-item insight-amber">🧠 <strong>Alerte Dopaminergique TDAH :</strong> Le choix est aimanté par la recherche de nouveauté ou la fuite de l'ennui.</div>`;
+            microActions.push("Appliquer une période de décantation obligatoire de 72h sans signature.");
         }
 
-        // 6. Détection RSD (Dysphorie Sensible au Rejet)
+        // 9. Détection RSD
         if (currentData.trigger === 'rsd') {
             integrity -= 25;
             setRiskLevel("MODÉRÉ (Réactivité Affective)", 2);
-            insights += `<div class="insight-item insight-warning">🛡️ <strong>Réactivité au Rejet / RSD :</strong> L'acte s'apparente à une rupture préventive pour contourner une blessure d'abandon ou une dévaluation perçue.</div>`;
+            insights += `<div class="insight-item insight-warning">🛡️ <strong>Réactivité au Rejet / RSD :</strong> L'acte s'apparente à une rupture préventive suite à une blessure perçue.</div>`;
         }
 
-        // 7. Analyse Somatique Polyvagale
+        // 10. Analyse Somatique Polyvagale
         if (currentData.somatics === 'freeze') {
             nervous -= 35;
-            insights += `<div class="insight-item insight-amber">🌊 <strong>Sidération Vagale Dorsale (Freeze / Shutdown) :</strong> Le système nerveux est en engourdissement défensif. La décision est vécue comme une stratégie de survie passive.</div>`;
+            insights += `<div class="insight-item insight-amber">🌊 <strong>Sidération Vagale Dorsale (Freeze / Shutdown) :</strong> Le système nerveux est en engourdissement défensif.</div>`;
         } else if (currentData.somatics === 'agitation') {
             setRiskLevel("ÉLEVÉ (Agitation Motrice)", 1);
             nervous -= 20;
-        }
-
-        // 8. Sabotage / Masochisme Moral
-        const shadowText = currentData.shadow.toLowerCase();
-        const penaltyTerms = ['punir', 'faute', 'culpabilit', 'blam', 'sanction', 'merite pas', 'm?rite pas', 'regrett'];
-        if (penaltyTerms.some(term => shadowText.includes(term))) {
-            integrity -= 20;
-            insights += `<div class="insight-item insight-amber">⚖️ <strong>Mécanisme de Sabotage / Pénitence :</strong> L'acte est teinté par une culpabilité inconsciente ou un besoin d'auto-punition.</div>`;
-        }
-
-        // 9. Page Blanche & Autonomie
-        const resetText = currentData.reset.toLowerCase();
-        const alienationTerms = ['provoquer', 'autres', 'prouver', 'reagir', 'r?agir', 'regard', 'famille', 'entourage'];
-        if (alienationTerms.some(term => resetText.includes(term))) {
-            loyalty = 35;
-            insights += `<div class="insight-item insight-warning">👥 <strong>Aliénation Relationnelle :</strong> L'acte est un message ou un appel adressé à l'entourage plutôt qu'un choix d'autonomie pure.</div>`;
-        } else {
-            insights += `<div class="insight-item insight-success">✅ <strong>Autonomie du Soi :</strong> Le choix conserve sa pertinence même affranchi du regard d'autrui.</div>`;
         }
 
         integrity = Math.max(0, Math.min(100, integrity));
@@ -844,12 +947,11 @@
 
         // Synthèse du profil
         if (integrity >= 75 && nervous >= 60) {
-            profile = "<strong>Intégration & Souveraineté :</strong> La structure décisionnelle est mûre, les renoncements sont assumés en conscience, et l'organisme dispose des ressources pour porter la transition.";
+            profile = "<strong>Intégration & Souveraineté :</strong> La structure décisionnelle est mûre, et l'organisme dispose des ressources pour porter la transition.";
             microActions.push("Planifier la première action concrète d'une durée inférieure à 15 minutes.");
         } else if (integrity >= 40) {
             profile = "<strong>Ambivalence de Transition :</strong> Le désir d'émancipation est réel mais parasité par des réactivités émotionnelles, des biais dopaminergiques ou une pression d'autonomie. Un sas de décantation est indispensable.";
             microActions.push("Dormir au moins deux nuits complètes avant toute prise de décision formelle.");
-            microActions.push("Consulter un tiers neutre (praticien/mentor) sans chercher son approbation.");
         } else {
             profile = "<strong>Sidération / Risque d'Acting-Out :</strong> Le profil indique une saturation neuro-émotionnelle ou une fuite en avant. Suspendez toute décision immédiate.";
             microActions.push("Mettre en pause toute action irréversible pendant minimum 7 jours.");
@@ -959,7 +1061,7 @@
     }
 
     function downloadMarkdown() {
-        const md = `# BILAN CLINIQUE DE DISCERNEMENT DÉCISIONNEL (v7.0)
+        const md = `# BILAN CLINIQUE DE DISCERNEMENT DÉCISIONNEL (v9.0)
 Date : ${new Date().toLocaleDateString()}
 Protocole : ${currentData.protocol || 'Standard'}
 
@@ -967,18 +1069,21 @@ Protocole : ${currentData.protocol || 'Standard'}
 - Décision / Problème : ${currentData.decision || 'Non renseigné'}
 - Urgence ressentie : ${currentData.urgency || 'Non renseignée'}
 
-## 2. Profilage Neuro-Psychiatrique & Attentionnel
+## 2. Profilage Neuro-Psychiatrique & Valence (RDoC NIMH)
 - Stimulation / Hyperfocus : ${currentData.stimulation || 'N/A'}
+- Valence Effort/Récompense (RDoC) : ${currentData.rdocCost || 'N/A'}
 - Réactivité d'Autonomie (PDA) : ${currentData.pda || 'N/A'}
 - Tunnel Monotropique : ${currentData.monotropism || 'N/A'}
 - Réactivité au Rejet (RSD) : ${currentData.trigger || 'N/A'}
 - Sommeil / Énergie / Hypomanie / DSPS : ${currentData.mania || 'N/A'}
 
-## 3. Ombre & Fonction Cachée
-${currentData.shadow || 'N/A'}
+## 3. Cartographie IFS (Internal Family Systems) & Ombre
+- Partie IFS au contrôle : ${currentData.ifsPart || 'N/A'}
+- Ombre & Évitement : ${currentData.shadow || 'N/A'}
 
-## 4. Système & Loyautés Invisibles
-${currentData.system || 'N/A'}
+## 4. Systémique & Double Empathie
+- Décalage de la Double Empathie : ${currentData.doubleEmpathy || 'N/A'}
+- Loyautés invisibles : ${currentData.system || 'N/A'}
 
 ## 5. Deuil Existentiel & Jonas
 - Deuil requis : ${currentData.grief || 'N/A'}
