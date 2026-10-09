@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Boussole Décisionnelle v9.1 — Neurosciences, IFS & Méta-Diagnostic</title>
+    <title>Boussole Décisionnelle v10.0 — Hub Clinique & Méta-Diagnostic</title>
     <style>
         :root {
             --bg-color: #030508;
@@ -381,7 +381,7 @@
 <div class="container">
 
     <div class="top-bar">
-        <div class="brand">🧭 BOUSSOLE DÉCISIONNELLE v9.1</div>
+        <div class="brand">🧭 BOUSSOLE DÉCISIONNELLE v10.0</div>
         <div class="controls">
             <button class="secondary" style="padding: 5px 12px; font-size: 0.78rem;" onclick="toggleLowStim()" id="low-stim-btn">Mode Épuré (Anti-Surcharge)</button>
         </div>
@@ -413,18 +413,70 @@
                 <h3>Auto-Sabotage & Masochisme Moral</h3>
                 <p>Déconstruction de la culpabilité inconsciente, du besoin de pénitence et du complexe de Jonas (peur de la pleine autonomie).</p>
             </div>
-            <div class="mode-card" onclick="startProtocol('ado')">
-                <h3>🧒 Parcours Adolescent (13-17 ans) <span class="badge badge-ado">Adapté</span></h3>
-                <p>Questionnaire visuel déstigmatisé (météo du corps, pression des pairs, choix sous tension) avec enregistrement local discret.</p>
-            </div>
             <div class="mode-card" onclick="startProtocol('parent')">
                 <h3>👨‍👩‍👧 Espace Parent & Éducateur <span class="badge badge-psy">Décodeur</span></h3>
                 <p>Grille d'observation comportementale pour décoder le shutdown, la surcharge sensorielle TSA/TDAH ou la dérégulation chez l'enfant.</p>
+            </div>
+            <div class="mode-card" style="grid-column: span 2; border-color: rgba(20, 184, 166, 0.4);" onclick="switchView('view-resources')">
+                <h3>📚 Hub de Ressources & Auto-Évaluations Officielles <span class="badge badge-teal">Répertoire</span></h3>
+                <p>Accès direct aux liens et téléchargements des échelles cliniques validées (ASRS, PHQ-9, AQ, GAD-7, ISI, etc.).</p>
             </div>
         </div>
 
         <div class="btn-group">
             <button class="secondary" onclick="openHistory()">Consulter le Coffre-Fort Local (Vault)</button>
+        </div>
+    </div>
+
+    <!-- VUE : HUB DE RESSOURCES ET LIENS OFFICIELS -->
+    <div class="view" id="view-resources">
+        <h1>Hub de Ressources & Auto-Évaluations Cliniques</h1>
+        <div class="subtitle">Répertoire des liens d'accès direct et de téléchargement des échelles d'auto-évaluation officielles et validées.</div>
+        
+        <div class="diagnostic-card">
+            <h3>1. TDAH (Trouble Déficitaire de l'Attention avec ou sans Hyperactivité)</h3>
+            <ul class="micro-actions">
+                <li><strong>ASRS-18 (Dépistage TDAH adulte) :</strong> Disponible sur <a href="https://tdah.io/asrs-18-test-oms/" target="_blank" style="color: var(--accent);">TDAH.io - ASRS-18</a> ou en version PDF via la <a href="https://cliniquejacques-cartier.ca/clinique-content/uploads/2017/01/Final-TDAH-adulte1.pdf" target="_blank" style="color: var(--accent);">Clinique Jacques-Cartier</a>.</li>
+                <li><strong>WURS-25 (TDAH rétrospectif dans l'enfance) :</strong> Consultable sur <a href="https://cerveaupapillon.com" target="_blank" style="color: var(--accent);">Cerveau Papillon - Test WURS-25</a>.</li>
+            </ul>
+        </div>
+
+        <div class="diagnostic-card">
+            <h3>2. Troubles du Spectre de l'Autisme (TSA)</h3>
+            <ul class="micro-actions">
+                <li><strong>AQ (Quotient du Spectre Autistique) :</strong> Consultable en ligne sur <a href="https://fr.scribd.com" target="_blank" style="color: var(--accent);">Scribd - Questionnaire AQ</a>.</li>
+                <li><strong>RAADS-R :</strong> Version française de référence indexée sur <a href="https://fr.scribd.com/document/724450671/raads-r" target="_blank" style="color: var(--accent);">Scribd - RAADS-R</a>.</li>
+            </ul>
+        </div>
+
+        <div class="diagnostic-card">
+            <h3>3. Fonctions Exécutives & Organisation</h3>
+            <ul class="micro-actions">
+                <li><strong>BRIEF-A :</strong> ⚠️ Test psychométrique réglementé et protégé par un copyright professionnel (édité par PAR). Non disponible en libre accès ; administré par un neuropsychologue.</li>
+            </ul>
+        </div>
+
+        <div class="diagnostic-card">
+            <h3>4. Émotions & Sensorialité</h3>
+            <ul class="micro-actions">
+                <li><strong>TAS-20 (Alexithymie) :</strong> Grille des 20 items disponible sur <a href="https://fr.scribd.com" target="_blank" style="color: var(--accent);">Scribd - Questionnaire TAS-20</a>.</li>
+                <li><strong>HSP (Hypersensibilité d'Elaine Aron) :</strong> Test complet accessible via <a href="https://psypersensible.fr" target="_blank" style="color: var(--accent);">PsyPersensible</a>.</li>
+            </ul>
+        </div>
+
+        <div class="diagnostic-card">
+            <h3>5. Humeur, Anxiété, Sommeil & TOC</h3>
+            <ul class="micro-actions">
+                <li><strong>PHQ-9 (Dépression) :</strong> Téléchargeable en PDF via <a href="https://www.prevention-depression.lu/wp-content/uploads/PHQ9_French_for_France.pdf" target="_blank" style="color: var(--accent);">Prévention Dépression Luxembourg</a>.</li>
+                <li><strong>GAD-7 (Anxiété généralisée) :</strong> Grille PDF sur le <a href="https://www.gmfulevis.com/clients/CISSSCA/Sous-Sites/GMF-U/Arret_de_travail/Form-questionnaire_GAD-7.pdf" target="_blank" style="color: var(--accent);">GMF-U Lévis</a>.</li>
+                <li><strong>OCI-R (TOC) :</strong> Guides d'orientation hébergés par le <a href="https://www.chu-montpellier.fr" target="_blank" style="color: var(--accent);">CHU de Montpellier</a>.</li>
+                <li><strong>MDQ (Troubles bipolaires) :</strong> Questionnaire de dépistage rapide en PDF sur <a href="https://www.psychiaclic.com" target="_blank" style="color: var(--accent);">Psychiaclic</a>.</li>
+                <li><strong>ISI (Index de Sévérité de l'Insomnie) :</strong> Évaluation consultable sur <a href="https://www.somnoplus.com" target="_blank" style="color: var(--accent);">SomnoPlus</a>.</li>
+            </ul>
+        </div>
+
+        <div class="btn-group">
+            <button class="secondary" onclick="returnHome()">Retour à l'accueil</button>
         </div>
     </div>
 
@@ -713,10 +765,6 @@
             totalSteps = 3;
             document.getElementById('lbl-decision').innerText = "⚡ Urgence : Quelle est la décision brute que vous voulez prendre tout de suite ?";
             document.getElementById('q-decision').placeholder = "Ex: Tout quitter maintenant / Répondre immédiatement par la colère / Partir...";
-        } else if (type === 'ado') {
-            totalSteps = 7;
-            document.getElementById('lbl-decision').innerText = "Quel est le choix, la décision ou le problème qui te préoccupe ?";
-            document.getElementById('q-decision').placeholder = "Ex: Arrêter les cours / M'embrouiller avec un pote / Quitter une activité...";
         } else if (type === 'parent') {
             totalSteps = 7;
             document.getElementById('lbl-decision').innerText = "Quel est le comportement problématique observé chez l'enfant ?";
@@ -1055,7 +1103,7 @@
     }
 
     function downloadMarkdown() {
-        const md = `# BILAN CLINIQUE DE DISCERNEMENT DÉCISIONNEL (v9.1)
+        const md = `# BILAN CLINIQUE DE DISCERNEMENT DÉCISIONNEL (v10.0)
 Date : ${new Date().toLocaleDateString()}
 Protocole : ${currentData.protocol || 'Standard'}
 
@@ -1094,7 +1142,7 @@ ${currentData.reset || 'N/A'}
 - Intégrité du Soi : ${currentData.results ? currentData.results.integrity : '--'}%
 - Résilience Nerveuse : ${currentData.results ? currentData.results.nervous : '--'}%
 - Indice de Loyauté : ${currentData.results ? currentData.results.loyalty : '--'}%
-- Risque d'Acting-Out : ${currentData.results ? currentData.results.actingRisk : '--'}
+- Risque d'Acting-Out : ${currentData.results ? currentData.results.actingRisk : '--'}%
 
 ### Synthèse :
 ${currentData.results && currentData.results.profile ? currentData.results.profile.replace(/<[^>]*>?/gm, '') : ''}
