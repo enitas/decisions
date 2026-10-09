@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Boussole Décisionnelle v10.0 — Hub Clinique & Méta-Diagnostic</title>
+    <title>Boussole Décisionnelle v11.0 — Suite Cognitive & Neuro-Inclusive</title>
     <style>
         :root {
             --bg-color: #030508;
@@ -21,6 +21,8 @@
             --indigo: #818cf8;
             --rose: #fb7185;
             --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            --letter-spacing: normal;
+            --line-height: 1.5;
         }
 
         body.low-stim {
@@ -40,6 +42,12 @@
             --rose: #a3a3a3;
         }
 
+        body.dys-font {
+            --font-family: "Atkinson Hyperlegible", "Comic Sans MS", "Verdana", sans-serif;
+            --letter-spacing: 0.6px;
+            --line-height: 1.7;
+        }
+
         body.low-stim * {
             transition: none !important;
             box-shadow: none !important;
@@ -47,6 +55,8 @@
 
         body {
             font-family: var(--font-family);
+            letter-spacing: var(--letter-spacing);
+            line-height: var(--line-height);
             background-color: var(--bg-color);
             color: var(--text-main);
             margin: 0;
@@ -76,6 +86,8 @@
             margin-bottom: 20px;
             padding-bottom: 15px;
             border-bottom: 1px solid var(--border);
+            flex-wrap: wrap;
+            gap: 10px;
         }
 
         .top-bar .brand {
@@ -87,8 +99,9 @@
 
         .top-bar .controls {
             display: flex;
-            gap: 10px;
+            gap: 8px;
             align-items: center;
+            flex-wrap: wrap;
         }
 
         h1 {
@@ -133,6 +146,7 @@
             margin-bottom: 20px;
             box-sizing: border-box;
             transition: border-color 0.2s;
+            font-family: var(--font-family);
         }
 
         textarea:focus, select:focus, input[type="text"]:focus {
@@ -273,47 +287,13 @@
             line-height: 1.5;
         }
 
-        .insight-warning {
-            color: var(--warning);
-            background: rgba(244, 63, 94, 0.1);
-            border-left: 4px solid var(--warning);
-        }
-
-        .insight-success {
-            color: var(--success);
-            background: rgba(16, 185, 129, 0.1);
-            border-left: 4px solid var(--success);
-        }
-
-        .insight-amber {
-            color: var(--amber);
-            background: rgba(245, 158, 11, 0.1);
-            border-left: 4px solid var(--amber);
-        }
-
-        .insight-purple {
-            color: var(--purple);
-            background: rgba(192, 132, 252, 0.1);
-            border-left: 4px solid var(--purple);
-        }
-
-        .insight-teal {
-            color: var(--teal);
-            background: rgba(20, 184, 166, 0.1);
-            border-left: 4px solid var(--teal);
-        }
-
-        .insight-indigo {
-            color: var(--indigo);
-            background: rgba(129, 140, 248, 0.1);
-            border-left: 4px solid var(--indigo);
-        }
-
-        .insight-rose {
-            color: var(--rose);
-            background: rgba(251, 113, 133, 0.1);
-            border-left: 4px solid var(--rose);
-        }
+        .insight-warning { color: var(--warning); background: rgba(244, 63, 94, 0.1); border-left: 4px solid var(--warning); }
+        .insight-success { color: var(--success); background: rgba(16, 185, 129, 0.1); border-left: 4px solid var(--success); }
+        .insight-amber { color: var(--amber); background: rgba(245, 158, 11, 0.1); border-left: 4px solid var(--amber); }
+        .insight-purple { color: var(--purple); background: rgba(192, 132, 252, 0.1); border-left: 4px solid var(--purple); }
+        .insight-teal { color: var(--teal); background: rgba(20, 184, 166, 0.1); border-left: 4px solid var(--teal); }
+        .insight-indigo { color: var(--indigo); background: rgba(129, 140, 248, 0.1); border-left: 4px solid var(--indigo); }
+        .insight-rose { color: var(--rose); background: rgba(251, 113, 133, 0.1); border-left: 4px solid var(--rose); }
 
         .progress {
             font-size: 0.75rem;
@@ -337,25 +317,26 @@
             align-items: center;
         }
 
-        .micro-actions {
+        .checklist-actions {
             list-style: none;
             padding: 0;
             margin: 10px 0 0 0;
         }
 
-        .micro-actions li {
-            position: relative;
-            padding-left: 24px;
-            margin-bottom: 8px;
+        .checklist-actions li {
+            margin-bottom: 10px;
             font-size: 0.88rem;
-            color: var(--text-main);
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
         }
 
-        .micro-actions li::before {
-            content: "→";
-            position: absolute;
-            left: 0;
-            color: var(--accent);
+        .checklist-actions input[type="checkbox"] {
+            margin-top: 3px;
+            accent-color: var(--accent);
+            cursor: pointer;
+            width: 18px;
+            height: 18px;
         }
 
         .badge {
@@ -381,16 +362,17 @@
 <div class="container">
 
     <div class="top-bar">
-        <div class="brand">🧭 BOUSSOLE DÉCISIONNELLE v10.0</div>
+        <div class="brand">🧭 BOUSSOLE DÉCISIONNELLE v4.00</div>
         <div class="controls">
-            <button class="secondary" style="padding: 5px 12px; font-size: 0.78rem;" onclick="toggleLowStim()" id="low-stim-btn">Mode Épuré (Anti-Surcharge)</button>
+            <button class="secondary" style="padding: 5px 10px; font-size: 0.75rem;" onclick="toggleDysFont()" id="dys-font-btn">Police Dys</button>
+            <button class="secondary" style="padding: 5px 10px; font-size: 0.75rem;" onclick="toggleLowStim()" id="low-stim-btn">Mode Épuré</button>
         </div>
     </div>
 
     <!-- VUE 0 : ACCUEIL ET SÉLECTION DU PROTOCOLE -->
     <div class="view active" id="view-home">
-        <h1>Méta-Diagnostic & Discernement Clinique (DSM-5-TR / RDoC / IFS / Polyvagal)</h1>
-        <div class="subtitle">Cadre clinique expert : Modèle des Systèmes Familiaux Intérieurs (IFS), Récompense-Effort (RDoC NIMH), Double Empathie et Métabolisme décisionnel.</div>
+        <h1>Méta-Diagnostic & Suite Cognitive (DSM-5-TR / RDoC / ACT / IFS)</h1>
+        <div class="subtitle">Outils souverains de discernement, de décharge mentale et de régulation pour profils neurodivergents et situations de crise.</div>
 
         <div class="mode-grid">
             <div class="mode-card" style="border-color: rgba(244, 63, 94, 0.4);" onclick="startProtocol('flash')">
@@ -403,28 +385,74 @@
             </div>
             <div class="mode-card" onclick="startProtocol('neuro')">
                 <h3>Neurodivergence, AuDHD & Cognition <span class="badge badge-audhd">Avancé</span></h3>
-                <p>Évaluation du biais dopaminergique, du tunnel monotropique, du masking, de la réactivité au rejet (RSD), du PDA et du sommeil.</p>
+                <p>Évaluation du biais dopaminergique, du tunnel monotropique, du masking, de la réactivité au rejet (RSD) et du PDA.</p>
             </div>
             <div class="mode-card" onclick="startProtocol('ifs')">
-                <h3>Cartographie IFS (Systèmes Intérieurs) <span class="badge badge-ifs">Nouveau</span></h3>
+                <h3>Cartographie IFS (Systèmes Intérieurs) <span class="badge badge-ifs">IFS</span></h3>
                 <p>Définir quelle « Partie » prend la décision : Manager (Perfectionnisme), Pompier (Impulsion/Anesthésie) ou le Soi central.</p>
             </div>
-            <div class="mode-card" onclick="startProtocol('sabotage')">
-                <h3>Auto-Sabotage & Masochisme Moral</h3>
-                <p>Déconstruction de la culpabilité inconsciente, du besoin de pénitence et du complexe de Jonas (peur de la pleine autonomie).</p>
+            <div class="mode-card" style="border-color: rgba(56, 189, 248, 0.4);" onclick="switchView('view-braindump')">
+                <h3>🌪️ Décharge Cognitive (Brain Dump) <span class="badge badge-tdah">Libre</span></h3>
+                <p>Bloc-notes souverain pour vider tout le bruit mental de votre tête et décharger votre mémoire de travail avant d'agir.</p>
+            </div>
+            <div class="mode-card" style="border-color: rgba(245, 158, 11, 0.4);" onclick="openTimerView()">
+                <h3>⏳ Minuteur de Décantation (72h) <span class="badge badge-psy">Sécurité</span></h3>
+                <p>Verrouillage temporaire de décantation pour les décisions à forte impulsion dopaminergique ou hypomaniaque.</p>
             </div>
             <div class="mode-card" onclick="startProtocol('parent')">
                 <h3>👨‍👩‍👧 Espace Parent & Éducateur <span class="badge badge-psy">Décodeur</span></h3>
                 <p>Grille d'observation comportementale pour décoder le shutdown, la surcharge sensorielle TSA/TDAH ou la dérégulation chez l'enfant.</p>
             </div>
-            <div class="mode-card" style="grid-column: span 2; border-color: rgba(20, 184, 166, 0.4);" onclick="switchView('view-resources')">
-                <h3>📚 Hub de Ressources & Auto-Évaluations Officielles <span class="badge badge-teal">Répertoire</span></h3>
+            <div class="mode-card" style="border-color: rgba(20, 184, 166, 0.4);" onclick="switchView('view-resources')">
+                <h3>📚 Hub de Ressources & Auto-Évaluations <span class="badge badge-teal">Répertoire</span></h3>
                 <p>Accès direct aux liens et téléchargements des échelles cliniques validées (ASRS, PHQ-9, AQ, GAD-7, ISI, etc.).</p>
             </div>
         </div>
 
         <div class="btn-group">
             <button class="secondary" onclick="openHistory()">Consulter le Coffre-Fort Local (Vault)</button>
+        </div>
+    </div>
+
+    <!-- VUE : DÉCHARGE COGNITIVE (BRAIN DUMP) -->
+    <div class="view" id="view-braindump">
+        <h1>Décharge Cognitive (Brain Dump)</h1>
+        <div class="subtitle">Libérez votre mémoire de travail saturée. Écrivez tout ce qui tourne en boucle dans votre esprit, sans structure ni filtre. Rien ne quitte votre appareil.</div>
+        
+        <textarea id="braindump-text" rows="12" placeholder="Écrivez tout en vrac ici : les to-do lists, les ruminations, les peurs, les colères, les idées contradictoires..."></textarea>
+
+        <div class="btn-group">
+            <button class="secondary" onclick="returnHome()">Retour à l'accueil</button>
+            <div>
+                <button class="secondary" onclick="clearBrainDump()">Effacer le brouillon</button>
+                <button onclick="downloadBrainDump()">Télécharger (.txt)</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- VUE : MINUTEUR DE DÉCANTATION 72H -->
+    <div class="view" id="view-timer">
+        <h1>Minuteur de Décantation (Règle des 72h)</h1>
+        <div class="subtitle">Suspension volontaire de signature ou d'engagement impulsif pour protéger votre système nerveux.</div>
+
+        <div class="diagnostic-card" style="text-align: center; padding: 30px;">
+            <div id="timer-display" style="font-size: 2.2rem; font-weight: bold; color: var(--amber); margin-bottom: 15px;">00h : 00m : 00s</div>
+            <div id="timer-status" style="font-size: 0.95rem; color: var(--text-muted); margin-bottom: 20px;">Aucun verrouillage de décantation actif.</div>
+            <div id="timer-controls">
+                <button onclick="startDecantationTimer()">Lancer un sas de décantation de 72h</button>
+                <button class="danger" onclick="cancelDecantationTimer()" style="margin-left: 10px;">Réinitialiser</button>
+            </div>
+        </div>
+
+        <div class="diagnostic-card">
+            <h3>Pourquoi ce sas ?</h3>
+            <p style="font-size: 0.88rem; line-height: 1.5; color: var(--text-muted); margin: 0;">
+                En cas d'hyperfocus monotropique, d'impulsion TDAH ou de tension de type PDA, le cortex préfrontal a besoin d'un délai biologique minimum pour que l'intensité chimique retombe avant toute décision irréversible.
+            </p>
+        </div>
+
+        <div class="btn-group">
+            <button class="secondary" onclick="returnHome()">Retour à l'accueil</button>
         </div>
     </div>
 
@@ -435,7 +463,7 @@
         
         <div class="diagnostic-card">
             <h3>1. TDAH (Trouble Déficitaire de l'Attention avec ou sans Hyperactivité)</h3>
-            <ul class="micro-actions">
+            <ul class="checklist-actions" style="padding-left:0; list-style:disc; margin-left:20px;">
                 <li><strong>ASRS-18 (Dépistage TDAH adulte) :</strong> Disponible sur <a href="https://tdah.io/asrs-18-test-oms/" target="_blank" style="color: var(--accent);">TDAH.io - ASRS-18</a> ou en version PDF via la <a href="https://cliniquejacques-cartier.ca/clinique-content/uploads/2017/01/Final-TDAH-adulte1.pdf" target="_blank" style="color: var(--accent);">Clinique Jacques-Cartier</a>.</li>
                 <li><strong>WURS-25 (TDAH rétrospectif dans l'enfance) :</strong> Consultable sur <a href="https://cerveaupapillon.com" target="_blank" style="color: var(--accent);">Cerveau Papillon - Test WURS-25</a>.</li>
             </ul>
@@ -443,7 +471,7 @@
 
         <div class="diagnostic-card">
             <h3>2. Troubles du Spectre de l'Autisme (TSA)</h3>
-            <ul class="micro-actions">
+            <ul class="checklist-actions" style="padding-left:0; list-style:disc; margin-left:20px;">
                 <li><strong>AQ (Quotient du Spectre Autistique) :</strong> Consultable en ligne sur <a href="https://fr.scribd.com" target="_blank" style="color: var(--accent);">Scribd - Questionnaire AQ</a>.</li>
                 <li><strong>RAADS-R :</strong> Version française de référence indexée sur <a href="https://fr.scribd.com/document/724450671/raads-r" target="_blank" style="color: var(--accent);">Scribd - RAADS-R</a>.</li>
             </ul>
@@ -451,14 +479,14 @@
 
         <div class="diagnostic-card">
             <h3>3. Fonctions Exécutives & Organisation</h3>
-            <ul class="micro-actions">
+            <ul class="checklist-actions" style="padding-left:0; list-style:disc; margin-left:20px;">
                 <li><strong>BRIEF-A :</strong> ⚠️ Test psychométrique réglementé et protégé par un copyright professionnel (édité par PAR). Non disponible en libre accès ; administré par un neuropsychologue.</li>
             </ul>
         </div>
 
         <div class="diagnostic-card">
             <h3>4. Émotions & Sensorialité</h3>
-            <ul class="micro-actions">
+            <ul class="checklist-actions" style="padding-left:0; list-style:disc; margin-left:20px;">
                 <li><strong>TAS-20 (Alexithymie) :</strong> Grille des 20 items disponible sur <a href="https://fr.scribd.com" target="_blank" style="color: var(--accent);">Scribd - Questionnaire TAS-20</a>.</li>
                 <li><strong>HSP (Hypersensibilité d'Elaine Aron) :</strong> Test complet accessible via <a href="https://psypersensible.fr" target="_blank" style="color: var(--accent);">PsyPersensible</a>.</li>
             </ul>
@@ -466,7 +494,7 @@
 
         <div class="diagnostic-card">
             <h3>5. Humeur, Anxiété, Sommeil & TOC</h3>
-            <ul class="micro-actions">
+            <ul class="checklist-actions" style="padding-left:0; list-style:disc; margin-left:20px;">
                 <li><strong>PHQ-9 (Dépression) :</strong> Téléchargeable en PDF via <a href="https://www.prevention-depression.lu/wp-content/uploads/PHQ9_French_for_France.pdf" target="_blank" style="color: var(--accent);">Prévention Dépression Luxembourg</a>.</li>
                 <li><strong>GAD-7 (Anxiété généralisée) :</strong> Grille PDF sur le <a href="https://www.gmfulevis.com/clients/CISSSCA/Sous-Sites/GMF-U/Arret_de_travail/Form-questionnaire_GAD-7.pdf" target="_blank" style="color: var(--accent);">GMF-U Lévis</a>.</li>
                 <li><strong>OCI-R (TOC) :</strong> Guides d'orientation hébergés par le <a href="https://www.chu-montpellier.fr" target="_blank" style="color: var(--accent);">CHU de Montpellier</a>.</li>
@@ -561,10 +589,10 @@
             </div>
         </div>
 
-        <!-- ÉTAPE 3 : MODÈLE IFS & L'OMBRE -->
+        <!-- ÉTAPE 3 : MODÈLE IFS & ACT (VALEURS VS ÉVITEMENT) -->
         <div class="step" id="step-3">
-            <h1>3. Cartographie IFS (Internal Family Systems) & Fonction de l'Acte</h1>
-            <div class="subtitle">Identifier quelle « Partie » de votre personnalité pilote la décision (Dr Richard Schwartz).</div>
+            <h1>3. Cartographie IFS & Bilan ACT (Valeurs vs Évitement)</h1>
+            <div class="subtitle">Identifier quelle « Partie » pilote la décision (Dr Richard Schwartz) et sa fonction comportementale (ACT).</div>
             
             <label for="q-ifs-part">Quelle Partie de votre système intérieur semble prendre les commandes ?</label>
             <select id="q-ifs-part">
@@ -574,8 +602,14 @@
                 <option value="exile">Un Exilé : Partie vulnérable, effrayée, abandonnée ou blessée qui crie au secours</option>
             </select>
 
-            <label for="q-shadow">Quel besoin secret, quelle honte, culpabilité ou évitement cet acte cherche-t-il à apaiser ?</label>
-            <textarea id="q-shadow" rows="3" placeholder="Ex: C'est une façon de me punir d'avoir échoué, de devancer un rejet imminent en sabotant la situation..."></textarea>
+            <label for="q-act-avoidance">ACT (Thérapie d'Acceptation et d'Engagement) : Ce choix est-il un acte motivé par vos valeurs profondes ou un évitement expérientiel ?</label>
+            <select id="q-act-avoidance">
+                <option value="values">Alignement de Valeurs : Choix constructif aligné sur ce qui compte vraiment pour moi sur le long terme</option>
+                <option value="experiential_avoidance">Évitement Expérientiel : Fuite frénétique d'une émotion inconfortable (peur, honte, ennui) à court terme au détriment de mes valeurs</option>
+            </select>
+
+            <label for="q-shadow">Quel besoin secret ou culpabilité cet acte cherche-t-il à apaiser ?</label>
+            <textarea id="q-shadow" rows="2" placeholder="Ex: C'est une façon de me punir d'avoir échoué ou de devancer un rejet imminent..."></textarea>
             
             <div class="btn-group">
                 <button class="secondary" onclick="prevWizardStep(3)">Précédent</button>
@@ -687,7 +721,7 @@
         </div>
 
         <div class="diagnostic-card">
-            <h3>Synthèse Psychodynamique & IFS Globale</h3>
+            <h3>Synthèse Psychodynamique, IFS & ACT</h3>
             <div id="res-profile-text" style="line-height: 1.6; font-size: 0.95rem; margin-bottom: 10px;"></div>
         </div>
 
@@ -704,9 +738,9 @@
         </div>
 
         <div class="diagnostic-card" id="micro-actions-card" style="display:none;">
-            <h3>Séquençage Ergonomique Anti-Surcharge (Spécifique TDAH / AuDHD)</h3>
-            <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 10px;">Pour contourner la paralysie d'exécution, accomplissez uniquement la micro-étape 1 sans conceptualiser la suite :</p>
-            <ul class="micro-actions" id="micro-actions-list"></ul>
+            <h3>Séquençage Ergonomique & Checklist Anti-Surcharge (TDAH / AuDHD)</h3>
+            <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 10px;">Cochez chaque micro-étape au fur et à mesure pour activer la dopamine saine sans vous submerger :</p>
+            <ul class="checklist-actions" id="checklist-actions-list"></ul>
         </div>
 
         <div class="btn-group">
@@ -744,15 +778,83 @@
     function switchView(viewId) {
         document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
         document.getElementById(viewId).classList.add('active');
+        window.scrollTo({top: 0, behavior: 'smooth'});
     }
 
     function toggleLowStim() {
         document.body.classList.toggle('low-stim');
         const btn = document.getElementById('low-stim-btn');
-        if (document.body.classList.contains('low-stim')) {
-            btn.innerText = "Mode Standard";
+        btn.innerText = document.body.classList.contains('low-stim') ? "Mode Standard" : "Mode Épuré";
+    }
+
+    function toggleDysFont() {
+        document.body.classList.toggle('dys-font');
+        const btn = document.getElementById('dys-font-btn');
+        btn.innerText = document.body.classList.contains('dys-font') ? "Police Standard" : "Police Dys";
+    }
+
+    // Gestion du Brain Dump
+    function clearBrainDump() {
+        if(confirm("Voulez-vous effacer ce brouillon mental ?")) {
+            document.getElementById('braindump-text').value = '';
+            localStorage.removeItem('depth_compass_braindump');
+        }
+    }
+
+    function downloadBrainDump() {
+        const text = document.getElementById('braindump-text').value;
+        if(!text.trim()) { alert("Le brouillon est vide."); return; }
+        const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'decharge-cognitive-braindump.txt';
+        a.click();
+        URL.revokeObjectURL(url);
+    }
+
+    // Gestion du Minuteur de Décantation 72h
+    function openTimerView() {
+        switchView('view-timer');
+        updateTimerDisplay();
+    }
+
+    function startDecantationTimer() {
+        const targetTime = new Date().getTime() + (72 * 60 * 60 * 1000);
+        localStorage.setItem('depth_compass_timer', targetTime);
+        updateTimerDisplay();
+    }
+
+    function cancelDecantationTimer() {
+        localStorage.removeItem('depth_compass_timer');
+        updateTimerDisplay();
+    }
+
+    function updateTimerDisplay() {
+        const target = localStorage.getItem('depth_compass_timer');
+        const display = document.getElementById('timer-display');
+        const status = document.getElementById('timer-status');
+
+        if (!target) {
+            display.innerText = "00h : 00m : 00s";
+            status.innerText = "Aucun verrouillage de décantation actif.";
+            return;
+        }
+
+        const now = new Date().getTime();
+        const distance = target - now;
+
+        if (distance < 0) {
+            display.innerText = "TERMINÉ (72h écoulées)";
+            status.innerText = "Le sas de décantation est expiré. Vous pouvez réévaluer la situation.";
+            localStorage.removeItem('depth_compass_timer');
         } else {
-            btn.innerText = "Mode Épuré (Anti-Surcharge)";
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+            display.innerText = `${String(hours).padStart(2, '0')}h : ${String(minutes).padStart(2, '0')}m : ${String(seconds).padStart(2, '0')}s`;
+            status.innerText = "⏳ Sas de décantation en cours. Engagement et signatures proscrits.";
+            setTimeout(updateTimerDisplay, 1000);
         }
     }
 
@@ -811,6 +913,7 @@
             currentData.mania = document.getElementById('q-mania').value;
         } else if (step === 3) {
             currentData.ifsPart = document.getElementById('q-ifs-part').value;
+            currentData.actAvoidance = document.getElementById('q-act-avoidance').value;
             currentData.shadow = document.getElementById('q-shadow').value.trim();
             if (!currentData.shadow) { alert("Veuillez remplir cette section."); return; }
         } else if (step === 4) {
@@ -878,12 +981,13 @@
             currentData.trigger = document.getElementById('q-trigger').value;
             currentData.mania = document.getElementById('q-mania').value;
             currentData.ifsPart = 'firefighter';
+            currentData.actAvoidance = 'experiential_avoidance';
             currentData.doubleEmpathy = 'no';
-            currentData.shadow = "Évaluation Flash (Étape simplifiée)";
-            currentData.system = "Évaluation Flash (Étape simplifiée)";
-            currentData.grief = "Évaluation Flash (Étape simplifiée)";
-            currentData.jonas = "Évaluation Flash (Étape simplifiée)";
-            currentData.reset = "Évaluation Flash (Étape simplifiée)";
+            currentData.shadow = "Évaluation Flash";
+            currentData.system = "Évaluation Flash";
+            currentData.grief = "Évaluation Flash";
+            currentData.jonas = "Évaluation Flash";
+            currentData.reset = "Évaluation Flash";
         }
 
         let integrity = 75;
@@ -911,7 +1015,7 @@
             integrity = 15;
             nervous = 20;
             setRiskLevel("CRITIQUE (Urgence Médicale)", 4);
-            insights += `<div class="insight-item insight-warning">🚨 <strong>ALERTE SENTINELLE CLINIQUE :</strong> Épuisement allostatique lourd ou détresse profonde. Cet outil ne remplace pas un suivi médical/psychiatrique. En cas de détresse aiguë, contactez immédiatement le 15 (SAMU) ou le 112.</div>`;
+            insights += `<div class="insight-item insight-warning">🚨 <strong>ALERTE SENTINELLE CLINIQUE :</strong> Épuisement allostatique lourd ou détresse profonde. En cas de détresse aiguë, contactez immédiatement le 15 (SAMU) ou le 112.</div>`;
         }
 
         if (currentData.ifsPart === 'firefighter') {
@@ -925,14 +1029,21 @@
             insights += `<div class="insight-item insight-success">✨ <strong>Alignement du Soi Central (Self) :</strong> La décision est portée depuis une posture de clarté, de calme et de confiance intime.</div>`;
         }
 
+        if (currentData.actAvoidance === 'experiential_avoidance') {
+            integrity -= 20;
+            insights += `<div class="insight-item insight-warning">🌀 <strong>Évitement Expérientiel (ACT) :</strong> Le choix est dicté par le besoin urgent d'échapper à une émotion désagréable plutôt que par un engagement de valeur.</div>`;
+        } else {
+            insights += `<div class="insight-item insight-success">🌱 <strong>Cohérence ACT (Valeurs) :</strong> Le choix soutient les directions de vie profondes de la personne.</div>`;
+        }
+
         if (currentData.doubleEmpathy === 'gap') {
             loyalty -= 20;
-            insights += `<div class="insight-item insight-indigo">💬 <strong>Décalage de la Double Empathie :</strong> Le conflit repose sur une interprétation erronée bilatérale du neurotype d'autrui. Ne tranchez pas sur la relation sans un décodage neutre explicite.</div>`;
+            insights += `<div class="insight-item insight-indigo">💬 <strong>Décalage de la Double Empathie :</strong> Le conflit repose sur une interprétation erronée bilatérale du neurotype d'autrui.</div>`;
         }
 
         if (currentData.rdocCost === 'underestimated') {
             integrity -= 15;
-            insights += `<div class="insight-item insight-amber">⚖️ <strong>Biais Effort-Récompense (RDoC) :</strong> Le cerveau sous-estime la pénibilité des tâches répétitives à venir. Lister la routine sur 6 mois.</div>`;
+            insights += `<div class="insight-item insight-amber">⚖️ <strong>Biais Effort-Récompense (RDoC) :</strong> Le cerveau sous-estime la pénibilité des tâches répétitives à venir.</div>`;
         } else if (currentData.rdocCost === 'anhedonia') {
             nervous -= 25;
             insights += `<div class="insight-item insight-warning">🥀 <strong>Anhédonie / Saturation :</strong> Tout effort apparaît disproportionné en raison d'un déficit d'énergie métabolique.</div>`;
@@ -994,7 +1105,7 @@
             profile = "<strong>Intégration & Souveraineté :</strong> La structure décisionnelle est mûre, et l'organisme dispose des ressources pour porter la transition.";
             microActions.push("Planifier la première action concrète d'une durée inférieure à 15 minutes.");
         } else if (integrity >= 40) {
-            profile = "<strong>Ambivalence de Transition :</strong> Le désir d'émancipation est réel mais parasité par des réactivités émotionnelles, des biais dopaminergiques ou une pression d'autonomie. Un sas de décantation est indispensable.";
+            profile = "<strong>Ambivalence de Transition :</strong> Le désir d'émancipation est réel mais parasité par des réactivités émotionnelles ou des évitements expérientiels. Un sas de décantation est indispensable.";
             microActions.push("Dormir au moins deux nuits complètes avant toute prise de décision formelle.");
         } else {
             profile = "<strong>Sidération / Risque d'Acting-Out :</strong> Le profil indique une saturation neuro-émotionnelle ou une fuite en avant. Suspendez toute décision immédiate.";
@@ -1018,11 +1129,16 @@
         document.getElementById('res-insights').innerHTML = insights;
 
         const actionsCard = document.getElementById('micro-actions-card');
-        const actionsList = document.getElementById('micro-actions-list');
+        const actionsList = document.getElementById('checklist-actions-list');
         actionsList.innerHTML = '';
         if (microActions.length > 0) {
-            microActions.forEach(act => {
-                actionsList.innerHTML += `<li>${act}</li>`;
+            microActions.forEach((act, idx) => {
+                actionsList.innerHTML += `
+                    <li>
+                        <input type="checkbox" id="chk-${idx}">
+                        <label for="chk-${idx}" style="font-weight: normal; margin-bottom: 0; cursor: pointer; color: var(--text-main);">${act}</label>
+                    </li>
+                `;
             });
             actionsCard.style.display = 'block';
         } else {
@@ -1071,11 +1187,16 @@
         document.getElementById('res-insights').innerHTML = item.results.insights;
 
         const actionsCard = document.getElementById('micro-actions-card');
-        const actionsList = document.getElementById('micro-actions-list');
+        const actionsList = document.getElementById('checklist-actions-list');
         actionsList.innerHTML = '';
         if (item.results.microActions && item.results.microActions.length > 0) {
-            item.results.microActions.forEach(act => {
-                actionsList.innerHTML += `<li>${act}</li>`;
+            item.results.microActions.forEach((act, idx) => {
+                actionsList.innerHTML += `
+                    <li>
+                        <input type="checkbox" id="chk-load-${idx}">
+                        <label for="chk-load-${idx}" style="font-weight: normal; margin-bottom: 0; cursor: pointer; color: var(--text-main);">${act}</label>
+                    </li>
+                `;
             });
             actionsCard.style.display = 'block';
         } else {
@@ -1103,7 +1224,7 @@
     }
 
     function downloadMarkdown() {
-        const md = `# BILAN CLINIQUE DE DISCERNEMENT DÉCISIONNEL (v10.0)
+        const md = `# BILAN CLINIQUE DE DISCERNEMENT DÉCISIONNEL (v11.0)
 Date : ${new Date().toLocaleDateString()}
 Protocole : ${currentData.protocol || 'Standard'}
 
@@ -1119,8 +1240,9 @@ Protocole : ${currentData.protocol || 'Standard'}
 - Réactivité au Rejet (RSD) : ${currentData.trigger || 'N/A'}
 - Sommeil / Énergie / Hypomanie / DSPS : ${currentData.mania || 'N/A'}
 
-## 3. Cartographie IFS (Internal Family Systems) & Ombre
+## 3. Cartographie IFS & Bilan ACT
 - Partie IFS au contrôle : ${currentData.ifsPart || 'N/A'}
+- Orientation ACT (Valeurs vs Évitement) : ${currentData.actAvoidance || 'N/A'}
 - Ombre & Évitement : ${currentData.shadow || 'N/A'}
 
 ## 4. Systémique & Double Empathie
