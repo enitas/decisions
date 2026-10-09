@@ -34,6 +34,11 @@
             --amber: #a3a3a3;
         }
 
+        body.low-stim * {
+            transition: none !important;
+            box-shadow: none !important;
+        }
+
         body {
             font-family: var(--font-family);
             background-color: var(--bg-color);
@@ -417,10 +422,10 @@
             <h1>2. Profilage Neurobiologique & Facteurs Émergents</h1>
             <div class="subtitle">Analyse des perturbations dopaminergiques, de la réactivité au rejet et de l'état de surcharge.</div>
             
-            <label for="q-stimulation">Est-ce que cette décision vous procure une excitation/stimuli immédiat (Hyperfocus) ?</label>
+            <label for="q-stimulation">Est-ce que cette décision vous procure une excitation ou un stimulus immédiat (Hyperfocus) ?</label>
             <select id="q-stimulation">
                 <option value="no">Non, c'est un projet profond qui conserve sa valeur même dans la routine neutre</option>
-                <option value="high">Oui, c'est une vague intense de nouveauté / soulagement dopaminergique immédiat</option>
+                <option value="high">Oui, c'est une vague intense de nouveauté ou un soulagement dopaminergique immédiat</option>
                 <option value="escape">C'est une fuite frénétique pour échapper à un ennui ou une frustration insupportable</option>
             </select>
 
@@ -490,7 +495,7 @@
 
         <!-- ÉTAPE 6 : SOMATOGRAPHIE POLYVAGALE & RÉSERVES VITALES -->
         <div class="step" id="step-6">
-            <h1>6. Réponse Somatique & Réserves Vitale</h1>
+            <h1>6. Réponse Somatique & Réserves Vitales</h1>
             <div class="subtitle">Analyse neuro-somatique du système nerveux autonome.</div>
             
             <label for="q-somatics">Comment votre corps enregistre-t-il la projection de ce choix ?</label>
@@ -565,8 +570,8 @@
         </div>
 
         <div class="diagnostic-card" id="micro-actions-card" style="display:none;">
-            <h3>Plan de Découpage Cognitivement Sécurisé (Anti-Paralysie TDAH)</h3>
-            <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 10px;">Pour contourner la surcharge cognitive, exécutez uniquement la micro-étape 1 sans penser à la suite :</p>
+            <h3>Séquençage Ergonomique Anti-Surcharge (Spécifique TDAH)</h3>
+            <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 10px;">Pour contourner la surcharge cognitive, exécutez uniquement la première micro-étape sans penser à la suite :</p>
             <ul class="micro-actions" id="micro-actions-list"></ul>
         </div>
 
@@ -585,7 +590,7 @@
         <div class="subtitle">Historique de vos diagnostics stockés exclusivement en local (`localStorage`). Aucune donnée ne quitte votre appareil.</div>
         
         <div id="history-list" style="margin-bottom: 20px; max-height: 400px; overflow-y: auto;">
-            <!-- Injecté par JS -->
+            <!-- Injecté dynamiquement -->
         </div>
 
         <div class="btn-group">
@@ -679,28 +684,38 @@
         let nervous = 80;
         let loyalty = 70;
         let actingRisk = "Faible";
+        let riskPriority = 0; // Priorité numérique du risque (0: Faible, 1: Agitation, 2: Dopamine/RSD, 3: Hypomanie, 4: Critique)
+
         let insights = "";
         let profile = "";
         let microActions = [];
+
+        function setRiskLevel(levelText, priorityValue) {
+            if (priorityValue > riskPriority) {
+                actingRisk = levelText;
+                riskPriority = priorityValue;
+            }
+        }
 
         // 1. Sentinelle Clinique Critique (Suicide / Désespoir)
         if (currentData.reserves === 'critical' || currentData.urgency === 'despair') {
             integrity = 15;
             nervous = 20;
-            actingRisk = "CRITIQUE (Urgence Medicale)";
-            insights += `<div class="insight-item insight-warning">🚨 <strong>ALERTE SENTINELLE CLINIQUE :</strong> Les indicateurs montrent un épuisement sévère ou une détresse profonde. Cet outil ne remplace pas un suivi médical/psychiatrique d'urgence. En cas de détresse aiguë, contactez immédiatement le 3114 (Ligne Nationale de Prévention) ou le 15.</div>`;
+            setRiskLevel("CRITIQUE (Urgence Médicale)", 4);
+            insights += `<div class="insight-item insight-warning">🚨 <strong>ALERTE SENTINELLE CLINIQUE :</strong> Les indicateurs montrent un épuisement sévère ou une détresse profonde. Cet outil ne remplace pas un suivi médical/psychiatrique d'urgence. En cas de détresse aiguë, contactez immédiatement le 3114 (Numéro national de prévention du suicide) ou le 15 (SAMU).</div>`;
         }
 
         // 2. Détection Virage Hypomaniaque / Bipolaire
         if (currentData.mania === 'mania') {
             integrity -= 30;
-            actingRisk = "ÉLEVÉ (Impulsion Hypomaniaque)";
+            setRiskLevel("ÉLEVÉ (Impulsion Hypomaniaque)", 3);
             insights += `<div class="insight-item insight-purple">⚡ <strong>Dépistage Hypomanie / Exaltation :</strong> Réduction du besoin de sommeil et sentiment de toute-puissance. Risque massif d'évaluer les risques à zéro. Appliquez un gel décisionnel strict de 14 jours.</div>`;
         }
 
         // 3. Détection Dopaminergique TDAH (Hyperfocus / Nouveauté)
         if (currentData.stimulation === 'high' || currentData.stimulation === 'escape') {
             integrity -= 20;
+            setRiskLevel("MODÉRÉ (Impulsion Dopaminergique)", 2);
             insights += `<div class="insight-item insight-amber">🧠 <strong>Alerte Dopaminergique TDAH :</strong> Le choix est fortement magnétisé par la nouveauté ou la fuite de l'ennui. Risque de désintérêt massif dès que la nouveauté s'estompera. Appliquez la Règle des 72h.</div>`;
             microActions.push("Mettre en place une période de décantation obligatoire de 72 heures sans signature ni engagement.");
             microActions.push("Lister les tâches routinières récurrentes que cette décision exigera dans 6 mois.");
@@ -709,6 +724,7 @@
         // 4. Détection RSD / Borderline (Réactivité au Rejet)
         if (currentData.trigger === 'rsd') {
             integrity -= 25;
+            setRiskLevel("MODÉRÉ (Réactivité Affective)", 2);
             insights += `<div class="insight-item insight-warning">🛡️ <strong>Réactivité au Rejet / RSD :</strong> L'acte ressemble à une rupture préventive pour vous protéger d'une blessure ou d'une critique récente. Isolez la décision du conflit affectif immédiat.</div>`;
         }
 
@@ -717,18 +733,22 @@
             nervous -= 35;
             insights += `<div class="insight-item insight-amber">🌊 <strong>Sidération Vagale Dorsale (Freeze) :</strong> Votre corps est en engourdissement défensif. La décision est vécue comme une tentative de survie passive.</div>`;
         } else if (currentData.somatics === 'agitation') {
-            actingRisk = "ÉLEVÉ (Agitation)";
+            setRiskLevel("ÉLEVÉ (Agitation)", 1);
             nervous -= 20;
         }
 
-        // 6. Sabotage / Masochisme Moral
-        if (currentData.shadow.toLowerCase().includes('punir') || currentData.shadow.toLowerCase().includes('faute')) {
+        // 6. Sabotage / Masochisme Moral (Dictionnaire élargi)
+        const shadowText = currentData.shadow.toLowerCase();
+        const penaltyTerms = ['punir', 'faute', 'culpabilit', 'blam', 'sanction', 'merite pas', 'm?rite pas', 'regrett'];
+        if (penaltyTerms.some(term => shadowText.includes(term))) {
             integrity -= 20;
             insights += `<div class="insight-item insight-amber">⚖️ <strong>Mécanisme de Sabotage / Pénitence :</strong> L'acte est teinté par une culpabilité inconsciente ou un besoin d'auto-punition.</div>`;
         }
 
-        // 7. Page Blanche & Autonomie
-        if (currentData.reset.toLowerCase().includes('provoquer') || currentData.reset.toLowerCase().includes('autres')) {
+        // 7. Page Blanche & Autonomie (Dictionnaire élargi)
+        const resetText = currentData.reset.toLowerCase();
+        const alienationTerms = ['provoquer', 'autres', 'prouver', 'reagir', 'r?agir', 'regard', 'famille', 'entourage'];
+        if (alienationTerms.some(term => resetText.includes(term))) {
             loyalty = 35;
             insights += `<div class="insight-item insight-warning">👥 <strong>Aliénation Relationnelle :</strong> L'acte est un message ou un appel adressé à l'entourage plutôt qu'un choix d'autonomie pure.</div>`;
         } else {
@@ -796,8 +816,8 @@
                 listEl.innerHTML += `
                     <div class="history-item">
                         <div>
-                            <strong>${item.decision.substring(0, 45)}...</strong><br>
-                            <small style="color: var(--text-muted);">${new Date(item.results.date).toLocaleDateString()} — Intégrité : ${item.results.integrity}% — Acting-out : ${item.results.actingRisk}</small>
+                            <strong>${item.decision ? item.decision.substring(0, 45) : 'Bilan'}&hellip;</strong><br>
+                            <small style="color: var(--text-muted);">${new Date(item.results.date).toLocaleDateString()} — Intégrité : ${item.results.integrity}% — Risque : ${item.results.actingRisk}</small>
                         </div>
                         <button class="secondary" style="padding: 6px 12px; font-size: 0.8rem;" onclick="loadHistoryItem(${index})">Revoir</button>
                     </div>
@@ -811,6 +831,9 @@
         const history = JSON.parse(localStorage.getItem('depth_compass_vault') || '[]');
         const item = history[index];
         if (!item) return;
+
+        // FIX : Synchronisation de currentData avec l'élément chargé
+        currentData = item;
 
         document.getElementById('res-integrity').innerText = `${item.results.integrity}%`;
         document.getElementById('res-nervous').innerText = `${item.results.nervous}%`;
@@ -856,39 +879,39 @@
 Date : ${new Date().toLocaleDateString()}
 
 ## 1. Phénoménologie de la Décision
-- Décision : ${currentData.decision}
-- Urgence ressentie : ${currentData.urgency}
+- Décision : ${currentData.decision || 'Non renseignée'}
+- Urgence ressentie : ${currentData.urgency || 'Non renseignée'}
 
 ## 2. Profilage Neuro-Psychiatrique
-- Stimulation / Hyperfocus : ${currentData.stimulation}
-- Réactivité au Rejet (RSD) : ${currentData.trigger}
-- Sommeil / Énergie / Hypomanie : ${currentData.mania}
+- Stimulation / Hyperfocus : ${currentData.stimulation || 'N/A'}
+- Réactivité au Rejet (RSD) : ${currentData.trigger || 'N/A'}
+- Sommeil / Énergie / Hypomanie : ${currentData.mania || 'N/A'}
 
 ## 3. Ombre & Fonction Cachée
-${currentData.shadow}
+${currentData.shadow || 'N/A'}
 
 ## 4. Système & Loyautés Invisibles
-${currentData.system}
+${currentData.system || 'N/A'}
 
 ## 5. Deuil Existentiel & Jonas
-- Deuil requis : ${currentData.grief}
-- Peur de la grandeur : ${currentData.jonas}
+- Deuil requis : ${currentData.grief || 'N/A'}
+- Peur de la grandeur : ${currentData.jonas || 'N/A'}
 
 ## 6. Réponse Somatique & Réserves
-- État polyvagal : ${currentData.somatics}
-- Réserves d'énergie : ${currentData.reserves}
+- État polyvagal : ${currentData.somatics || 'N/A'}
+- Réserves d'énergie : ${currentData.reserves || 'N/A'}
 
 ## 7. Test de la Page Blanche
-${currentData.reset}
+${currentData.reset || 'N/A'}
 
 ## 8. Métriques & Diagnostics
-- Intégrité du Soi : ${currentData.results.integrity}%
-- Résilience Nerveuse : ${currentData.results.nervous}%
-- Indice de Loyauté : ${currentData.results.loyalty}%
-- Risque d'Acting-Out : ${currentData.results.actingRisk}
+- Intégrité du Soi : ${currentData.results ? currentData.results.integrity : '--'}%
+- Résilience Nerveuse : ${currentData.results ? currentData.results.nervous : '--'}%
+- Indice de Loyauté : ${currentData.results ? currentData.results.loyalty : '--'}%
+- Risque d'Acting-Out : ${currentData.results ? currentData.results.actingRisk : '--'}
 
 ### Synthèse :
-${currentData.results.profile.replace(/<[^>]*>?/gm, '')}
+${currentData.results && currentData.results.profile ? currentData.results.profile.replace(/<[^>]*>?/gm, '') : ''}
 `;
 
         const blob = new Blob([md], { type: 'text/markdown' });
