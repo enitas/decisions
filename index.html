@@ -3,11 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Boussole Décisionnelle v11.4 — Suite Cognitive & Souveraine</title>
+    <title>Boussole Décisionnelle v11.5 — Suite Cognitive & PWA Native</title>
     <!-- Optimisation PWA / Écran d'accueil mobile -->
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="theme-color" content="#030508">
+    <!-- Manifeste PWA intégré (Data URI) pour reconnaissance instantanée par le navigateur -->
+    <link rel="manifest" href='data:application/manifest+json;charset=utf-8,%7B%22name%22%3A%22Boussole%20D%C3%A9cisionnelle%22%2C%22short_name%22%3A%22Boussole%22%2C%22start_url%22%3A%22.%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%23030508%22%2C%22theme_color%22%3A%22%23030508%22%2C%22icons%22%3A%5B%5D%7D'>
     <style>
         :root {
             --bg-color: #030508;
@@ -383,8 +385,10 @@
 <div class="container">
 
     <div class="top-bar">
-        <div class="brand">🧭 BOUSSOLE DÉCISIONNELLE v11.4</div>
+        <div class="brand">🧭 BOUSSOLE DÉCISIONNELLE v11.5</div>
         <div class="controls">
+            <!-- Bouton d'installation PWA natif (masqué par défaut jusqu'à ce que le navigateur autorise l'installation) -->
+            <button id="pwa-install-btn" style="display: none; background: var(--success); color: #030712; padding: 5px 12px; font-size: 0.75rem; font-weight: bold;" onclick="installPWA()">Installer l'App</button>
             <button class="secondary" style="padding: 5px 10px; font-size: 0.75rem;" onclick="toggleDysFont()" id="dys-font-btn">Police Dys</button>
             <button class="secondary" style="padding: 5px 10px; font-size: 0.75rem;" onclick="toggleLowStim()" id="low-stim-btn">Mode Épuré</button>
         </div>
@@ -833,6 +837,44 @@
     let currentData = {};
     let breathingTimer = null;
     let timerTimeout = null;
+    let deferredPrompt = null;
+
+    // Enregistrement automatique du Service Worker PWA via Blob (100% autonome en fichier unique)
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+            const swCode = `
+                self.addEventListener('install', (e) => e.waitUntil(self.skipWaiting()));
+                self.addEventListener('activate', (e) => e.waitUntil(self.clients.claim()));
+                self.addEventListener('fetch', (e) => {
+                    e.respondWith(
+                        caches.match(e.request).then(response => response || fetch(e.request)).catch(() => {})
+                    );
+                });
+            `;
+            const blob = new Blob([swCode], { type: 'text/javascript' });
+            navigator.serviceWorker.register(URL.createObjectURL(blob)).catch(err => console.log('SW registration error:', err));
+        });
+    }
+
+    // Gestion de l'événement d'installation PWA
+    window.addEventListener('beforeinstallprompt', (e) => {
+        e.preventDefault();
+        deferredPrompt = e;
+        const installBtn = document.getElementById('pwa-install-btn');
+        if (installBtn) installBtn.style.display = 'inline-block';
+    });
+
+    function installPWA() {
+        if (!deferredPrompt) return;
+        deferredPrompt.prompt();
+        deferredPrompt.userChoice.then((choiceResult) => {
+            if (choiceResult.outcome === 'accepted') {
+                console.log('Utilisateur a accepté l\'installation PWA');
+            }
+            deferredPrompt = null;
+            document.getElementById('pwa-install-btn').style.display = 'none';
+        });
+    }
 
     function switchView(viewId) {
         document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
@@ -1055,7 +1097,7 @@
             } catch(err) {
                 alert("Erreur lors de la lecture du fichier.");
             }
-            event.target.value = ''; // Reset file input
+            event.target.value = '';
         };
         reader.readAsText(file);
     }
@@ -1065,7 +1107,6 @@
         currentStep = 1;
         currentData = { protocol: type };
         
-        // Réinitialise les boutons de l'étape 2 (au cas où ils auraient été modifiés par le mode Flash)
         const btnGroup = document.querySelector('#step-2 .btn-group');
         if (btnGroup) {
             btnGroup.innerHTML = `
@@ -1307,7 +1348,7 @@
         if (currentData.trigger === 'rsd') {
             integrity -= 25;
             setRiskLevel("MODÉRÉ (Réactivité Affective)", 2);
-            insights += `<div class="insight-item insight-warning">🛡️ <strong>Réactivité au Rejet / RSD :</strong> L'acte s'apparente à une rupture préventive suite à une blessure perçue.</div>`;
+            insights += `<div class="insight-item insight-warning">🛡️ <strong>Réactivité au Rejet / RSD :</strong> Le choix s'apparente à une rupture préventive suite à une blessure perçue.</div>`;
         }
 
         if (currentData.somatics === 'freeze') {
@@ -1444,7 +1485,7 @@
     }
 
     function downloadMarkdown() {
-        const md = `# BILAN CLINIQUE DE DISCERNEMENT DÉCISIONNEL (v11.4)
+        const md = `# BILAN CLINIQUE DE DISCERNEMENT DÉCISIONNEL (v11.5)
 Date : ${new Date().toLocaleDateString()}
 Protocole : ${currentData.protocol || 'Standard'}
 
