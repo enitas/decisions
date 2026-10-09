@@ -3,18 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Boussole Décisionnelle v11.6 — Suite Cognitive & Espace TDAH</title>
+    <title>Boussole Décisionnelle v11.6 — Suite Complète</title>
     
-    <!-- Optimisation PWA / Écran d'accueil mobile -->
+    <!-- Optimisation PWA / Mobile -->
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="theme-color" content="#030508">
-    
-    <!-- Manifeste PWA intégré -->
     <link rel="manifest" href='data:application/manifest+json;charset=utf-8,%7B%22name%22%3A%22Boussole%20D%C3%A9cisionnelle%22%2C%22short_name%22%3A%22Boussole%22%2C%22start_url%22%3A%22.%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%23030508%22%2C%22theme_color%22%3A%22%23030508%22%2C%22icons%22%3A%5B%5D%7D'>
     
     <style>
-        /* ================= VARIABLES & THEMES ================= */
+        /* ================= VARIABLES ================= */
         :root {
             --bg-color: #030508;
             --card-bg: #0b0f17;
@@ -26,120 +24,80 @@
             --warning: #f43f5e;
             --success: #10b981;
             --amber: #f59e0b;
+            --purple: #c084fc;
             --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             --letter-spacing: normal;
             --line-height: 1.5;
         }
 
         body.low-stim {
-            --bg-color: #0d0d0d;
-            --card-bg: #141414;
-            --text-main: #d4d4d4;
-            --text-muted: #737373;
-            --accent: #a3a3a3;
-            --accent-hover: #e5e5e5;
-            --border: #262626;
-            --warning: #a3a3a3;
-            --success: #a3a3a3;
-            --amber: #a3a3a3;
+            --bg-color: #0d0d0d; --card-bg: #141414; --text-main: #d4d4d4; --text-muted: #737373;
+            --accent: #a3a3a3; --accent-hover: #e5e5e5; --border: #262626; --warning: #a3a3a3;
+            --success: #a3a3a3; --amber: #a3a3a3; --purple: #a3a3a3;
         }
+        body.low-stim * { transition: none !important; box-shadow: none !important; }
 
         body.dys-font {
             --font-family: "Atkinson Hyperlegible", "Comic Sans MS", "Verdana", sans-serif;
-            --letter-spacing: 0.6px;
-            --line-height: 1.7;
+            --letter-spacing: 0.6px; --line-height: 1.7;
         }
 
-        body.low-stim * {
-            transition: none !important;
-            box-shadow: none !important;
-        }
-
-        /* ================= BASE STYLES ================= */
+        /* ================= BASE ================= */
         body {
-            font-family: var(--font-family);
-            letter-spacing: var(--letter-spacing);
-            line-height: var(--line-height);
-            background-color: var(--bg-color);
-            color: var(--text-main);
-            margin: 0;
-            padding: 20px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
+            font-family: var(--font-family); letter-spacing: var(--letter-spacing); line-height: var(--line-height);
+            background-color: var(--bg-color); color: var(--text-main); margin: 0; padding: 20px;
+            display: flex; justify-content: center; align-items: flex-start; min-height: 100vh;
             transition: background-color 0.3s, color 0.3s;
         }
 
         .container {
-            width: 100%;
-            max-width: 880px;
-            background-color: var(--card-bg);
-            border: 1px solid var(--border);
-            border-radius: 18px;
-            padding: 40px;
-            box-shadow: 0 30px 80px rgba(0,0,0,0.95);
-            position: relative;
+            width: 100%; max-width: 880px; background-color: var(--card-bg); border: 1px solid var(--border);
+            border-radius: 18px; padding: 40px; box-shadow: 0 30px 80px rgba(0,0,0,0.95); margin-top: 2vh; margin-bottom: 5vh;
         }
+        @media (max-width: 640px) { .container { padding: 20px; margin-top: 0; } .mode-grid { grid-template-columns: 1fr !important; } }
 
-        @media (max-width: 640px) {
-            .container { padding: 20px; }
-            .mode-grid { grid-template-columns: 1fr !important; }
-        }
-
-        /* ================= TOP BAR ================= */
-        .top-bar {
-            display: flex; justify-content: space-between; align-items: center;
-            margin-bottom: 20px; padding-bottom: 15px; border-bottom: 1px solid var(--border);
-            flex-wrap: wrap; gap: 10px;
-        }
+        /* ================= TYPOGRAPHY & UI ================= */
+        .top-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding-bottom: 15px; border-bottom: 1px solid var(--border); flex-wrap: wrap; gap: 10px; }
         .top-bar .brand { font-weight: 700; font-size: 1.1rem; color: var(--accent); }
-        .top-bar .controls { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
-
-        /* ================= TYPOGRAPHY ================= */
+        .controls { display: flex; gap: 8px; align-items: center; }
         h1 { font-size: 1.5rem; margin-top: 0; margin-bottom: 8px; color: #fff; }
+        h3 { margin-top: 0; color: var(--accent); font-size: 1.05rem; margin-bottom: 12px; }
         .subtitle { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 25px; }
         label { display: block; font-weight: 600; margin-bottom: 8px; font-size: 0.92rem; color: #e2e8f0; }
 
-        /* ================= VIEWS ================= */
         .view { display: none; animation: fadeIn 0.3s ease; }
         .view.active { display: block; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+        
+        .step { display: none; }
+        .step.active { display: block; animation: fadeIn 0.3s ease; }
 
-        /* ================= FORM ELEMENTS ================= */
+        /* ================= INPUTS & BUTTONS ================= */
         textarea, select, input[type="text"] {
-            width: 100%; padding: 12px 16px; background-color: #06080d;
-            border: 1px solid var(--border); border-radius: 8px; color: var(--text-main);
-            font-size: 0.95rem; margin-bottom: 20px; box-sizing: border-box;
-            transition: border-color 0.2s; font-family: var(--font-family);
+            width: 100%; padding: 12px 16px; background-color: #06080d; border: 1px solid var(--border);
+            border-radius: 8px; color: var(--text-main); font-size: 0.95rem; margin-bottom: 20px; box-sizing: border-box; font-family: var(--font-family);
         }
         textarea:focus, select:focus, input[type="text"]:focus { outline: none; border-color: var(--accent); }
 
-        /* ================= BUTTONS ================= */
         .btn-group { display: flex; justify-content: space-between; align-items: center; margin-top: 25px; gap: 10px; flex-wrap: wrap; }
         button {
             background-color: var(--accent); color: #030712; border: none; padding: 12px 22px;
-            font-weight: 600; border-radius: 8px; cursor: pointer; font-size: 0.92rem;
-            transition: background 0.2s, transform 0.1s;
+            font-weight: 600; border-radius: 8px; cursor: pointer; font-size: 0.92rem; transition: background 0.2s, transform 0.1s;
         }
         button:hover { background-color: var(--accent-hover); }
         button:active { transform: scale(0.98); }
         button.secondary { background-color: transparent; color: var(--text-muted); border: 1px solid var(--border); }
         button.secondary:hover { color: var(--text-main); border-color: var(--text-muted); }
         button.danger { background-color: var(--warning); color: #fff; }
+        button:disabled { opacity: 0.5; cursor: not-allowed; }
 
         /* ================= CARDS & GRIDS ================= */
         .mode-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin-bottom: 25px; }
-        .mode-card {
-            background: #06080d; border: 1px solid var(--border); border-radius: 10px;
-            padding: 20px; cursor: pointer; transition: all 0.2s;
-        }
+        .mode-card { background: #06080d; border: 1px solid var(--border); border-radius: 10px; padding: 20px; cursor: pointer; transition: all 0.2s; }
         .mode-card:hover { border-color: var(--accent); transform: translateY(-2px); }
-        .mode-card h3 { margin-top: 0; color: var(--accent); font-size: 1.05rem; margin-bottom: 8px; }
         .mode-card p { margin: 0; color: var(--text-muted); font-size: 0.85rem; line-height: 1.4; }
 
         .diagnostic-card { background-color: #06080d; border: 1px solid var(--border); border-radius: 10px; padding: 20px; margin-bottom: 20px; }
-        .diagnostic-card h3 { margin-top: 0; color: var(--accent); font-size: 0.95rem; margin-bottom: 12px; }
 
         .insight-item { padding: 12px 16px; margin-bottom: 12px; border-radius: 6px; font-size: 0.88rem; line-height: 1.5; }
         .insight-warning { color: var(--warning); background: rgba(244, 63, 94, 0.1); border-left: 4px solid var(--warning); }
@@ -153,13 +111,9 @@
         .checklist-actions { list-style: none; padding: 0; margin: 10px 0 0 0; }
         .checklist-actions li { margin-bottom: 10px; font-size: 0.9rem; display: flex; align-items: center; gap: 10px; }
         .checklist-actions input[type="checkbox"] { accent-color: var(--accent); width: 18px; height: 18px; cursor: pointer; }
-        
-        /* Effet Barré (Strikethrough) dynamique */
-        .checklist-actions input[type="checkbox"]:checked + label {
-            text-decoration: line-through; color: var(--text-muted); opacity: 0.6; transition: all 0.2s ease;
-        }
+        .checklist-actions input[type="checkbox"]:checked + label { text-decoration: line-through; color: var(--text-muted); opacity: 0.6; transition: all 0.2s ease; }
 
-        /* ================= ANIMATIONS & VISUALS ================= */
+        /* ================= VISUALS ================= */
         .breath-circle-container { display: flex; justify-content: center; align-items: center; height: 180px; margin: 20px 0; }
         .breath-circle {
             width: 120px; height: 120px; border-radius: 50%; background: rgba(56, 189, 248, 0.15); border: 2px solid var(--accent);
@@ -172,6 +126,13 @@
         
         .resource-link { display: block; padding: 12px; border: 1px solid var(--border); border-radius: 8px; color: var(--text-main); text-decoration: none; margin-bottom: 10px; transition: 0.2s; background: #06080d;}
         .resource-link:hover { border-color: var(--accent); color: var(--accent); }
+
+        .vault-item { background: #1e293b; padding: 15px; border-radius: 8px; margin-bottom: 15px; border-left: 4px solid var(--purple); }
+        .vault-item .date { font-size: 0.75rem; color: var(--text-muted); margin-bottom: 5px; font-weight: bold; }
+        .vault-item .type { font-size: 0.85rem; color: var(--purple); margin-bottom: 8px; }
+        .vault-item .content { font-size: 0.9rem; line-height: 1.4; white-space: pre-wrap; }
+
+        .timer-display { font-size: 3rem; text-align: center; font-weight: bold; color: var(--amber); margin: 20px 0; font-variant-numeric: tabular-nums; letter-spacing: 2px;}
     </style>
 </head>
 <body>
@@ -183,8 +144,8 @@
         <div class="brand">🧭 BOUSSOLE DÉCISIONNELLE v11.6</div>
         <div class="controls">
             <button id="pwa-install-btn" style="display: none; background: var(--success); color: #030712; padding: 5px 12px; font-size: 0.75rem; font-weight: bold;" onclick="installPWA()">Installer l'App</button>
-            <button class="secondary" style="padding: 5px 10px; font-size: 0.75rem;" onclick="toggleDysFont()" id="dys-font-btn">Police Dys</button>
-            <button class="secondary" style="padding: 5px 10px; font-size: 0.75rem;" onclick="toggleLowStim()" id="low-stim-btn">Mode Épuré</button>
+            <button class="secondary" style="padding: 5px 10px; font-size: 0.75rem;" onclick="toggleDysFont()">Police Dys</button>
+            <button class="secondary" style="padding: 5px 10px; font-size: 0.75rem;" onclick="toggleLowStim()">Mode Épuré</button>
         </div>
     </div>
 
@@ -198,56 +159,51 @@
                 <h3 style="font-size: 1.2rem;">🌪️ ESPACE TDAH & PARALYSIE EXÉCUTIVE <span class="badge badge-tdah">NOUVEAU</span></h3>
                 <p><strong>Séquenceur anti-paralysie</strong> (briseur de mur), <strong>Filtre Dopaminergique</strong> anti-impulsivité et <strong>Compteur visuel</strong> de Cécité Temporelle.</p>
             </div>
-            <div class="mode-card" style="border-color: rgba(244, 63, 94, 0.4);" onclick="startProtocol('flash')">
-                <h3>⚡ Mode Flash / Crise Aiguë</h3>
+            <div class="mode-card" style="border-color: rgba(244, 63, 94, 0.4);" onclick="startProtocol('Flash')">
+                <h3 style="color: var(--warning);">⚡ Protocole Flash</h3>
                 <p>Évaluation ultrarapide pour les états de saturation intense ou d'impulsion de rupture immédiate.</p>
             </div>
-            <div class="mode-card" onclick="startProtocol('standard')">
-                <h3>Bifurcation & Choix Stratégique</h3>
-                <p>Analyse approfondie des choix majeurs (carrière, relation) confrontés au deuil et aux loyautés invisibles.</p>
+            <div class="mode-card" style="border-color: rgba(192, 132, 252, 0.4);" onclick="startProtocol('Standard')">
+                <h3 style="color: var(--purple);">🗺️ Bifurcation Stratégique</h3>
+                <p>Analyse approfondie en 3 étapes pour décortiquer un choix majeur et l'historiser.</p>
             </div>
             <div class="mode-card" style="border-color: rgba(56, 189, 248, 0.4);" onclick="switchView('view-braindump')">
                 <h3>🧠 Décharge Cognitive</h3>
-                <p>Bloc-notes souverain pour vider tout le bruit mental avec sauvegarde automatique locale.</p>
+                <p>Bloc-notes souverain pour vider tout le bruit mental (Sauvegarde auto).</p>
             </div>
-            <div class="mode-card" style="border-color: rgba(16, 185, 129, 0.4);" onclick="openBreathingView()">
-                <h3>🫁 Régulation Somatique</h3>
-                <p>Exercice visuel guidé de cohérence (4-4-4-4) pour abaisser l'hyper-activation sympathique.</p>
+            <div class="mode-card" style="border-color: rgba(16, 185, 129, 0.4);" onclick="switchView('view-breathing')">
+                <h3 style="color: var(--success);">🫁 Régulation Somatique</h3>
+                <p>Exercice visuel guidé (4-4-4-4) pour abaisser l'hyper-activation du système nerveux.</p>
             </div>
-            <div class="mode-card" style="border-color: rgba(245, 158, 11, 0.4);" onclick="switchView('view-timer')">
-                <h3>⏳ Minuteur de Décantation</h3>
-                <p>Verrouillage temporaire (24h-72h) pour éviter les engagements ou achats impulsifs.</p>
+            <div class="mode-card" style="border-color: rgba(245, 158, 11, 0.4);" onclick="openTimerView()">
+                <h3 style="color: var(--amber);">⏳ Minuteur Décantation</h3>
+                <p>Verrouillage temporaire (24h-72h) pour bloquer les engagements impulsifs.</p>
             </div>
             <div class="mode-card" onclick="switchView('view-resources')">
-                <h3>📚 Hub Échelles Cliniques</h3>
-                <p>Accès direct aux auto-évaluations validées (ASRS, AQ, PHQ-9, TAS-20).</p>
+                <h3>📚 Échelles Cliniques</h3>
+                <p>Accès direct aux auto-évaluations (ASRS, AQ-50, PHQ-9, TAS-20).</p>
             </div>
         </div>
 
-        <div class="btn-group">
-            <button class="secondary" onclick="switchView('view-vault')" style="width: 100%;">Consulter le Coffre-Fort Local (Vault)</button>
-        </div>
+        <button class="secondary" onclick="openVault()" style="width: 100%;">Consulter le Coffre-Fort (Historique Local)</button>
     </div>
 
     <!-- ================= VUE 1 : ESPACE TDAH ================= -->
     <div class="view" id="view-tdah">
         <h1>Espace TDAH & Paralysie Exécutive</h1>
-        <div class="subtitle">Outils immédiats pour contourner le dysfonctionnement exécutif et la recherche impulsive de dopamine.</div>
+        <div class="subtitle">Outils immédiats pour contourner le dysfonctionnement exécutif.</div>
 
         <!-- Séquenceur -->
         <div class="diagnostic-card">
-            <h3 style="color: var(--accent);">🧱 1. Séquenceur Anti-Paralysie</h3>
-            <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 15px;">Écrivez la tâche "montagne" ci-dessous, l'outil va la pulvériser en micro-actions de 2 minutes.</p>
-            
-            <input type="text" id="tdah-task-input" placeholder="Ex: Ranger la cuisine, Faire mes impôts, Appeler..." style="margin-bottom: 10px;">
+            <h3>🧱 1. Séquenceur Anti-Paralysie</h3>
+            <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 15px;">Écrivez la tâche "montagne" ci-dessous pour la pulvériser en micro-actions de 2 minutes.</p>
+            <input type="text" id="tdah-task-input" placeholder="Ex: Ranger la cuisine, Faire mes impôts..." style="margin-bottom: 10px;">
             <button onclick="generateMicroTasks()" style="width: 100%; margin-bottom: 15px;">Briser le mur de cette tâche</button>
-            
             <div id="tdah-micro-container" style="display: none; background: rgba(56,189,248,0.05); padding: 15px; border-radius: 8px; border: 1px dashed var(--accent);">
                 <ul class="checklist-actions" id="tdah-micro-list" style="margin-top: 0;"></ul>
-                
                 <div style="margin-top: 15px; display: flex; gap: 8px;">
                     <input type="text" id="custom-step-input" placeholder="Ajouter une micro-étape à moi..." style="margin-bottom: 0; padding: 8px;">
-                    <button class="secondary" onclick="addCustomStep()" style="padding: 8px 12px; white-space: nowrap;">+ Ajouter</button>
+                    <button class="secondary" onclick="addCustomStep()" style="padding: 8px 12px;">+ Ajouter</button>
                 </div>
             </div>
         </div>
@@ -255,52 +211,40 @@
         <!-- Filtre Dopaminergique -->
         <div class="diagnostic-card">
             <h3 style="color: var(--warning);">⚡ 2. Filtre à Dopamine</h3>
-            <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 15px;">Test rapide avant un achat compulsif ou une décision radicale.</p>
-            
             <label>Depuis combien de temps avez-vous cette envie précise ?</label>
             <select id="dopa-time" style="padding: 10px; margin-bottom: 15px;">
                 <option value="flash">Moins de 2 heures (Je le veux LÀ MAINTENANT)</option>
-                <option value="recent">Quelques jours (C'est devenu une obsession récente)</option>
-                <option value="long">Plusieurs semaines/mois (C'est mûrement réfléchi)</option>
+                <option value="recent">Quelques jours (Obsession récente)</option>
+                <option value="long">Plusieurs semaines/mois (Mûrement réfléchi)</option>
             </select>
-
             <label>Que ressentez-vous physiquement en y pensant ?</label>
             <select id="dopa-body" style="padding: 10px; margin-bottom: 15px;">
-                <option value="electric">Tension électrique, urgence, cœur qui bat, excitation</option>
-                <option value="calm">Calme, ancrage, certitude posée</option>
+                <option value="electric">Tension électrique, urgence, excitation frénétique</option>
                 <option value="escape">Soulagement immédiat (fuite d'une douleur/ennui)</option>
+                <option value="calm">Calme, ancrage, certitude posée</option>
             </select>
-
-            <button onclick="testDopamine()" class="secondary" style="width: 100%;">Lancer le Test Rapide</button>
+            <button onclick="testDopamine()" class="secondary" style="width: 100%;">Lancer le Test</button>
             <div id="dopa-result" style="display: none; margin-top: 15px;"></div>
         </div>
 
         <!-- Cécité Temporelle -->
         <div class="diagnostic-card">
             <h3 style="color: var(--success);">⏳ 3. Ancrage Temporel (20 Min)</h3>
-            <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 15px;">Matérialisez visuellement le temps lors d'un hyperfocus.</p>
-            
             <div id="time-blind-text" style="text-align: center; font-size: 1.8rem; font-weight: bold; color: var(--text-main); margin-bottom: 10px; font-variant-numeric: tabular-nums;">20:00</div>
-            <div class="time-blindness-bar">
-                <div class="time-blindness-fill" id="time-blind-fill"></div>
-            </div>
-            
+            <div class="time-blindness-bar"><div class="time-blindness-fill" id="time-blind-fill"></div></div>
             <div style="display: flex; gap: 10px; justify-content: center;">
                 <button onclick="startTimeBlindness()" style="background: var(--success); color: #000;">Démarrer</button>
                 <button onclick="stopTimeBlindness()" class="secondary">Réinitialiser</button>
             </div>
         </div>
-
-        <div class="btn-group">
-            <button class="secondary" onclick="returnHome()">Retour à l'accueil</button>
-        </div>
+        <div class="btn-group"><button class="secondary" onclick="returnHome()">Retour</button></div>
     </div>
 
     <!-- ================= VUE 2 : BRAIN DUMP ================= -->
     <div class="view" id="view-braindump">
         <h1>Décharge Cognitive</h1>
-        <div class="subtitle">Votre mémoire de travail est saturée. Videz tout ici. Sauvegarde automatique hors-ligne activée.</div>
-        <textarea id="braindump-text" rows="14" placeholder="Écrivez tout en vrac ici... Ce texte est sauvegardé automatiquement sur votre appareil à chaque lettre tapée."></textarea>
+        <div class="subtitle">Videz tout ici. Sauvegarde automatique locale activée.</div>
+        <textarea id="braindump-text" rows="14" placeholder="Tapez ici..."></textarea>
         <div class="btn-group">
             <button class="secondary" onclick="returnHome()">Retour</button>
             <div style="display: flex; gap: 10px;">
@@ -312,49 +256,96 @@
 
     <!-- ================= VUE 3 : RESPIRATION ================= -->
     <div class="view" id="view-breathing">
-        <h1>Régulation Somatique (Box Breathing)</h1>
-        <div class="subtitle">Méthode 4-4-4-4 pour abaisser le rythme cardiaque et désactiver le système nerveux sympathique.</div>
+        <h1 style="color: var(--success)">Régulation Somatique</h1>
+        <div class="subtitle">Méthode 4-4-4-4 pour désactiver le système nerveux sympathique.</div>
         <div class="diagnostic-card" style="text-align: center; padding: 30px 20px;">
-            <div id="breath-status" style="font-size: 1.2rem; font-weight: bold; color: var(--accent); margin-bottom: 10px; height: 30px;">Prêt à commencer</div>
-            <div class="breath-circle-container"><div class="breath-circle" id="breath-circle">Inspirez</div></div>
+            <div id="breath-status" style="font-size: 1.2rem; font-weight: bold; color: var(--success); margin-bottom: 10px; height: 30px;">Prêt à commencer</div>
+            <div class="breath-circle-container">
+                <div class="breath-circle" id="breath-circle" style="border-color: var(--success); color: var(--success); background: rgba(16, 185, 129, 0.15);">Inspirez</div>
+            </div>
             <div id="breath-controls" style="margin-top: 25px;">
-                <button onclick="startBreathingExercise()">Démarrer (4s)</button>
-                <button class="danger secondary" onclick="stopBreathingExercise()" style="margin-left: 10px;">Arrêter</button>
+                <button onclick="startBreathingExercise()" style="background: var(--success); color: #000;">Démarrer</button>
+                <button class="secondary" onclick="stopBreathingExercise()" style="margin-left: 10px;">Arrêter</button>
             </div>
         </div>
         <div class="btn-group"><button class="secondary" onclick="returnHome()">Retour</button></div>
     </div>
 
-    <!-- ================= VUE 4 : PROTOCOLE (Simplifié) ================= -->
+    <!-- ================= VUE 4 : PROTOCOLE D'ANALYSE ================= -->
     <div class="view" id="view-protocol">
-        <h1 id="protocol-title">Analyse Stratégique</h1>
-        <div class="subtitle">Prenez du recul sur votre situation avant de trancher.</div>
+        <h1 id="protocol-title" style="color: var(--purple);">Protocole d'Analyse</h1>
+        <div class="subtitle">Décortiquez l'urgence ou la décision.</div>
+        
         <div class="diagnostic-card">
-            <label>Quelle est la situation précise ?</label>
-            <textarea rows="4" placeholder="Décrivez objectivement..."></textarea>
-            <label>Quelle émotion pilote cette décision en ce moment ?</label>
-            <select>
-                <option>Colère / Injustice</option><option>Peur / Anxiété</option>
-                <option>Ennui / Épuisement</option><option>Enthousiasme / Nouveauté</option>
-            </select>
-            <div style="margin-top: 20px;" class="insight-item insight-amber">
-                <strong>Conseil :</strong> Ne prenez aucune décision d'engagement ou de rupture sous le coup de cette émotion. Laissez décanter 72h.
+            <!-- Etape 1 -->
+            <div id="proto-step-1" class="step active">
+                <h3>Étape 1 : Cartographie de l'Enjeu</h3>
+                <label>Que se passe-t-il concrètement et quelle est la décision à prendre ?</label>
+                <textarea id="proto-q1" rows="4" placeholder="Décrivez les faits bruts, sans jugement..."></textarea>
+                <button onclick="nextProtoStep(2)" style="width: 100%;">Suivant</button>
+            </div>
+
+            <!-- Etape 2 -->
+            <div id="proto-step-2" class="step">
+                <h3>Étape 2 : Moteur Émotionnel</h3>
+                <label>Quelle émotion pilote principalement ce besoin d'agir là, maintenant ?</label>
+                <select id="proto-q2">
+                    <option value="Peur du manque / Urgence">Peur du manque / Urgence de sécuriser</option>
+                    <option value="Colère / Sentiment d'Injustice">Colère / Injustice (Besoin de fuir ou de détruire)</option>
+                    <option value="Nouveauté (Dopamine)">Enthousiasme soudain / Recherche de nouveauté</option>
+                    <option value="Lassitude (Burnout)">Épuisement profond / Ennui insoutenable</option>
+                    <option value="Clarté sereine">Clarté froide / Sereine</option>
+                </select>
+                <div class="btn-group" style="margin-top: 20px;">
+                    <button class="secondary" onclick="nextProtoStep(1)">Précédent</button>
+                    <button onclick="nextProtoStep(3)">Suivant</button>
+                </div>
+            </div>
+
+            <!-- Etape 3 -->
+            <div id="proto-step-3" class="step">
+                <h3>Étape 3 : Conséquences & Loyautés</h3>
+                <label>Si vous agissez, quelle est la pire conséquence possible dans 6 mois ?</label>
+                <textarea id="proto-q3" rows="3"></textarea>
+                <div class="btn-group">
+                    <button class="secondary" onclick="nextProtoStep(2)">Précédent</button>
+                    <button onclick="finishProtocol()" style="background: var(--purple); color: #fff;">Enregistrer au Coffre</button>
+                </div>
+            </div>
+            
+            <!-- Resultat final -->
+            <div id="proto-result" class="step">
+                <h3>Analyse terminée</h3>
+                <div id="proto-verdict" class="insight-item insight-amber"></div>
+                <button onclick="returnHome()" class="secondary" style="width: 100%; margin-top: 15px;">Retour à l'accueil</button>
             </div>
         </div>
-        <div class="btn-group"><button class="secondary" onclick="returnHome()">Retour</button></div>
+        <div class="btn-group"><button class="secondary" onclick="returnHome()">Annuler</button></div>
     </div>
 
     <!-- ================= VUE 5 : TIMER DÉCANTATION ================= -->
     <div class="view" id="view-timer">
-        <h1>Minuteur de Décantation</h1>
-        <div class="subtitle">Engagement solennel de ne pas agir impulsivement pendant une période donnée.</div>
-        <div class="diagnostic-card" style="text-align: center;">
-            <p>Verrouillez votre décision pour :</p>
-            <div style="display: flex; gap: 10px; justify-content: center; margin-bottom: 20px;">
-                <button onclick="alert('Minuteur réglé pour 24h. Ne faites rien d\'ici là.')">24 Heures</button>
-                <button onclick="alert('Minuteur réglé pour 72h. Reposez-vous.')">72 Heures</button>
+        <h1 style="color: var(--amber);">Minuteur de Décantation</h1>
+        <div class="subtitle">Engagement solennel de ne pas agir impulsivement pendant une période donnée. Ce minuteur continuera de tourner même si vous fermez l'application.</div>
+        
+        <div class="diagnostic-card">
+            <div id="timer-setup">
+                <h3 style="text-align: center;">Bloquer la décision pour :</h3>
+                <div style="display: flex; gap: 10px; justify-content: center; margin: 20px 0;">
+                    <button onclick="startDecantationTimer(24)" style="background: var(--amber); color: #000;">24 Heures</button>
+                    <button onclick="startDecantationTimer(72)" style="background: var(--warning);">72 Heures</button>
+                </div>
+                <p style="font-size: 0.85rem; color: var(--text-muted); text-align: center;">Le cortex préfrontal a besoin d'au moins une nuit de sommeil pour éteindre l'amygdale. Ne décidez jamais le soir.</p>
             </div>
-            <p style="font-size: 0.85rem; color: var(--text-muted);">Le cortex préfrontal a besoin de sommeil pour éteindre l'amygdale (centre de l'alerte/impulsion). Ne décidez jamais la nuit.</p>
+            
+            <div id="timer-active" style="display: none;">
+                <h3 style="text-align: center; color: var(--amber);">Décantation en cours</h3>
+                <div class="timer-display" id="decantation-display">23:59:59</div>
+                <p style="text-align: center; font-size: 0.9rem;">L'action ou l'achat est strictement interdit tant que le minuteur tourne.</p>
+                <div style="text-align: center; margin-top: 20px;">
+                    <button class="secondary danger" onclick="cancelDecantationTimer()" style="font-size: 0.8rem; padding: 5px 10px;">Briser l'engagement (Urgence vitale uniquement)</button>
+                </div>
+            </div>
         </div>
         <div class="btn-group"><button class="secondary" onclick="returnHome()">Retour</button></div>
     </div>
@@ -362,43 +353,51 @@
     <!-- ================= VUE 6 : RESSOURCES ================= -->
     <div class="view" id="view-resources">
         <h1>Hub Échelles Cliniques</h1>
-        <div class="subtitle">Auto-évaluations validées scientifiquement (à titre indicatif, ne remplace pas un diagnostic).</div>
+        <div class="subtitle">Auto-évaluations validées (à titre indicatif).</div>
         <div class="diagnostic-card">
             <a href="https://psychology-tools.com/test/adult-adhd-self-report-scale" target="_blank" class="resource-link">📝 <strong>ASRS v1.1</strong> (Dépistage TDAH Adulte) ↗</a>
-            <a href="https://psychology-tools.com/test/autism-spectrum-quotient" target="_blank" class="resource-link">🧩 <strong>AQ-50</strong> (Quotient du Spectre Autistique) ↗</a>
-            <a href="https://psychology-tools.com/test/phq-9" target="_blank" class="resource-link">☁️ <strong>PHQ-9</strong> (Évaluation Dépression) ↗</a>
-            <a href="https://psychology-tools.com/test/toronto-alexithymia-scale" target="_blank" class="resource-link">😶 <strong>TAS-20</strong> (Alexithymie / Difficulté à identifier les émotions) ↗</a>
+            <a href="https://psychology-tools.com/test/autism-spectrum-quotient" target="_blank" class="resource-link">🧩 <strong>AQ-50</strong> (Spectre Autistique) ↗</a>
+            <a href="https://psychology-tools.com/test/phq-9" target="_blank" class="resource-link">☁️ <strong>PHQ-9</strong> (Dépression) ↗</a>
+            <a href="https://psychology-tools.com/test/toronto-alexithymia-scale" target="_blank" class="resource-link">😶 <strong>TAS-20</strong> (Alexithymie / Émotions) ↗</a>
         </div>
         <div class="btn-group"><button class="secondary" onclick="returnHome()">Retour</button></div>
     </div>
 
-    <!-- ================= VUE 7 : VAULT ================= -->
+    <!-- ================= VUE 7 : VAULT (Coffre-Fort) ================= -->
     <div class="view" id="view-vault">
-        <h1>Coffre-Fort Local (Vault)</h1>
-        <div class="subtitle">Historique de vos réflexions passées (stockées uniquement sur cet appareil).</div>
-        <div class="diagnostic-card">
-            <p style="color: var(--text-muted); font-size: 0.9rem; text-align: center;"><em>(Fonctionnalité d'historisation complète prévue dans la v12)</em><br><br>Actuellement, vos données de "Décharge Cognitive" sont bien sauvegardées localement.</p>
+        <h1 style="color: var(--purple);">Coffre-Fort Local</h1>
+        <div class="subtitle">Historique de vos réflexions (Stocké à 100% hors-ligne sur cet appareil).</div>
+        
+        <div class="diagnostic-card" style="border-color: var(--purple);">
+            <h3>Vos anciennes décharges (Brain Dump)</h3>
+            <p style="font-size: 0.85rem; color: var(--text-muted);">Voici le contenu actuellement sauvegardé dans le bloc-notes :</p>
+            <div id="vault-braindump" class="vault-item" style="display: none;"></div>
+            <p id="vault-braindump-empty" style="font-style: italic; color: var(--text-muted); font-size: 0.85rem;">Aucune note en cours.</p>
         </div>
-        <div class="btn-group"><button class="secondary" onclick="returnHome()">Retour</button></div>
+
+        <div class="diagnostic-card">
+            <h3>Historique des Protocoles</h3>
+            <div id="vault-history-list"></div>
+            <p id="vault-history-empty" style="font-style: italic; color: var(--text-muted); font-size: 0.85rem;">Vous n'avez pas encore enregistré d'analyse.</p>
+        </div>
+
+        <div class="btn-group">
+            <button class="secondary" onclick="returnHome()">Retour</button>
+            <button class="secondary danger" onclick="clearVault()">Vider le Coffre</button>
+        </div>
     </div>
 
 </div>
 
 <!-- ================= SCRIPTS ================= -->
 <script>
-    // === 1. PWA & Service Worker ===
+    // === 1. PWA ===
     let deferredPrompt = null;
     if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
-            const swCode = `
-                self.addEventListener('install', (e) => e.waitUntil(self.skipWaiting()));
-                self.addEventListener('activate', (e) => e.waitUntil(self.clients.claim()));
-                self.addEventListener('fetch', (e) => {
-                    e.respondWith(caches.match(e.request).then(r => r || fetch(e.request)).catch(() => {}));
-                });
-            `;
+            const swCode = `self.addEventListener('fetch', e => { e.respondWith(caches.match(e.request).then(r => r || fetch(e.request)).catch(() => {})); });`;
             const blob = new Blob([swCode], { type: 'text/javascript' });
-            navigator.serviceWorker.register(URL.createObjectURL(blob)).catch(err => console.log('SW error:', err));
+            navigator.serviceWorker.register(URL.createObjectURL(blob)).catch(()=>{});
         });
     }
     window.addEventListener('beforeinstallprompt', (e) => {
@@ -411,7 +410,7 @@
         deferredPrompt.userChoice.then(() => { deferredPrompt = null; document.getElementById('pwa-install-btn').style.display = 'none'; });
     }
 
-    // === 2. Navigation & UI ===
+    // === 2. NAVIGATION ===
     function switchView(viewId) {
         document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
         document.getElementById(viewId).classList.add('active');
@@ -420,157 +419,222 @@
     function returnHome() { switchView('view-home'); }
     function toggleLowStim() { document.body.classList.toggle('low-stim'); }
     function toggleDysFont() { document.body.classList.toggle('dys-font'); }
-    function startProtocol(type) { 
-        document.getElementById('protocol-title').innerText = type === 'flash' ? '⚡ Protocole Flash (Crise)' : 'Bifurcation Stratégique';
-        switchView('view-protocol'); 
-    }
 
     // === 3. ESPACE TDAH ===
-    let stepCounter = 0; // Pour garantir des IDs uniques aux checkboxes
-
+    let stepCounter = 0;
     function generateMicroTasks() {
         const input = document.getElementById('tdah-task-input').value.toLowerCase();
         const listEl = document.getElementById('tdah-micro-list');
         const container = document.getElementById('tdah-micro-container');
+        if(!input.trim()) return alert("Écrivez une tâche d'abord.");
         
-        if(!input.trim()) { alert("Écrivez une tâche dans le champ pour commencer."); return; }
-        
-        let tasks = [];
-        if (input.includes('admin') || input.includes('impôt') || input.includes('papier') || input.includes('mail')) {
-            tasks = [ "S'asseoir et ouvrir l'ordinateur/dossier (Juste ça. 1 min)", "Regrouper les papiers/onglets requis au centre (2 min)", "Remplir UNE ligne ou lire UN mail (1 min)", "Fermer les yeux 10s. Continuer l'élan ou stop sans culpabilité." ];
-        } else if (input.includes('rang') || input.includes('nettoy') || input.includes('vaissel') || input.includes('ménag')) {
-            tasks = [ "Mettre une musique tempo rapide (1 min)", "Prendre un sac et jeter 3 déchets évidents (2 min)", "Regrouper tous les objets hors-sujet au centre (2 min)", "Nettoyer une micro-zone de 30x30 cm (2 min)" ];
-        } else {
-            tasks = [ "Écrire la tâche sur un papier et le regarder (1 min)", "Préparer physiquement le matériel, le poser devant soi (2 min)", "Faire la 1ère micro-action pendant exactement 2 minutes", "S'arrêter. Si le cerveau a accroché, continuer." ];
-        }
+        let tasks = [
+            "Écrire la tâche sur un papier et le regarder (1 min)", 
+            "Préparer physiquement le matériel devant soi (2 min)", 
+            "Faire la 1ère micro-action pendant exactement 2 minutes", 
+            "S'arrêter. Si le cerveau a accroché, continuer."
+        ];
+        if (input.match(/admin|impôt|papier|mail/)) tasks = ["Ouvrir l'ordinateur/dossier (1 min)", "Regrouper les papiers requis (2 min)", "Remplir UNE ligne ou UN mail (1 min)", "Fermer les yeux 10s. Stop ou continuer."];
+        if (input.match(/rang|nettoy|vaissel|ménag|aspirateur/)) tasks = ["Mettre une musique tempo rapide (1 min)", "Jeter 3 déchets évidents (2 min)", "Regrouper les objets hors-sujet au centre (2 min)", "Nettoyer une zone de 30x30 cm (2 min)"];
 
         listEl.innerHTML = '';
         tasks.forEach(t => appendTaskHTML(t));
         container.style.display = 'block';
     }
-
     function addCustomStep() {
         const inputEl = document.getElementById('custom-step-input');
         if(!inputEl.value.trim()) return;
         appendTaskHTML(inputEl.value.trim());
         inputEl.value = '';
     }
-
     function appendTaskHTML(text) {
-        stepCounter++;
-        const id = `micro-tdah-${stepCounter}`;
+        stepCounter++; const id = `micro-tdah-${stepCounter}`;
         const li = document.createElement('li');
         li.innerHTML = `<input type="checkbox" id="${id}"> <label for="${id}" style="font-weight: normal; margin-bottom: 0; cursor: pointer;">${text}</label>`;
         document.getElementById('tdah-micro-list').appendChild(li);
     }
 
     function testDopamine() {
-        const time = document.getElementById('dopa-time').value;
-        const body = document.getElementById('dopa-body').value;
-        const resEl = document.getElementById('dopa-result');
-        
-        resEl.style.display = 'block';
-        if (time === 'flash' && (body === 'electric' || body === 'escape')) {
+        const time = document.getElementById('dopa-time').value; const body = document.getElementById('dopa-body').value;
+        const resEl = document.getElementById('dopa-result'); resEl.style.display = 'block';
+        if (time === 'flash' && body !== 'calm') {
             resEl.className = 'insight-item insight-warning';
-            resEl.innerHTML = `🚨 ALERTE ROUGE DOPAMINE 🚨<br><span style="font-weight:normal;">Votre cerveau cherche un "fix" immédiat. Verrouillez votre carte bleue, reportez la décision de 72h.</span>`;
+            resEl.innerHTML = `🚨 ALERTE DOPAMINE<br><span style="font-weight:normal;">Cerveau en quête de "fix". Verrouillez la décision 72h.</span>`;
         } else if (time === 'long' && body === 'calm') {
             resEl.className = 'insight-item insight-success';
-            resEl.innerHTML = `✅ FEU VERT<br><span style="font-weight:normal;">Besoin ancré, réfléchi et régulé. Ce n'est pas une impulsion TDAH.</span>`;
+            resEl.innerHTML = `✅ FEU VERT<br><span style="font-weight:normal;">Besoin ancré et régulé. Ce n'est pas une impulsion.</span>`;
         } else {
             resEl.className = 'insight-item insight-amber';
-            resEl.innerHTML = `⚠️ ZONE ORANGE<br><span style="font-weight:normal;">Mélange de besoin et d'excitation. Dormez dessus au moins une nuit (24h de sas) avant d'agir.</span>`;
+            resEl.innerHTML = `⚠️ ZONE ORANGE<br><span style="font-weight:normal;">Mélange de besoin et d'excitation. Dormez dessus 24h.</span>`;
         }
     }
 
-    let blindTimer = null;
-    let blindSeconds = 20 * 60; 
+    let blindTimer = null; let blindSeconds = 20*60; 
     function startTimeBlindness() {
-        stopTimeBlindness();
-        blindSeconds = 20 * 60;
-        const fill = document.getElementById('time-blind-fill');
-        const text = document.getElementById('time-blind-text');
-        
+        stopTimeBlindness(); blindSeconds = 20*60;
+        const fill = document.getElementById('time-blind-fill'); const text = document.getElementById('time-blind-text');
         fill.style.width = '100%'; fill.style.backgroundColor = 'var(--success)';
-        
         blindTimer = setInterval(() => {
             blindSeconds--;
-            if (blindSeconds <= 0) {
-                stopTimeBlindness();
-                text.innerText = "TEMPS ÉCOULÉ !"; text.style.color = "var(--warning)";
-                fill.style.width = '0%'; playBeep(); return;
-            }
-            const m = Math.floor(blindSeconds / 60); const s = blindSeconds % 60;
-            text.innerText = `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
-            const percent = (blindSeconds / (20 * 60)) * 100;
-            fill.style.width = `${percent}%`;
-            if (percent < 25) fill.style.backgroundColor = 'var(--warning)';
-            else if (percent < 50) fill.style.backgroundColor = 'var(--amber)';
+            if (blindSeconds <= 0) { stopTimeBlindness(); text.innerText = "TEMPS ÉCOULÉ !"; text.style.color = "var(--warning)"; fill.style.width = '0%'; return; }
+            text.innerText = `${String(Math.floor(blindSeconds/60)).padStart(2,'0')}:${String(blindSeconds%60).padStart(2,'0')}`;
+            const pct = (blindSeconds/(20*60))*100; fill.style.width = `${pct}%`;
+            if (pct < 25) fill.style.backgroundColor = 'var(--warning)'; else if (pct < 50) fill.style.backgroundColor = 'var(--amber)';
         }, 1000);
     }
     function stopTimeBlindness() {
-        if (blindTimer) clearInterval(blindTimer);
-        document.getElementById('time-blind-text').innerText = "20:00";
-        document.getElementById('time-blind-text').style.color = "var(--text-main)";
-        document.getElementById('time-blind-fill').style.width = '100%';
-        document.getElementById('time-blind-fill').style.backgroundColor = 'var(--success)';
-    }
-    function playBeep() {
-        try {
-            const ctx = new (window.AudioContext || window.webkitAudioContext)();
-            const osc = ctx.createOscillator(); osc.type = 'sine'; osc.frequency.setValueAtTime(523.25, ctx.currentTime);
-            osc.connect(ctx.destination); osc.start(); osc.stop(ctx.currentTime + 1.0);
-        } catch(e) {}
+        if(blindTimer) clearInterval(blindTimer);
+        document.getElementById('time-blind-text').innerText = "20:00"; document.getElementById('time-blind-text').style.color = "var(--text-main)";
+        document.getElementById('time-blind-fill').style.width = '100%'; document.getElementById('time-blind-fill').style.backgroundColor = 'var(--success)';
     }
 
-    // === 4. BRAIN DUMP (Avec Sauvegarde Locale) ===
-    window.addEventListener('DOMContentLoaded', () => {
-        const savedDump = localStorage.getItem('boussole_braindump');
-        if (savedDump) document.getElementById('braindump-text').value = savedDump;
-    });
-
-    document.getElementById('braindump-text').addEventListener('input', (e) => {
-        localStorage.setItem('boussole_braindump', e.target.value);
-    });
-
-    function clearBrainDump() { 
-        if(confirm("Effacer définitivement vos notes actuelles ?")) {
-            document.getElementById('braindump-text').value = ''; 
-            localStorage.removeItem('boussole_braindump');
-        }
-    }
-
+    // === 4. BRAIN DUMP ===
+    const dumpEl = document.getElementById('braindump-text');
+    window.addEventListener('DOMContentLoaded', () => { if(localStorage.getItem('bd_dump')) dumpEl.value = localStorage.getItem('bd_dump'); });
+    dumpEl.addEventListener('input', (e) => localStorage.setItem('bd_dump', e.target.value));
+    function clearBrainDump() { if(confirm("Effacer définitivement ?")) { dumpEl.value = ''; localStorage.removeItem('bd_dump'); } }
     function downloadBrainDump() {
-        const text = document.getElementById('braindump-text').value;
-        if (!text) return alert("Le bloc-notes est vide.");
-        const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
+        if (!dumpEl.value) return;
         const a = document.createElement('a');
-        a.href = URL.createObjectURL(blob);
-        a.download = `Decharge-Mentale-${new Date().toISOString().split('T')[0]}.txt`;
+        a.href = URL.createObjectURL(new Blob([dumpEl.value], { type: 'text/plain;charset=utf-8' }));
+        a.download = `Decharge-${new Date().toISOString().split('T')[0]}.txt`;
         document.body.appendChild(a); a.click(); document.body.removeChild(a);
     }
 
-    // === 5. BOX BREATHING ===
-    let breathingTimer = null;
+    // === 5. RESPIRATION ===
+    let breathTimer = null;
     function startBreathingExercise() {
-        if (breathingTimer) clearInterval(breathingTimer);
-        const statusEl = document.getElementById('breath-status');
-        const circleEl = document.getElementById('breath-circle');
+        if (breathTimer) clearInterval(breathTimer);
+        const statusEl = document.getElementById('breath-status'); const circleEl = document.getElementById('breath-circle');
         let step = 0;
         const cycle = () => {
-            if (step === 0) { statusEl.innerText = "Inspirez profondément (4s)"; circleEl.style.transform = "scale(1.4)"; }
-            else if (step === 1) { statusEl.innerText = "Bloquez la respiration (4s)"; }
-            else if (step === 2) { statusEl.innerText = "Expirez lentement (4s)"; circleEl.style.transform = "scale(1)"; }
-            else if (step === 3) { statusEl.innerText = "Restez poumons vides (4s)"; }
+            if (step===0) { statusEl.innerText="Inspirez (4s)"; circleEl.style.transform="scale(1.4)"; }
+            else if (step===1) { statusEl.innerText="Bloquez (4s)"; }
+            else if (step===2) { statusEl.innerText="Expirez (4s)"; circleEl.style.transform="scale(1)"; }
+            else if (step===3) { statusEl.innerText="Restez vide (4s)"; }
             step = (step + 1) % 4;
         };
-        cycle(); breathingTimer = setInterval(cycle, 4000);
+        cycle(); breathTimer = setInterval(cycle, 4000);
     }
     function stopBreathingExercise() {
-        if (breathingTimer) clearInterval(breathingTimer);
-        document.getElementById('breath-status').innerText = "Exercice arrêté";
-        document.getElementById('breath-circle').style.transform = "scale(1)";
+        if(breathTimer) clearInterval(breathTimer);
+        document.getElementById('breath-status').innerText = "Arrêté"; document.getElementById('breath-circle').style.transform = "scale(1)";
     }
-    function openBreathingView() { switchView('view-breathing'); }
+
+    // === 6. PROTOCOLE D'ANALYSE ===
+    let currentProtocolType = "Standard";
+    function startProtocol(type) {
+        currentProtocolType = type;
+        document.getElementById('protocol-title').innerText = type === 'Flash' ? '⚡ Protocole Flash (Crise)' : '🗺️ Bifurcation Stratégique';
+        document.getElementById('proto-q1').value = ''; document.getElementById('proto-q3').value = '';
+        nextProtoStep(1); switchView('view-protocol');
+    }
+    function nextProtoStep(stepNum) {
+        document.querySelectorAll('#view-protocol .step').forEach(s => s.classList.remove('active'));
+        document.getElementById(`proto-step-${stepNum}`).classList.add('active');
+    }
+    function finishProtocol() {
+        const situation = document.getElementById('proto-q1').value;
+        const emotion = document.getElementById('proto-q2').value;
+        const consequence = document.getElementById('proto-q3').value;
+        
+        // Sauvegarde au Vault
+        let history = JSON.parse(localStorage.getItem('bd_history') || '[]');
+        history.unshift({ date: new Date().toLocaleString('fr-FR'), type: currentProtocolType, situation: situation, emotion: emotion });
+        localStorage.setItem('bd_history', JSON.stringify(history.slice(0, 10))); // Garde les 10 derniers
+
+        // Verdict intelligent
+        const verdictEl = document.getElementById('proto-verdict');
+        if(emotion.includes("Sereine")) {
+            verdictEl.className = "insight-item insight-success";
+            verdictEl.innerHTML = `<strong>Analyse Saine :</strong> L'émotion est stable. Si les conséquences sont gérables, vous pouvez agir.`;
+        } else {
+            verdictEl.className = "insight-item insight-warning";
+            verdictEl.innerHTML = `<strong>Alerte Biais Émotionnel :</strong> Votre décision est dictée par [${emotion}]. Il est recommandé d'activer le minuteur de décantation 72h avant de valider ce choix.`;
+        }
+        
+        document.querySelectorAll('#view-protocol .step').forEach(s => s.classList.remove('active'));
+        document.getElementById('proto-result').classList.add('active');
+    }
+
+    // === 7. MINUTEUR DE DÉCANTATION ===
+    let decantTimer = null;
+    function openTimerView() { checkDecantationStatus(); switchView('view-timer'); }
+    function startDecantationTimer(hours) {
+        const endTime = Date.now() + (hours * 3600 * 1000);
+        localStorage.setItem('bd_timer_end', endTime);
+        checkDecantationStatus();
+    }
+    function cancelDecantationTimer() {
+        if(confirm("Attention : Êtes-vous sûr de vouloir casser ce verrou de sécurité ?")) {
+            localStorage.removeItem('bd_timer_end'); checkDecantationStatus();
+        }
+    }
+    function checkDecantationStatus() {
+        if(decantTimer) clearInterval(decantTimer);
+        const end = localStorage.getItem('bd_timer_end');
+        if(end && parseInt(end) > Date.now()) {
+            document.getElementById('timer-setup').style.display = 'none';
+            document.getElementById('timer-active').style.display = 'block';
+            decantTimer = setInterval(updateDecantationUI, 1000);
+            updateDecantationUI();
+        } else {
+            document.getElementById('timer-setup').style.display = 'block';
+            document.getElementById('timer-active').style.display = 'none';
+            localStorage.removeItem('bd_timer_end');
+        }
+    }
+    function updateDecantationUI() {
+        const end = parseInt(localStorage.getItem('bd_timer_end'));
+        const diff = end - Date.now();
+        if(diff <= 0) return checkDecantationStatus();
+        
+        const h = Math.floor(diff / (1000 * 60 * 60));
+        const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+        const s = Math.floor((diff % (1000 * 60)) / 1000);
+        document.getElementById('decantation-display').innerText = 
+            `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+    }
+
+    // === 8. VAULT (Coffre-fort) ===
+    function openVault() {
+        // Chargement du BrainDump
+        const savedDump = localStorage.getItem('bd_dump');
+        const dumpContainer = document.getElementById('vault-braindump');
+        const dumpEmpty = document.getElementById('vault-braindump-empty');
+        if(savedDump) {
+            dumpContainer.innerText = savedDump.substring(0, 150) + (savedDump.length > 150 ? "..." : "");
+            dumpContainer.style.display = 'block'; dumpEmpty.style.display = 'none';
+        } else {
+            dumpContainer.style.display = 'none'; dumpEmpty.style.display = 'block';
+        }
+
+        // Chargement de l'historique des protocoles
+        const history = JSON.parse(localStorage.getItem('bd_history') || '[]');
+        const listEl = document.getElementById('vault-history-list');
+        const listEmpty = document.getElementById('vault-history-empty');
+        listEl.innerHTML = '';
+        if(history.length > 0) {
+            history.forEach(item => {
+                listEl.innerHTML += `
+                    <div class="vault-item">
+                        <div class="date">${item.date}</div>
+                        <div class="type">Protocole : ${item.type}</div>
+                        <div class="content"><strong>Sujet :</strong> ${item.situation || "Non renseigné"}<br><strong>Moteur :</strong> ${item.emotion}</div>
+                    </div>`;
+            });
+            listEl.style.display = 'block'; listEmpty.style.display = 'none';
+        } else {
+            listEl.style.display = 'none'; listEmpty.style.display = 'block';
+        }
+        switchView('view-vault');
+    }
+
+    function clearVault() {
+        if(confirm("ATTENTION : Cela va effacer tout votre historique de décisions (Le Brain Dump actuel sera conservé). Continuer ?")) {
+            localStorage.removeItem('bd_history'); openVault();
+        }
+    }
 </script>
 </body>
 </html>
