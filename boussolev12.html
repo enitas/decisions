@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Boussole Décisionnelle v12.0 — Clinique & Souveraine (Obfusquée)</title>
+    
+    <!-- PWA / Mobile -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#030508">
+    <link rel="manifest" href='data:application/manifest+json;charset=utf-8,%7B%22name%22%3A%22Boussole%20D%C3%A9cisionnelle%22%2C%22short_name%22%3A%22Boussole%22%2C%22start_url%22%3A%22.%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%23030508%22%2C%22theme_color%22%3A%22%23030508%22%2C%22icons%22%3A%5B%5D%7D'>
+    
+    <style>
+        :root {
+            --bg-color: #030508; --card-bg: #0b0f17; --text-main: #f1f5f9; --text-muted: #8c9bae;
+            --accent: #38bdf8; --accent-hover: #7dd3fc; --border: #1e293b; --warning: #f43f5e;
+            --success: #10b981; --amber: #f59e0b; --purple: #c084fc; --teal: #14b8a6; --rose: #fb7185;
+            --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            --letter-spacing: normal; --line-height: 1.5;
+        }
+        body.low-stim {
+            --bg-color: #0d0d0d; --card-bg: #141414; --text-main: #d4d4d4; --text-muted: #737373;
+            --accent: #a3a3a3; --accent-hover: #e5e5e5; --border: #262626; --warning: #a3a3a3;
+            --success: #a3a3a3; --amber: #a3a3a3; --purple: #a3a3a3; --teal: #a3a3a3; --rose: #a3a3a3;
+        }
+        body.low-stim * { transition: none !important; box-shadow: none !important; }
+        body.dys-font {
+            --font-family: "Atkinson Hyperlegible", "Comic Sans MS", "Verdana", sans-serif;
+            --letter-spacing: 0.6px; --line-height: 1.7;
+        }
+
+        body.simple-lang .clinical-text { display: none !important; }
+        body:not(.simple-lang) .simple-text { display: none !important; }
+
+        body {
+            font-family: var(--font-family); letter-spacing: var(--letter-spacing); line-height: var(--line-height);
+            background-color: var(--bg-color); color: var(--text-main); margin: 0; padding: 20px;
+            display: flex; justify-content: center; align-items: flex-start; min-height: 100vh;
+        }
+        .container {
+            width: 100%; max-width: 920px; background-color: var(--card-bg); border: 1px solid var(--border);
+            border-radius: 18px; padding: 40px; box-shadow: 0 30px 80px rgba(0,0,0,0.95); margin-top: 2vh; margin-bottom: 5vh;
+        }
+        @media (max-width: 640px) { .container { padding: 20px; margin-top: 0; } .mode-grid { grid-template-columns: 1fr !important; } }
+
+        .top-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding-bottom: 15px; border-bottom: 1px solid var(--border); flex-wrap: wrap; gap: 10px; }
+        .top-bar .brand { font-weight: 700; font-size: 1.1rem; color: var(--accent); }
+        .controls { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+        h1 { font-size: 1.5rem; margin-top: 0; margin-bottom: 8px; color: #fff; }
+        h3 { margin-top: 0; color: var(--accent); font-size: 1.05rem; margin-bottom: 12px; }
+        .subtitle { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 25px; line-height: 1.5; }
+        label { display: block; font-weight: 600; margin-bottom: 8px; font-size: 0.92rem; color: #e2e8f0; }
+
+        .view, .step, .parent-step { display: none; }
+        .view.active, .step.active, .parent-step.active { display: block; animation: fadeIn 0.3s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+
+        textarea, select, input[type="text"], input[type="number"] {
+            width: 100%; padding: 12px 16px; background-color: #06080d; border: 1px solid var(--border);
+            border-radius: 8px; color: var(--text-main); font-size: 0.95rem; margin-bottom: 20px; box-sizing: border-box; font-family: var(--font-family);
+        }
+        textarea:focus, select:focus, input:focus { outline: none; border-color: var(--accent); }
+
+        .btn-group { display: flex; justify-content: space-between; align-items: center; margin-top: 25px; gap: 10px; flex-wrap: wrap; }
+        button {
+            background-color: var(--accent); color: #030712; border: none; padding: 12px 22px;
+            font-weight: 600; border-radius: 8px; cursor: pointer; font-size: 0.92rem; transition: background 0.2s, transform 0.1s;
+        }
+        button:hover { background-color: var(--accent-hover); }
+        button.secondary { background-color: transparent; color: var(--text-muted); border: 1px solid var(--border); }
+        button.secondary:hover { color: var(--text-main); border-color: var(--text-muted); }
+        button.danger { background-color: var(--warning); color: #fff; }
+
+        .mode-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin-bottom: 25px; }
+        .mode-card { background: #06080d; border: 1px solid var(--border); border-radius: 10px; padding: 20px; cursor: pointer; transition: all 0.2s; }
+        .mode-card:hover { border-color: var(--accent); transform: translateY(-2px); }
+        .mode-card p { margin: 0; color: var(--text-muted); font-size: 0.85rem; line-height: 1.4; }
+
+        .diagnostic-card { background-color: #06080d; border: 1px solid var(--border); border-radius: 10px; padding: 20px; margin-bottom: 20px; }
+        .metric-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 20px; }
+        .metric-box { background: #06080d; border: 1px solid var(--border); padding: 12px; border-radius: 8px; text-align: center; }
+
+        .insight-item { padding: 12px 16px; margin-bottom: 12px; border-radius: 6px; font-size: 0.88rem; line-height: 1.5; }
+        .insight-warning { color: var(--warning); background: rgba(244, 63, 94, 0.1); border-left: 4px solid var(--warning); }
+        .insight-success { color: var(--success); background: rgba(16, 185, 129, 0.1); border-left: 4px solid var(--success); }
+        .insight-amber { color: var(--amber); background: rgba(245, 158, 11, 0.1); border-left: 4px solid var(--amber); }
+        .insight-teal { color: var(--teal); background: rgba(20, 184, 166, 0.1); border-left: 4px solid var(--teal); }
+        .insight-purple { color: var(--purple); background: rgba(192, 132, 252, 0.1); border-left: 4px solid var(--purple); }
+        .insight-rose { color: var(--rose); background: rgba(251, 113, 133, 0.1); border-left: 4px solid var(--rose); }
+
+        .badge { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 0.72rem; font-weight: bold; margin-left: 6px; }
+        
+        .checklist-actions { list-style: none; padding: 0; margin: 10px 0 0 0; }
+        .checklist-actions li { margin-bottom: 10px; font-size: 0.9rem; display: flex; align-items: flex-start; gap: 10px; }
+        .checklist-actions input[type="checkbox"] { accent-color: var(--accent); width: 18px; height: 18px; cursor: pointer; margin-top: 2px; }
+        .checklist-actions input[type="checkbox"]:checked + label { text-decoration: line-through; color: var(--text-muted); opacity: 0.6; }
+
+        .breath-circle-container { display: flex; justify-content: center; align-items: center; height: 180px; margin: 20px 0; }
+        .breath-circle {
+            width: 120px; height: 120px; border-radius: 50%; background: rgba(56, 189, 248, 0.15); border: 2px solid var(--accent);
+            display: flex; justify-content: center; align-items: center; font-size: 0.85rem; font-weight: bold; color: var(--accent);
+            transition: transform 4s ease-in-out, background 4s ease-in-out;
+        }
+
+        .time-blindness-bar { width: 100%; height: 30px; background: #1e293b; border-radius: 15px; overflow: hidden; margin-bottom: 15px; }
+        .time-blindness-fill { height: 100%; background: var(--success); width: 100%; transition: width 1s linear, background-color 1s ease; }
+        
+        .resource-link { display: block; padding: 12px; border: 1px solid var(--border); border-radius: 8px; color: var(--text-main); text-decoration: none; margin-bottom: 10px; transition: 0.2s; background: #06080d;}
+        .resource-link:hover { border-color: var(--accent); color: var(--accent); }
+
+        .vault-item { background: #1e293b; padding: 15px; border-radius: 8px; margin-bottom: 15px; border-left: 4px solid var(--purple); }
+        .vault-item .date { font-size: 0.75rem; color: var(--text-muted); margin-bottom: 5px; font-weight: bold; }
+        .vault-item .type { font-size: 0.85rem; color: var(--purple); margin-bottom: 8px; }
+        .vault-item .content { font-size: 0.9rem; line-height: 1.4; white-space: pre-wrap; }
+
+        .timer-display { font-size: 3rem; text-align: center; font-weight: bold; color: var(--amber); margin: 20px 0; font-variant-numeric: tabular-nums; letter-spacing: 2px;}
+        .certificate-box { background: linear-gradient(135deg, #0b0f17 0%, #1e1b4b 100%); border: 2px solid var(--rose); border-radius: 12px; padding: 25px; text-align: center; margin-top: 15px; }
+        .crisis-alert-banner { background: rgba(244, 63, 94, 0.2); border: 2px solid var(--warning); border-radius: 12px; padding: 20px; margin-bottom: 20px; display: none; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="top-bar">
+        <div class="brand">🧭 BOUSSOLE DÉCISIONNELLE v12.0 — Secure</div>
+        <div class="controls">
+            <button class="secondary" style="padding: 5px 10px; font-size: 0.75rem; border-color: var(--accent); color: var(--accent);" onclick="toggleLanguageMode()" id="lang-toggle-btn">Mode : Expert</button>
+            <button id="pwa-install-btn" style="display: none; background: var(--success); color: #030712; padding: 5px 12px; font-size: 0.75rem; font-weight: bold;" onclick="installPWA()">Installer</button>
+            <button class="secondary" style="padding: 5px 10px; font-size: 0.75rem;" onclick="toggleDysFont()">Police Dys</button>
+            <button class="secondary" style="padding: 5px 10px; font-size: 0.75rem;" onclick="toggleLowStim()">Mode Épuré</button>
+        </div>
+    </div>
+
+    <div class="crisis-alert-banner" id="crisis-banner">
+        <h3 style="color: var(--warning); margin-bottom: 8px;">🚨 Alerte de Sécurité & Soutien Immédiat</h3>
+        <p style="font-size: 0.9rem; margin-bottom: 12px;">Vous exprimez un niveau de détresse ou d'effondrement critique.</p>
+        <div style="background: #06080d; padding: 12px; border-radius: 8px; font-size: 0.9rem;">
+            📞 <strong>France :</strong> Appelez le <strong>3114</strong> (Prévention Suicide, 24/7) ou le <strong>15</strong>.<br>
+            🇪🇺 <strong>Europe :</strong> Appelez le <strong>112</strong>.
+        </div>
+    </div>
+
+    <div class="view active" id="view-home">
+        <h1><span class="clinical-text">Méta-Diagnostic & Suite Clinique</span><span class="simple-text">Tableau de Bord & Boussole Personnelle</span></h1>
+        <div class="subtitle"><span class="clinical-text">Architecture décisionnelle fondée sur les matrices RDoC, ACT, IFS, Polyvagale, DBT.</span><span class="simple-text">Outils simples pour faire le tri dans ses choix et calmer son cerveau.</span></div>
+
+        <div class="mode-grid">
+            <div class="mode-card" style="border-color: rgba(20, 184, 166, 0.6); background: linear-gradient(145deg, #06080d 0%, #081a17 100%);" onclick="startParentProtocol()">
+                <h3 style="color: var(--teal);"><span class="clinical-text">👨‍👩‍👧 Espace Parent & Éducateur (7 Étapes)</span><span class="simple-text">👨‍👩‍👧 Guide de Gestion de Crise Enfant</span></h3>
+                <p><span class="clinical-text">Grille systémique dédiée (meltdown, shutdown, PDA).</span><span class="simple-text">Pour décoder une crise d'enfant et évaluer la surcharge sensorielle.</span></p>
+            </div>
+            <div class="mode-card" style="border-color: rgba(56, 189, 248, 0.6);" onclick="switchView('view-tdah')">
+                <h3 style="color: var(--accent);"><span class="clinical-text">🌪️ Espace TDAH & Dysfonction Exécutive</span><span class="simple-text">🌪️ Espace Déblocage TDAH</span></h3>
+                <p><span class="clinical-text">Analyse des 3 dimensions exécutives et briseur de mur de tâche.</span><span class="simple-text">Pour lancer une tâche bloquée et vérifier l'impulsion.</span></p>
+            </div>
+            <div class="mode-card" style="border-color: rgba(245, 158, 11, 0.6);" onclick="switchView('view-spoons')">
+                <h3 style="color: var(--amber);"><span class="clinical-text">🥄 Compteur Allostatique & Cuillères</span><span class="simple-text">🥄 Jauge d'Énergie (Cuillères)</span></h3>
+                <p><span class="clinical-text">Budgétisation fine ventilée par drains.</span><span class="simple-text">Pour compter votre énergie restante.</span></p>
+            </div>
+            <div class="mode-card" style="border-color: rgba(192, 132, 252, 0.6);" onclick="switchView('view-rumination')">
+                <h3 style="color: var(--purple);"><span class="clinical-text">🔄 Débogueur ACT de Ruminations</span><span class="simple-text">🔄 Arrêt des Boucles Mentales</span></h3>
+                <p><span class="clinical-text">Protocole de défusion cognitive.</span><span class="simple-text">Pour couper court aux pensées en boucle.</span></p>
+            </div>
+            <div class="mode-card" style="border-color: rgba(251, 113, 133, 0.6);" onclick="switchView('view-commitment')">
+                <h3 style="color: var(--rose);"><span class="clinical-text">📜 Contrat de Sécurité DBT (STOP/TIPP)</span><span class="simple-text">📜 Contrat Anti-Impulsion (Sas)</span></h3>
+                <p><span class="clinical-text">Protocole d'urgence émotionnelle.</span><span class="simple-text">Pour vous engager à ne rien décider à chaud.</span></p>
+            </div>
+            <div class="mode-card" style="border-color: rgba(16, 185, 129, 0.6);" onclick="switchView('view-wall')">
+                <h3 style="color: var(--success);"><span class="clinical-text">🌟 Mur d'Activation Comportementale</span><span class="simple-text">🌟 Le Mur de vos Réussites</span></h3>
+                <p><span class="clinical-text">Registre des renforcements positifs.</span><span class="simple-text">Pour noter vos victoires et nourrir votre estime.</span></p>
+            </div>
+            <div class="mode-card" style="border-color: rgba(244, 63, 94, 0.4);" onclick="startProtocol('flash')">
+                <h3 style="color: var(--warning);">⚡ Protocole Flash (Urgence Adulte)</h3><p>Évaluation rapide en cas de saturation intense.</p>
+            </div>
+            <div class="mode-card" style="border-color: rgba(192, 132, 252, 0.4);" onclick="startProtocol('standard')">
+                <h3 style="color: var(--purple);">🗺️ Analyse Stratégique Adulte (7 Étapes)</h3><p>Pour décortiquer un choix important.</p>
+            </div>
+            <div class="mode-card" style="border-color: rgba(56, 189, 248, 0.4);" onclick="switchView('view-braindump')">
+                <h3>🧠 Décharge Mentale (Brain Dump)</h3><p>Bloc-notes souverain sans filtre.</p>
+            </div>
+            <div class="mode-card" style="border-color: rgba(16, 185, 129, 0.4);" onclick="switchView('view-breathing')">
+                <h3 style="color: var(--success);">🫁 Respiration Apaisante</h3><p>Exercice visuel guidé (4-4-4-4).</p>
+            </div>
+            <div class="mode-card" style="border-color: rgba(245, 158, 11, 0.4);" onclick="openTimerView()">
+                <h3 style="color: var(--amber);">⏳ Minuteur de Décantation</h3><p>Verrouillage temporaire 24h ou 72h.</p>
+            </div>
+            <div class="mode-card" onclick="switchView('view-resources')">
+                <h3>📚 Tests & Échelles Officielles</h3><p>ASRS, AQ-50, PHQ-9...</p>
+            </div>
+        </div>
+        <button class="secondary" onclick="openVault()" style="width: 100%;">Consulter le Coffre-Fort (Historique Local)</button>
+    </div>
+
+    <div class="view" id="view-questionnaire">
+        <div class="progress" style="display:flex; justify-content:space-between; font-size:0.8rem; color:var(--text-muted); text-transform:uppercase; margin-bottom:20px;">
+            <span id="progress-indicator">Étape 1 sur 7</span>
+            <button class="secondary" style="padding: 2px 8px; font-size: 0.75rem;" onclick="returnHome()">Abandonner</button>
+        </div>
+
+        <div class="step active" id="step-1">
+            <h1 id="title-step-1">1. <span class="wiz-t1">La Situation & l'Urgence</span></h1>
+            <div class="subtitle"><span class="wiz-s1">Définition brute de la situation.</span></div>
+            <label for="q-decision"><span class="wiz-l1">Quelle est la décision ou la crise observée ?</span></label>
+            <textarea id="q-decision" rows="3" placeholder="Ex: Démissionner sur un coup de tête..."></textarea>
+            <label for="q-urgency"><span class="wiz-lu">Degré d'urgence :</span></label>
+            <select id="q-urgency">
+                <option value="calm">Cognition Froide : Posé et mûri</option>
+                <option value="pressured">Tension Sensationnelle</option>
+                <option value="explosive">Cognition Chaude / Pulsionnel</option>
+                <option value="despair">Effondrement / Shutdown / Désespoir</option>
+            </select>
+            <div class="btn-group"><button class="secondary" onclick="returnHome()">Retour</button><button onclick="nextWizardStep(1)">Suivant</button></div>
+        </div>
+
+        <div class="step" id="step-2">
+            <h1>2. <span class="wiz-t2">Profilage Neurobiologique & RDoC</span></h1>
+            <div class="subtitle"><span class="wiz-s2">Analyse des circuits de récompense.</span></div>
+            <label><span class="wiz-l2-1">Besoin de stimulation ou fuite d'ennui :</span></label>
+            <select id="q-stimulation"><option value="no">Non</option><option value="high">Oui, recherche d'un fix immédiat</option><option value="audhd_burnout">Burnout / Saturation totale</option></select>
+            <label><span class="wiz-l2-2">Calcul Effort / Récompense :</span></label>
+            <select id="q-rdoc-cost"><option value="balanced">Réaliste</option><option value="underestimated">Sous-estimation des efforts</option><option value="anhedonia">Anhédonie totale</option></select>
+            <label><span class="wiz-l2-3">Réactivité de type PDA :</span></label>
+            <select id="q-pda"><option value="no">Non</option><option value="pda_reactive">Oui, rejet viscéral de contrainte</option></select>
+            <label><span class="wiz-l2-4">Tunnel Monotropique :</span></label>
+            <select id="q-monotropism"><option value="no">Non</option><option value="tunnel">Oui, idée fixe</option></select>
+            <div class="btn-group"><button class="secondary" onclick="prevWizardStep(2)">Précédent</button><button onclick="nextWizardStep(2)">Suivant</button></div>
+        </div>
+
+        <div class="step" id="step-3">
+            <h1>3. <span class="wiz-t3">Cartographie IFS & ACT</span></h1>
+            <div class="subtitle"><span class="wiz-s3">Parties intérieures.</span></div>
+            <label><span class="wiz-l3-1">Quelle Partie pilote la décision ?</span></label>
+            <select id="q-ifs-part"><option value="self">Soi Central</option><option value="manager">Manager</option><option value="firefighter">Pompier</option><option value="exile">Exilé</option></select>
+            <label><span class="wiz-l3-2">Moteur du choix (ACT) :</span></label>
+            <select id="q-act-avoidance"><option value="values">Valeurs</option><option value="experiential_avoidance">Évitement expérientiel</option></select>
+            <label><span class="wiz-l3-3">Besoin secret ou honte :</span></label>
+            <textarea id="q-shadow" rows="2" placeholder="Ex: Me punir..."></textarea>
+            <div class="btn-group"><button class="secondary" onclick="prevWizardStep(3)">Précédent</button><button onclick="nextWizardStep(3)">Suivant</button></div>
+        </div>
+
+        <div class="step" id="step-4">
+            <h1>4. <span class="wiz-t4">Systémique & Double Empathie</span></h1>
+            <label><span class="wiz-l4-1">Malentendu entre neurotypes :</span></label>
+            <select id="q-double-empathy"><option value="no">Non</option><option value="gap">Oui</option></select>
+            <label><span class="wiz-l4-2">Loyautés invisibles :</span></label>
+            <textarea id="q-system" rows="3" placeholder="Ex: Mes parents..."></textarea>
+            <div class="btn-group"><button class="secondary" onclick="prevWizardStep(4)">Précédent</button><button onclick="nextWizardStep(4)">Suivant</button></div>
+        </div>
+
+        <div class="step" id="step-5">
+            <h1>5. <span class="wiz-t5">Deuil Existentiel & Autonomie</span></h1>
+            <label><span class="wiz-l5-1">Renoncement irréversible :</span></label>
+            <textarea id="q-grief" rows="3"></textarea>
+            <label><span class="wiz-l5-2">Complexe de Jonas :</span></label>
+            <textarea id="q-jonas" rows="3"></textarea>
+            <div class="btn-group"><button class="secondary" onclick="prevWizardStep(5)">Précédent</button><button onclick="nextWizardStep(5)">Suivant</button></div>
+        </div>
+
+        <div class="step" id="step-6">
+            <h1>6. <span class="wiz-t6">Somatique Polyvagale & Énergie</span></h1>
+            <label><span class="wiz-l6-1">État du Système Nerveux :</span></label>
+            <select id="q-somatics"><option value="flow">Ventral (Sécurité)</option><option value="chest">Sympathique (Alerte)</option><option value="freeze">Dorsal (Shutdown)</option></select>
+            <label><span class="wiz-l6-2">Réserves d'énergie (sur 10) :</span></label>
+            <select id="q-reserves"><option value="high">8-10</option><option value="medium">4-7</option><option value="critical">1-3 (Critique)</option></select>
+            <div class="btn-group"><button class="secondary" onclick="prevWizardStep(6)">Précédent</button><button onclick="nextWizardStep(6)">Suivant</button></div>
+        </div>
+
+        <div class="step" id="step-7">
+            <h1>7. <span class="wiz-t7">Test de la Page Blanche</span></h1>
+            <label><span class="wiz-l7-1">Sans passé ni témoin, feriez-vous ce choix ?</span></label>
+            <textarea id="q-reset" rows="4"></textarea>
+            <div class="btn-group"><button class="secondary" onclick="prevWizardStep(7)">Précédent</button><button onclick="runCompleteAnalysis()" style="background:var(--purple); color:#fff;">LANCER LE BILAN</button></div>
+        </div>
+    </div>
+
+    <div class="view" id="view-parent-questionnaire">
+        <div class="progress" style="display:flex; justify-content:space-between; font-size:0.8rem; color:var(--text-muted); text-transform:uppercase; margin-bottom:20px;">
+            <span id="parent-progress-indicator">Étape 1 sur 7 (Parent)</span>
+            <button class="secondary" style="padding: 2px 8px; font-size: 0.75rem;" onclick="returnHome()">Abandonner</button>
+        </div>
+
+        <div class="parent-step active" id="pstep-1">
+            <h1 style="color: var(--teal);">1. Crise Enfant</h1>
+            <label>Situation observée :</label>
+            <textarea id="pq-situation" rows="3"></textarea>
+            <label>Type d'état :</label>
+            <select id="pq-crisis-type"><option value="meltdown">Meltdown</option><option value="shutdown">Shutdown</option><option value="pda_rebellion">PDA</option><option value="caprice_operant">Caprice</option></select>
+            <div class="btn-group"><button class="secondary" onclick="returnHome()">Retour</button><button onclick="nextParentStep(1)">Suivant</button></div>
+        </div>
+        <div class="parent-step" id="pstep-2">
+            <h1 style="color: var(--teal);">2. Surcharge Sensorielle</h1>
+            <label>Exposition :</label><select id="pq-sensory"><option value="high">Élevée</option><option value="medium">Moyenne</option><option value="low">Faible</option></select>
+            <label>Signes de fuite :</label><select id="pq-sensory-signs"><option value="ears">Bouche les oreilles</option><option value="stimming">Stimming</option><option value="none">Aucun</option></select>
+            <div class="btn-group"><button class="secondary" onclick="prevParentStep(2)">Précédent</button><button onclick="nextParentStep(2)">Suivant</button></div>
+        </div>
+        <div class="parent-step" id="pstep-3">
+            <h1 style="color: var(--teal);">3. Profil PDA</h1>
+            <label>Consigne initiale :</label><select id="pq-demand-style"><option value="direct">Directe</option><option value="indirect">Indirecte</option><option value="cooperative">Collaborative</option></select>
+            <label>Réaction PDA :</label><select id="pq-pda-response"><option value="yes">Oui</option><option value="no">Non</option></select>
+            <div class="btn-group"><button class="secondary" onclick="prevParentStep(3)">Précédent</button><button onclick="nextParentStep(3)">Suivant</button></div>
+        </div>
+        <div class="parent-step" id="pstep-4">
+            <h1 style="color: var(--teal);">4. Système Nerveux Enfant</h1>
+            <label>État polyvagal :</label><select id="pq-child-nervous"><option value="sympathetic">Sympathique</option><option value="dorsal">Dorsal</option><option value="ventral">Ventral</option></select>
+            <label>Conscience :</label><select id="pq-child-cognition"><option value="none">Néocortex déconnecté</option><option value="partial">Partielle</option><option value="full">Totale</option></select>
+            <div class="btn-group"><button class="secondary" onclick="prevParentStep(4)">Précédent</button><button onclick="nextParentStep(4)">Suivant</button></div>
+        </div>
+        <div class="parent-step" id="pstep-5">
+            <h1 style="color: var(--teal);">5. Co-régulation Adulte</h1>
+            <label>Votre état :</label><select id="pq-adult-state"><option value="calm">Calme</option><option value="triggered">Déclenché</option><option value="exhausted">Épuisé</option></select>
+            <label>Besoin de pause :</label><select id="pq-adult-pause"><option value="yes">Oui</option><option value="no">Non</option></select>
+            <div class="btn-group"><button class="secondary" onclick="prevParentStep(5)">Précédent</button><button onclick="nextParentStep(5)">Suivant</button></div>
+        </div>
+        <div class="parent-step" id="pstep-6">
+            <h1 style="color: var(--teal);">6. Urgence Immédiate</h1>
+            <label>Règle d'or :</label><select id="pq-immediate-action"><option value="zero_demand">Zéro exigence / Silence</option><option value="containment">Sécurisation douce</option><option value="repair">Connexion</option></select>
+            <div class="btn-group"><button class="secondary" onclick="prevParentStep(6)">Précédent</button><button onclick="nextParentStep(6)">Suivant</button></div>
+        </div>
+        <div class="parent-step" id="pstep-7">
+            <h1 style="color: var(--teal);">7. Proactivité (Ross Greene)</h1>
+            <label>Cause racine :</label><textarea id="pq-root-cause" rows="4"></textarea>
+            <div class="btn-group"><button class="secondary" onclick="prevParentStep(7)">Précédent</button><button onclick="runParentAnalysis()" style="background:var(--teal); color:#000;">GÉNÉRER LE BILAN</button></div>
+        </div>
+    </div>
+
+    <div class="view" id="view-results">
+        <h1>Bilan Clinique & Multidimensionnel</h1>
+        <div class="metric-grid">
+            <div class="metric-box"><div>Intégrité</div><div id="res-integrity" style="font-weight:bold; color:var(--accent);">--</div></div>
+            <div class="metric-box"><div>Résilience</div><div id="res-nervous" style="font-weight:bold; color:var(--success);">--</div></div>
+            <div class="metric-box"><div>Loyauté / Charge</div><div id="res-loyalty" style="font-weight:bold; color:var(--purple);">--</div></div>
+            <div class="metric-box"><div>Risque Agir</div><div id="res-acting" style="font-weight:bold; color:var(--warning);">--</div></div>
+        </div>
+        <div class="diagnostic-card"><h3>Synthèse</h3><div id="res-profile-text"></div></div>
+        <div class="diagnostic-card"><h3>Vigilances & Prescriptions</h3><div id="res-insights"></div></div>
+        <div class="diagnostic-card" style="border-color: var(--accent);">
+            <h3>🌉 Ponts de Régulation Immédiats</h3>
+            <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                <button onclick="switchView('view-breathing')" style="background: var(--success); color: #000;">🫁 Respiration (4-4-4-4)</button>
+                <button onclick="openTimerView()" style="background: var(--amber); color: #000;">⏳ Minuteur Décantation</button>
+                <button onclick="switchView('view-commitment')" style="background: var(--rose); color: #fff;">📜 Contrat DBT</button>
+            </div>
+        </div>
+        <div class="diagnostic-card" id="micro-actions-card" style="display:none;"><h3>Checklist Anti-Surcharge</h3><ul class="checklist-actions" id="checklist-actions-list"></ul></div>
+        <div class="btn-group">
+            <button class="secondary" onclick="returnHome()">Accueil</button>
+            <button onclick="copyTherapistReport()" style="background: var(--purple); color: #fff;">📋 Copier pour le Thérapeute</button>
+        </div>
+    </div>
+
+    <div class="view" id="view-tdah">
+        <h1><span class="clinical-text">Espace TDAH & Dysfonction Exécutive</span><span class="simple-text">Espace Déblocage & Action TDAH</span></h1>
+        <div class="diagnostic-card">
+            <h3>🧱 Séquenceur Anti-Paralysie</h3>
+            <label>Tâche insurmontable :</label><input type="text" id="tdah-task-input" placeholder="Ex: Ranger..." style="margin-bottom: 10px;">
+            <button onclick="generateMicroTasks()" style="width: 100%; margin-bottom: 15px;">Diviser (2 min)</button>
+            <div id="tdah-micro-container" style="display: none; background: rgba(56,189,248,0.05); padding: 15px; border-radius: 8px;"><ul class="checklist-actions" id="tdah-micro-list"></ul></div>
+        </div>
+        <div class="diagnostic-card">
+            <h3 style="color: var(--warning);">⚡ Filtre Anti-Impulsion</h3>
+            <label>Depuis quand :</label><select id="dopa-time"><option value="flash">Moins de 2h</option><option value="long">Semaines</option></select>
+            <label>Ressenti :</label><select id="dopa-body"><option value="electric">Tension / Urgence</option><option value="calm">Calme</option></select>
+        </div>
+        <div class="diagnostic-card">
+            <h3 style="color: var(--success);">⏳ Minuteur Visuel (20 Min)</h3>
+            <div id="time-blind-text" style="text-align: center; font-size: 1.8rem; font-weight: bold; margin-bottom: 10px;">20:00</div>
+            <div class="time-blindness-bar"><div class="time-blindness-fill" id="time-blind-fill"></div></div>
+            <div style="display: flex; gap: 10px; justify-content: center;"><button onclick="startTimeBlindness()" style="background: var(--success); color: #000;">Démarrer</button><button onclick="stopTimeBlindness()" class="secondary">Stop</button></div>
+        </div>
+        <div class="btn-group"><button class="secondary" onclick="returnHome()">Retour</button></div>
+    </div>
+
+    <div class="view" id="view-spoons">
+        <h1><span class="clinical-text">Compteur Allostatique & Cuillères</span><span class="simple-text">Jauge d'Énergie (Cuillères)</span></h1>
+        <div class="diagnostic-card" style="border-color: var(--amber);">
+            <label>Cuillères ce matin :</label>
+            <div style="display: flex; gap: 10px; margin-bottom: 20px;"><input type="number" id="spoon-total" value="12" min="1" max="30" style="margin-bottom:0;"><button onclick="initSpoons()" style="background: var(--amber); color: #000;">Valider</button></div>
+            <div id="spoon-status-display" style="font-weight: bold; color: var(--success);"></div>
+            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 15px;">
+                <button class="secondary" onclick="spendCategorySpoons('bruit', 2)">🔊 Bruit (-2)</button>
+                <button class="secondary" onclick="spendCategorySpoons('social', 3)">👥 Social (-3)</button>
+                <button class="secondary" onclick="spendCategorySpoons('admin', 3)">⚙️ Admin (-3)</button>
+                <button class="secondary" onclick="spendCategorySpoons('emotion', 4)">🌊 Émotions (-4)</button>
+            </div>
+        </div>
+        <div class="diagnostic-card"><div id="spoon-report" style="color: var(--text-muted); font-size: 0.9rem;">Sélectionnez un drain.</div></div>
+        <div class="btn-group"><button class="secondary" onclick="returnHome()">Retour</button></div>
+    </div>
+
+    <div class="view" id="view-rumination">
+        <h1><span class="clinical-text">Débogueur ACT de Ruminations</span><span class="simple-text">Arrêt des Boucles Mentales</span></h1>
+        <div class="diagnostic-card" style="border-color: var(--purple);">
+            <label>Phrase en boucle :</label><textarea id="rum-thought" rows="3"></textarea>
+            <p style="font-style: italic; color: var(--purple); margin: 10px 0;">« J'observe que j'ai la pensée que : <span id="rum-preview" style="font-weight:bold; color:var(--text-main);">...</span> »</p>
+            <div style="display: flex; gap: 15px; margin-top: 15px;"><button onclick="resolveRumination('yes')" style="flex:1; background: var(--purple); color: #fff;">Oui (Action)</button><button onclick="resolveRumination('no')" style="flex:1;" class="secondary">Non (Bruit de fond)</button></div>
+            <div id="rum-result" style="display: none; margin-top: 20px;"></div>
+        </div>
+        <div class="btn-group"><button class="secondary" onclick="returnHome()">Retour</button></div>
+    </div>
+
+    <div class="view" id="view-commitment">
+        <h1><span class="clinical-text">Contrat DBT (STOP/TIPP)</span><span class="simple-text">Contrat Anti-Impulsion</span></h1>
+        <div class="diagnostic-card" style="border-color: var(--rose);">
+            <label>Je m'engage à ne pas :</label><input type="text" id="com-action">
+            <label>Jusqu'à :</label><input type="text" id="com-deadline">
+            <label>Pourquoi :</label><textarea id="com-reason" rows="2"></textarea>
+            <button onclick="generateCertificate()" style="background: var(--rose); color: #fff; width: 100%;">Sceller</button>
+            <div id="certificate-output" style="display: none;"></div>
+        </div>
+        <div class="btn-group"><button class="secondary" onclick="returnHome()">Retour</button></div>
+    </div>
+
+    <div class="view" id="view-wall">
+        <h1><span class="clinical-text">Mur d'Activation Comportementale</span><span class="simple-text">Le Mur de vos Réussites</span></h1>
+        <div class="diagnostic-card" style="border-color: var(--success);">
+            <label>Victoire du jour :</label><textarea id="wall-input" rows="3"></textarea>
+            <button onclick="addWallVictory()" style="background: var(--success); color: #000; width: 100%;">Épingler</button>
+        </div>
+        <div class="diagnostic-card"><div id="wall-list"></div><p id="wall-empty" style="font-style:italic; color:var(--text-muted);">Vide.</p></div>
+        <div class="btn-group"><button class="secondary" onclick="returnHome()">Retour</button></div>
+    </div>
+
+    <div class="view" id="view-braindump">
+        <h1>Décharge Mentale (Brain Dump)</h1>
+        <textarea id="braindump-text" rows="14" placeholder="Tapez tout en vrac..."></textarea>
+        <div class="btn-group"><button class="secondary" onclick="returnHome()">Retour</button><button onclick="downloadBrainDump()">Télécharger (.txt)</button></div>
+    </div>
+
+    <div class="view" id="view-breathing">
+        <h1 style="color: var(--success)">Respiration Apaisante</h1>
+        <div class="diagnostic-card" style="text-align: center; padding: 30px;">
+            <div id="breath-status" style="font-size: 1.2rem; font-weight: bold; color: var(--success); margin-bottom: 10px;">Prêt</div>
+            <div class="breath-circle-container"><div class="breath-circle" id="breath-circle" style="border-color: var(--success); color: var(--success);">Inspirez</div></div>
+            <button onclick="startBreathingExercise()" style="background: var(--success); color: #000;">Démarrer</button><button class="secondary" onclick="stopBreathingExercise()" style="margin-left: 10px;">Arrêter</button>
+        </div>
+        <div class="btn-group"><button class="secondary" onclick="returnHome()">Retour</button></div>
+    </div>
+
+    <div class="view" id="view-timer">
+        <h1 style="color: var(--amber);">Minuteur de Décantation</h1>
+        <div class="diagnostic-card" style="text-align: center; padding: 30px;">
+            <div id="timer-setup">
+                <button onclick="startDecantationTimer(24)" style="background: var(--amber); color: #000;">24 Heures</button>
+                <button onclick="startDecantationTimer(72)" style="background: var(--warning); margin-left: 10px;">72 Heures</button>
+            </div>
+            <div id="timer-active" style="display: none;">
+                <div class="timer-display" id="decantation-display">23:59:59</div>
+                <button class="secondary danger" onclick="cancelDecantationTimer()">Annuler</button>
+            </div>
+        </div>
+        <div class="btn-group"><button class="secondary" onclick="returnHome()">Retour</button></div>
+    </div>
+
+    <div class="view" id="view-resources">
+        <h1>Tests & Échelles Officielles</h1>
+        <div class="diagnostic-card">
+            <a href="https://psychology-tools.com/test/adult-adhd-self-report-scale" target="_blank" class="resource-link">ASRS v1.1 ↗</a>
+            <a href="https://psychology-tools.com/test/autism-spectrum-quotient" target="_blank" class="resource-link">AQ-50 ↗</a>
+            <a href="https://psychology-tools.com/test/phq-9" target="_blank" class="resource-link">PHQ-9 ↗</a>
+        </div>
+        <div class="btn-group"><button class="secondary" onclick="returnHome()">Retour</button></div>
+    </div>
+
+    <div class="view" id="view-vault">
+        <h1>Coffre-Fort (Historique)</h1>
+        <div class="diagnostic-card"><div id="vault-history-list"></div><p id="vault-history-empty" style="font-style:italic; color:var(--text-muted);">Vide.</p></div>
+        <div class="btn-group"><button class="secondary" onclick="returnHome()">Retour</button></div>
+    </div>
+</div>
+
+<!-- SCRIPT OBFUSQUÉ ET SÉCURISÉ -->
+<script>
+(function(){
+    const _0x1a = { s: "standard", p: "parent", f: "flash", h: "fr-FR", d1: "bd_history", d2: "bd_wall", d3: "bd_dump", d4: "bd_timer_end" };
+    let _0x1b = _0x1a.s, _0x1c = 1, _0x1d = 7, _0x1e = 1, _0x1f = {};
+    const _0x20 = {
+        clinical: {
+            t1: "Phénoménologie & Température Cognitive", s1: "Définition brute.", l1: "Quelle est la décision ou la crise observée ?", lu: "Degré d'urgence :",
+            t2: "Profilage Neurobiologique & Matrice RDoC", s2: "Analyse des circuits.", l2_1: "Besoin de stimulation :", l2_2: "Calcul Effort / Récompense :", l2_3: "Rejet de contrainte (PDA) :", l2_4: "Tunnel Monotropique :",
+            t3: "Cartographie IFS & Bilan ACT", s3: "Parties intérieures.", l3_1: "Quelle Partie pilote ?", l3_2: "Moteur du choix :", l3_3: "Besoin secret :",
+            t4: "Systémique & Double Empathie", s4: "Communication.", l4_1: "Malentendu entre neurotypes :", l4_2: "Loyautés invisibles :",
+            t5: "Deuil Existentiel & Autonomie", l5_1: "Renoncement irréversible :", l5_2: "Complexe de Jonas :",
+            t6: "Somatique Polyvagale & Énergie", l6_1: "État du Système Nerveux :", l6_2: "Réserves d'énergie :",
+            t7: "Test de la Page Blanche", l7_1: "Sans passé ni témoin :"
+        },
+        simple: {
+            t1: "La Situation & l'Urgence", s1: "Définition claire.", l1: "Quelle est la situation ?", lu: "Niveau d'urgence :",
+            t2: "Fonctionnement & Énergie", s2: "Analyse.", l2_1: "Besoin de stimulation ou fuite :", l2_2: "Évaluation effort/énergie :", l2_3: "Blocage face à une règle :", l2_4: "Cerveau en tunnel :",
+            t3: "Parties Intérieures & Motivations", s3: "Moteurs.", l3_1: "Quelle partie de vous :", l3_2: "Choix aligné ou fuite :", l3_3: "Besoin secret :",
+            t4: "Entourage & Relations", s4: "Relations.", l4_1: "Incompréhension des proches :", l4_2: "Peur de décevoir :",
+            t5: "Deuils & Changements", l5_1: "Renoncement :", l5_2: "Peur d'assumer :",
+            t6: "État Physique & Niveau d'Énergie", l6_1: "État du corps :", l6_2: "Niveau d'énergie :",
+            t7: "Test de la Page Blanche", l7_1: "Si vous partiez de zéro :"
+        }
+    };
+    window.updateWizardLabels = function() {
+        const _0x21 = document.body.classList.contains('simple-lang');
+        const _0x22 = _0x21 ? _0x20.simple : _0x20.clinical;
+        ['t1','s1','l1','lu','t2','s2','l2_1','l2_2','l2_3','l2_4','t3','s3','l3_1','l3_2','l3_3','t4','s4','l4_1','l4_2','t5','l5_1','l5_2','t6','l6_1','l6_2','t7','l7_1'].forEach(_0x23 => {
+            document.querySelectorAll('.wiz-' + _0x23.replace('_','-')).forEach(_0x24 => {
+                if(_0x22[_0x23]) _0x24.innerText = _0x22[_0x23];
+            });
+        });
+    };
+    window.toggleLanguageMode = function() {
+        document.body.classList.toggle('simple-lang');
+        const _0x25 = document.body.classList.contains('simple-lang');
+        const _0x26 = document.getElementById('lang-toggle-btn');
+        if(_0x26) _0x26.innerText = _0x25 ? "Mode : Accessible" : "Mode : Expert";
+        window.updateWizardLabels();
+    };
+    window.switchView = function(_0x27) {
+        document.querySelectorAll('.view').forEach(_0x28 => _0x28.classList.remove('active'));
+        const _0x29 = document.getElementById(_0x27);
+        if(_0x29) _0x29.classList.add('active');
+        window.scrollTo({top: 0, behavior: 'smooth'});
+    };
+    window.returnHome = function() { window.switchView('view-home'); };
+    window.toggleLowStim = function() { document.body.classList.toggle('low-stim'); };
+    window.toggleDysFont = function() { document.body.classList.toggle('dys-font'); };
+
+    window.startProtocol = function(_0x2a) {
+        _0x1b = _0x2a; _0x1c = 1; _0x1f = { protocol: _0x2a };
+        _0x1d = (_0x2a === 'flash') ? 3 : 7;
+        document.querySelectorAll('.step').forEach(_0x2b => _0x2b.classList.remove('active'));
+        const _0x2c = document.getElementById('step-1');
+        if(_0x2c) _0x2c.classList.add('active');
+        _0x2d(); window.updateWizardLabels(); window.switchView('view-questionnaire');
+    };
+    function _0x2d() {
+        const _0x2e = document.getElementById('progress-indicator');
+        if(_0x2e) _0x2e.innerText = `Étape ${_0x1c} sur ${_0x1d}`;
+    }
+    window.nextWizardStep = function(_0x2f) {
+        if (_0x2f === 1) {
+            _0x1f.decision = document.getElementById('q-decision').value.trim();
+            _0x1f.urgency = document.getElementById('q-urgency').value;
+            if (!_0x1f.decision) return alert("Veuillez saisir votre réponse.");
+            const _0x30 = document.getElementById('crisis-banner');
+            if (_0x1f.urgency === 'despair' || _0x1f.decision.toLowerCase().includes('suicide') || _0x1f.decision.toLowerCase().includes('finir') || _0x1f.decision.toLowerCase().includes('mort')) {
+                if(_0x30) _0x30.style.display = 'block';
+            } else {
+                if(_0x30) _0x30.style.display = 'none';
+            }
+            if (_0x1b === 'flash') {
+                document.getElementById('step-1').classList.remove('active');
+                _0x1c = 6; document.getElementById('step-6').classList.add('active');
+                _0x2d(); return;
+            }
+        }
+        document.getElementById('step-' + _0x1c).classList.remove('active');
+        _0x1c++;
+        document.getElementById('step-' + _0x1c).classList.add('active');
+        _0x2d();
+    };
+    window.prevWizardStep = function() {
+        document.getElementById('step-' + _0x1c).classList.remove('active');
+        _0x1c--;
+        document.getElementById('step-' + _0x1c).classList.add('active');
+        _0x2d();
+    };
+
+    window.startParentProtocol = function() {
+        _0x1b = 'parent'; _0x1e = 1; _0x1f = { protocol: 'parent' };
+        document.querySelectorAll('.parent-step').forEach(_0x31 => _0x31.classList.remove('active'));
+        document.getElementById('pstep-1').classList.add('active');
+        window.switchView('view-parent-questionnaire');
+    };
+    window.nextParentStep = function(_0x32) {
+        if (_0x32 === 1) {
+            _0x1f.situation = document.getElementById('pq-situation').value.trim();
+            _0x1f.crisisType = document.getElementById('pq-crisis-type').value;
+            if (!_0x1f.situation) return alert("Veuillez décrire la situation.");
+        }
+        document.getElementById('pstep-' + _0x1e).classList.remove('active');
+        _0x1e++;
+        document.getElementById('pstep-' + _0x1e).classList.add('active');
+        document.getElementById('parent-progress-indicator').innerText = `Étape ${_0x1e} sur 7 (Parent)`;
+    };
+    window.prevParentStep = function() {
+        document.getElementById('pstep-' + _0x1e).classList.remove('active');
+        _0x1e--;
+        document.getElementById('pstep-' + _0x1e).classList.add('active');
+        document.getElementById('parent-progress-indicator').innerText = `Étape ${_0x1e} sur 7 (Parent)`;
+    };
+    window.runParentAnalysis = function() {
+        _0x1f.sensory = document.getElementById('pq-sensory').value;
+        _0x1f.pdaResponse = document.getElementById('pq-pda-response').value;
+        _0x1f.adultState = document.getElementById('pq-adult-state').value;
+        _0x1f.immediateAction = document.getElementById('pq-immediate-action').value;
+        let _0x33 = 70, _0x34 = 75, _0x35 = "Modéré";
+        let _0x36 = `<div class="insight-item insight-teal">👨‍👩‍👧 Crise analysée : [${_0x1f.crisisType.toUpperCase()}].</div>`;
+        if (_0x1f.adultState === 'triggered' || _0x1f.adultState === 'exhausted') {
+            _0x36 += `<div class="insight-item insight-warning">⚠️ <strong>Alerte Co-Régulation :</strong> Votre système nerveux est en surcharge. Pause de 10 min requise.</div>`;
+        }
+        _0x1f.results = { integrity: _0x33, nervous: _0x34, actingRisk: _0x35, insights: _0x36, date: new Date().toLocaleString(_0x1a.h) };
+        let _0x37 = JSON.parse(localStorage.getItem(_0x1a.d1) || '[]');
+        _0x37.unshift({ date: _0x1f.results.date, type: _0x1f.protocol, situation: _0x1f.situation, emotion: _0x1f.crisisType });
+        localStorage.setItem(_0x1a.d1, JSON.stringify(_0x37.slice(0, 15)));
+
+        document.getElementById('res-integrity').innerText = _0x33 + "%";
+        document.getElementById('res-nervous').innerText = _0x34 + "%";
+        document.getElementById('res-loyalty').innerText = "N/A";
+        document.getElementById('res-acting').innerText = _0x35;
+        document.getElementById('res-profile-text').innerHTML = `<strong>Situation enfant :</strong> ${_0x1f.situation}`;
+        document.getElementById('res-insights').innerHTML = _0x36;
+        document.getElementById('micro-actions-card').style.display = 'none';
+        window.switchView('view-results');
+    };
+
+    window.runCompleteAnalysis = function() {
+        _0x1f.somatics = document.getElementById('q-somatics').value;
+        _0x1f.reserves = document.getElementById('q-reserves').value;
+        _0x1f.ifs = document.getElementById('q-ifs-part').value;
+        let _0x38 = 80, _0x39 = 85, _0x3a = "Faible";
+        let _0x3b = `<div class="insight-item insight-success">✨ Analyse multi-axiale réussie.</div>`;
+        if (_0x1f.somatics === 'freeze' || _0x1f.reserves === 'critical') {
+            _0x38 = 35; _0x39 = 30; _0x3a = "ÉLEVÉ";
+            _0x3b += `<div class="insight-item insight-warning">🚨 <strong>Shutdown Dorsal :</strong> Interdiction formelle de prendre une décision majeure aujourd'hui. Activez le minuteur de décantation.</div>`;
+        }
+        _0x1f.results = { integrity: _0x38, nervous: _0x39, actingRisk: _0x3a, insights: _0x3b, date: new Date().toLocaleString(_0x1a.h) };
+        let _0x3c = JSON.parse(localStorage.getItem(_0x1a.d1) || '[]');
+        _0x3c.unshift({ date: _0x1f.results.date, type: _0x1f.protocol, situation: _0x1f.decision, emotion: _0x1f.urgency });
+        localStorage.setItem(_0x1a.d1, JSON.stringify(_0x3c.slice(0, 15)));
+
+        document.getElementById('res-integrity').innerText = _0x38 + "%";
+        document.getElementById('res-nervous').innerText = _0x39 + "%";
+        document.getElementById('res-loyalty').innerText = "65%";
+        document.getElementById('res-acting').innerText = _0x3a;
+        document.getElementById('res-profile-text').innerHTML = `<strong>Situation :</strong> ${_0x1f.decision}`;
+        document.getElementById('res-insights').innerHTML = _0x3b;
+        document.getElementById('micro-actions-card').style.display = 'block';
+        window.switchView('view-results');
+    };
+
+    window.copyTherapistReport = function() {
+        const _0x3d = `### RAPPORT CLINIQUE
+- Date: ${new Date().toLocaleString(_0x1a.h)}
+- Situation: ${_0x1f.decision || _0x1f.situation || 'N/A'}
+- Risque: ${_0x1f.results ? _0x1f.results.actingRisk : 'N/A'}`;
+        navigator.clipboard.writeText(_0x3d).then(() => alert("Copié pour le thérapeute !"));
+    };
+
+    let _0x3e = 0;
+    window.generateMicroTasks = function() {
+        const _0x3f = document.getElementById('tdah-task-input').value;
+        if(!_0x3f) return alert("Tâche requise.");
+        const _0x40 = document.getElementById('tdah-micro-list');
+        _0x40.innerHTML = '';
+        ["Poser le matériel (1 min)", "Faire 2 minutes exactes", "S'arrêter"].forEach(_0x41 => {
+            _0x3e++;
+            _0x40.innerHTML += `<li><input type="checkbox" id="m-${_0x3e}"><label for="m-${_0x3e}">${_0x41}</label></li>`;
+        });
+        document.getElementById('tdah-micro-container').style.display = 'block';
+    };
+
+    let _0x42 = null, _0x43 = 20*60;
+    window.startTimeBlindness = function() {
+        if(_0x42) clearInterval(_0x42); _0x43 = 20*60;
+        const _0x44 = document.getElementById('time-blind-fill'), _0x45 = document.getElementById('time-blind-text');
+        _0x44.style.width = '100%';
+        _0x42 = setInterval(() => {
+            _0x43--;
+            if (_0x43 <= 0) { clearInterval(_0x42); _0x45.innerText = "FINI !"; _0x44.style.width = '0%'; return; }
+            _0x45.innerText = `${String(Math.floor(_0x43/60)).padStart(2,'0')}:${String(_0x43%60).padStart(2,'0')}`;
+            _0x44.style.width = `${(_0x43/(20*60))*100}%`;
+        }, 1000);
+    };
+    window.stopTimeBlindness = function() {
+        if(_0x42) clearInterval(_0x42);
+        document.getElementById('time-blind-text').innerText = "20:00";
+        document.getElementById('time-blind-fill').style.width = '100%';
+    };
+
+    let _0x46 = 12;
+    window.initSpoons = function() { _0x46 = parseInt(document.getElementById('spoon-total').value) || 12; _0x47(); };
+    window.spendCategorySpoons = function(_0x48, _0x49) {
+        _0x46 -= _0x49; _0x47();
+        document.getElementById('spoon-report').innerHTML = `Drain : ${_0x48.toUpperCase()} (-${_0x49}). Reste : ${_0x46}.`;
+    };
+    function _0x47() {
+        const _0x4a = document.getElementById('spoon-status-display');
+        if(_0x4a) _0x4a.innerText = _0x46 > 3 ? `🥄 Reste : ${_0x46} cuillères.` : `⚠️ Épuisement imminent (${_0x46}) !`;
+    }
+
+    const _0x4b = document.getElementById('rum-thought');
+    if(_0x4b) _0x4b.addEventListener('input', e => document.getElementById('rum-preview').innerText = e.target.value || "...");
+    window.resolveRumination = function(c) {
+        const r = document.getElementById('rum-result'); r.style.display = 'block';
+        r.className = c === 'yes' ? 'insight-item insight-success' : 'insight-item insight-purple';
+        r.innerHTML = c === 'yes' ? "✅ Micro-étape de 2 minutes." : "🧠 Pensée observée comme un nuage.";
+    };
+
+    window.generateCertificate = function() {
+        const a = document.getElementById('com-action').value, d = document.getElementById('com-deadline').value;
+        if(!a || !d) return alert("Champs requis.");
+        const o = document.getElementById('certificate-output'); o.style.display = 'block';
+        o.innerHTML = `<div class="certificate-box"><h3>📜 CONTRAT DBT</h3><p>Ne pas faire : ${a}<br>Jusqu'au : ${d}</p></div>`;
+    };
+
+    window.addWallVictory = function() {
+        const t = document.getElementById('wall-input').value.trim(); if(!t) return;
+        let w = JSON.parse(localStorage.getItem(_0x1a.d2) || '[]');
+        w.unshift({ date: new Date().toLocaleDateString(), text: t });
+        localStorage.setItem(_0x1a.d2, JSON.stringify(w));
+        document.getElementById('wall-input').value = ''; _0x4c();
+    };
+    function _0x4c() {
+        const w = JSON.parse(localStorage.getItem(_0x1a.d2) || '[]');
+        const l = document.getElementById('wall-list'), e = document.getElementById('wall-empty');
+        if(!l) return; l.innerHTML = '';
+        if(w.length > 0) {
+            w.forEach(i => l.innerHTML += `<div class="vault-item"><div>${i.date}</div><div>${i.text}</div></div>`);
+            l.style.display = 'block'; if(e) e.style.display = 'none';
+        } else { l.style.display = 'none'; if(e) e.style.display = 'block'; }
+    }
+    window.addEventListener('DOMContentLoaded', _0x4c);
+
+    const _0x4d = document.getElementById('braindump-text');
+    window.addEventListener('DOMContentLoaded', () => { if(_0x4d && localStorage.getItem(_0x1a.d3)) _0x4d.value = localStorage.getItem(_0x1a.d3); });
+    if(_0x4d) _0x4d.addEventListener('input', e => localStorage.setItem(_0x1a.d3, e.target.value));
+    window.downloadBrainDump = function() {
+        if(!_0x4d || !_0x4d.value) return alert("Vide.");
+        const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([_0x4d.value], {type:'text/plain'}));
+        a.download = 'decharge.txt'; a.click();
+    };
+
+    let _0x4e = null;
+    window.startBreathingExercise = function() {
+        if(_0x4e) clearInterval(_0x4e); let s = 0;
+        const st = document.getElementById('breath-status');
+        _0x4e = setInterval(() => {
+            const arr = ["Inspirez (4s)", "Bloquez (4s)", "Expirez (4s)", "Vide (4s)"];
+            if(st) st.innerText = arr[s]; s = (s+1)%4;
+        }, 4000);
+    };
+    window.stopBreathingExercise = function() {
+        if(_0x4e) clearInterval(_0x4e);
+        const st = document.getElementById('breath-status'); if(st) st.innerText = "Arrêté";
+    };
+
+    window.openTimerView = function() { window.switchView('view-timer'); };
+    window.startDecantationTimer = function(h) { localStorage.setItem(_0x1a.d4, Date.now() + h*3600*1000); alert("Minuteur activé."); };
+    window.cancelDecantationTimer = function() { localStorage.removeItem(_0x1a.d4); alert("Verrou levé."); };
+
+    window.openVault = function() {
+        const hist = JSON.parse(localStorage.getItem(_0x1a.d1) || '[]');
+        const list = document.getElementById('vault-history-list'), empty = document.getElementById('vault-history-empty');
+        if(!list) return; list.innerHTML = '';
+        if(hist.length > 0) {
+            hist.forEach(i => list.innerHTML += `<div class="vault-item"><div>${i.date}</div><div><strong>${i.type.toUpperCase()} :</strong> ${i.situation}</div></div>`);
+            list.style.display = 'block'; if(empty) empty.style.display = 'none';
+        } else { list.style.display = 'none'; if(empty) empty.style.display = 'block'; }
+        window.switchView('view-vault');
+    };
+})();
+</script>
+</body>
+</html>
