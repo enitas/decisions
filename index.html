@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Boussole Décisionnelle v14.4 APEX — Édition Industrielle & Souveraine</title>
+    <title>Boussole Décisionnelle v14.5 APEX — Édition Parents & Soignants Simplifiée</title>
     
     <!-- PWA / Mobile -->
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -55,6 +55,7 @@
         h3 { margin-top: 0; color: var(--accent); font-size: 1.05rem; margin-bottom: 12px; }
         .subtitle { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 25px; line-height: 1.5; }
         label { display: block; font-weight: 600; margin-bottom: 8px; font-size: 0.92rem; color: #e2e8f0; }
+        .help-text { font-size: 0.8rem; color: var(--text-muted); margin-top: -6px; margin-bottom: 12px; line-height: 1.4; }
 
         .view, .step, .parent-step { display: none; }
         .view.active, .step.active, .parent-step.active { display: block; animation: fadeIn 0.3s ease; }
@@ -142,12 +143,12 @@
 <div class="container">
     <!-- BANDEAU D'AVERTISSEMENT PROTOCOLE FILE:// -->
     <div class="protocol-warning-banner" id="protocol-warning">
-        ⚠️ <strong>Avertissement technique :</strong> Vous ouvrez cette application directement via un fichier local (<code style="color:#fff;">file://</code>). Pour garantir le fonctionnement optimal du chiffrement sécurisé et de l'export PDF, il est recommandé de l'exécuter via un mini-serveur local (ex: <code style="color:#fff;">npx http-server</code>).
+        ⚠️ <strong>Avertissement technique :</strong> Vous ouvrez cette application directement via un fichier local (<code style="color:#fff;">file://</code>). Pour garantir le fonctionnement optimal du chiffrement sécurisé et de l'export PDF, il est recommandé de l'exécuter via un mini-serveur local.
     </div>
 
     <!-- VUE DISCLAIMER / ONBOARDING LÉGAL -->
     <div class="view" id="view-disclaimer" style="text-align: center; padding: 20px;">
-        <h1 style="color: var(--accent); margin-bottom: 15px;">🧭 Bienvenue dans la Boussole Apex v14.4</h1>
+        <h1 style="color: var(--accent); margin-bottom: 15px;">🧭 Bienvenue dans la Boussole Apex v14.5</h1>
         <div class="diagnostic-card" style="text-align: left; margin-bottom: 25px; border-color: var(--accent);">
             <h3>Mentions Légales & Avertissement Clinique</h3>
             <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.6;">
@@ -155,14 +156,14 @@
                 <strong>Elle ne se substitue en aucun cas à un diagnostic médical formel, un suivi psychiatrique ou une prise en charge thérapeutique professionnelle.</strong>
             </p>
             <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.6;">
-                Toutes vos données de santé sont chiffrées localement sur votre terminal (AES-GCM 256 bits). Aucun serveur tiers n'y a accès. En cas de crise aiguë ou de détresse vitale, veuillez contacter immédiatement le <strong>3114</strong> (Prévention Suicide) ou le <strong>15</strong> (SAMU).
+                Toutes vos données de santé sont chiffrées localement sur votre terminal (AES-GCM 256 bits). En cas de crise aiguë ou de détresse vitale, veuillez contacter immédiatement le <strong>3114</strong> (Prévention Suicide) ou le <strong>15</strong> (SAMU).
             </p>
         </div>
         <button onclick="acceptDisclaimer()" style="background: var(--accent); color: #030712; font-size: 1rem; padding: 14px 30px;">J'ai compris et j'accepte d'entrer</button>
     </div>
 
     <div class="top-bar">
-        <div class="brand">🧭 BOUSSOLE DÉCISIONNELLE v14.4 APEX — Industriel & Souverain</div>
+        <div class="brand">🧭 BOUSSOLE DÉCISIONNELLE v14.5 APEX — Édition Parents & Soignants</div>
         <div class="controls">
             <button class="secondary" style="padding: 5px 10px; font-size: 0.75rem; border-color: var(--accent); color: var(--accent);" onclick="toggleLanguageMode()" id="lang-toggle-btn">Mode : Expert</button>
             <button class="secondary" style="padding: 5px 10px; font-size: 0.75rem;" onclick="toggleDysFont()">Police Dys</button>
@@ -180,7 +181,7 @@
     </div>
 
     <div class="view" id="view-home">
-        <h1><span class="clinical-text">Méta-Diagnostic & Suite Apex v14.4</span><span class="simple-text">Tableau de Bord & Boussole Personnelle</span></h1>
+        <h1><span class="clinical-text">Méta-Diagnostic & Suite Apex v14.5</span><span class="simple-text">Tableau de Bord & Boussole Personnelle</span></h1>
         <div class="subtitle"><span class="clinical-text">Architecture clinique multi-axiale sécurisée (Chiffrement AES-GCM 256 bits local), portabilité des données, export PDF expert et plan de crise Stanley-Brown.</span><span class="simple-text">Outils complets pour trier vos choix, suivre votre état et protéger votre énergie.</span></div>
 
         <div class="mode-grid">
@@ -193,8 +194,8 @@
                 <p>Protocole d'urgence en 6 étapes avec contacts d'urgence personnalisables.</p>
             </div>
             <div class="mode-card" style="border-color: rgba(20, 184, 166, 0.6); background: linear-gradient(145deg, #06080d 0%, #081a17 100%);" onclick="startParentProtocol()">
-                <h3 style="color: var(--teal);"><span class="clinical-text">👨‍👩‍👧 Espace Parent & Éducateur (7 Étapes)</span><span class="simple-text">👨‍👩‍👧 Guide de Crise Enfant</span></h3>
-                <p><span class="clinical-text">Grille systémique (meltdown, shutdown, PDA).</span><span class="simple-text">Pour décoder une crise d'enfant et évaluer la surcharge sensorielle.</span></p>
+                <h3 style="color: var(--teal);"><span class="clinical-text">👨‍👩‍👧 Espace Parent & Éducateur (7 Étapes)</span><span class="simple-text">👨‍👩‍👧 Guide de Crise Enfant (Simplifié)</span></h3>
+                <p><span class="clinical-text">Grille systémique (meltdown, shutdown, PDA).</span><span class="simple-text">Pour décoder une crise d'enfant, comprendre la surcharge et retrouver le calme.</span></p>
             </div>
             <div class="mode-card" style="border-color: rgba(56, 189, 248, 0.6);" onclick="switchView('view-tdah')">
                 <h3 style="color: var(--accent);"><span class="clinical-text">🌪️ Espace TDAH & Exécutif</span><span class="simple-text">🌪️ Espace Déblocage TDAH</span></h3>
@@ -410,7 +411,7 @@
         </div>
     </div>
 
-    <!-- QUESTIONNAIRE PARENT -->
+    <!-- QUESTIONNAIRE PARENT (SIMPLIFIÉ & AVEC INFOBULLES) -->
     <div class="view" id="view-parent-questionnaire">
         <div class="progress" style="display:flex; justify-content:space-between; font-size:0.8rem; color:var(--text-muted); text-transform:uppercase; margin-bottom:20px;">
             <span id="parent-progress-indicator">Étape 1 sur 7 (Parent)</span>
@@ -420,43 +421,115 @@
         <div class="parent-step active" id="pstep-1">
             <h1 style="color: var(--teal);">1. Crise Enfant / Comportement-Défi</h1>
             <label>Situation observée :</label>
+            <div class="help-text">Décrivez brièvement ce qui vient de se passer (ex: crise au supermarché, refus de partir à l'école...).</div>
             <textarea id="pq-situation" rows="3"></textarea>
-            <label>Type d'état :</label>
-            <select id="pq-crisis-type"><option value="meltdown">Meltdown (Surcharge externe)</option><option value="shutdown">Shutdown (Inhibition interne)</option><option value="pda_rebellion">PDA (Rejet de contrainte)</option><option value="operant">Comportement-défi à fonction opérante</option></select>
+            
+            <label>Type de crise observée :</label>
+            <div class="help-text">Choisissez ce qui ressemble le plus à l'état actuel de votre enfant.</div>
+            <select id="pq-crisis-type">
+                <option value="meltdown">Meltdown — Crise d'explosion (surcharge sensorielle ou émotionnelle externe)</option>
+                <option value="shutdown">Shutdown — Repli sur soi / Fermeture (l'enfant s'isole, ne parle plus, s'éteint)</option>
+                <option value="pda_rebellion">Profil PDA — Refus viscéral de toute consigne par sentiment de menace</option>
+                <option value="operant">Comportement-défi pour obtenir quelque chose ou fuir une tâche</option>
+            </select>
             <div class="btn-group"><button class="secondary" onclick="returnHome()">Retour</button><button onclick="nextParentStep(1)">Suivant</button></div>
         </div>
+
         <div class="parent-step" id="pstep-2">
-            <h1 style="color: var(--teal);">2. Surcharge Sensorielle</h1>
-            <label>Exposition :</label><select id="pq-sensory"><option value="high">Élevée</option><option value="medium">Moyenne</option><option value="low">Faible</option></select>
-            <label>Signes de fuite :</label><select id="pq-sensory-signs"><option value="ears">Bouche les oreilles</option><option value="stimming">Stimming</option><option value="none">Aucun</option></select>
+            <h1 style="color: var(--teal);">2. Surcharge Sensorielle & Signes</h1>
+            <label>Niveau de bruit / agitation autour de l'enfant :</label>
+            <div class="help-text">L'environnement était-il bruyant, lumineux ou agité ?</div>
+            <select id="pq-sensory">
+                <option value="high">Élevé (beaucoup de bruits, lumières, monde...)</option>
+                <option value="medium">Moyen (ambiance normale mais fatigante)</option>
+                <option value="low">Faible (environnement calme)</option>
+            </select>
+
+            <label>Signes physiques observés :</label>
+            <div class="help-text">Comment le corps de l'enfant réagit-il ? (Ex : mouvements répétitifs d'apaisement dits de "stimming").</div>
+            <select id="pq-sensory-signs">
+                <option value="ears">Se bouche les oreilles ou ferme les yeux fort</option>
+                <option value="stimming">Mouvements répétitifs d'apaisement (balancer le corps, triturer un objet, se balancer)</option>
+                <option value="none">Aucun signe particulier visible</option>
+            </select>
             <div class="btn-group"><button class="secondary" onclick="prevParentStep(2)">Précédent</button><button onclick="nextParentStep(2)">Suivant</button></div>
         </div>
+
         <div class="parent-step" id="pstep-3">
-            <h1 style="color: var(--teal);">3. Profil PDA (Évitement Pathologique)</h1>
-            <label>Consigne initiale :</label><select id="pq-demand-style"><option value="direct">Directe</option><option value="indirect">Indirecte</option><option value="cooperative">Collaborative</option></select>
-            <label>Réaction de menace vitale (PDA) :</label><select id="pq-pda-response"><option value="yes">Oui</option><option value="no">Non</option></select>
+            <h1 style="color: var(--teal);">3. Façon de donner la consigne (Profil PDA)</h1>
+            <label>Comment la demande a-t-elle été formulée ?</label>
+            <div class="help-text">Les enfants au profil PDA (Avoidance de la demande) réagissent fortement aux ordres directs.</div>
+            <select id="pq-demand-style">
+                <option value="direct">Consigne directe ('Il faut faire ça maintenant')</option>
+                <option value="indirect">Consigne indirecte ou sous forme de jeu ('Je me demande qui va ranger...')</option>
+                <option value="cooperative">Négociation collaborative</option>
+            </select>
+
+            <label>Y a-t-il eu une réaction de panique / refus immédiat ?</label>
+            <div class="help-text">L'enfant a-t-il perçu la demande comme une menace vitale ?</div>
+            <select id="pq-pda-response">
+                <option value="yes">Oui, rejet immédiat et violent / fuite</option>
+                <option value="no">Non, réaction habituelle</option>
+            </select>
             <div class="btn-group"><button class="secondary" onclick="prevParentStep(3)">Précédent</button><button onclick="nextParentStep(3)">Suivant</button></div>
         </div>
+
         <div class="parent-step" id="pstep-4">
-            <h1 style="color: var(--teal);">4. Système Nerveux Enfant</h1>
-            <label>État polyvagal :</label><select id="pq-child-nervous"><option value="sympathetic">Sympathique</option><option value="dorsal">Dorsal</option><option value="ventral">Ventral</option></select>
-            <label>Conscience :</label><select id="pq-child-cognition"><option value="none">Néocortex déconnecté</option><option value="partial">Partielle</option><option value="full">Totale</option></select>
+            <h1 style="color: var(--teal);">4. État du Corps (Système Nerveux)</h1>
+            <label>Comment qualifiez-vous l'état corporel de l'enfant ?</label>
+            <div class="help-text">Permet de savoir si le cerveau rationnel est encore connecté ou si le cerveau de survie a pris le relais.</div>
+            <select id="pq-child-nervous">
+                <option value="sympathetic">Corps en alerte (cris, agitation, fuite, lutte)</option>
+                <option value="dorsal">Corps figé / éteint (regard vide, mutisme, inerte)</option>
+                <option value="ventral">Corps calme, disponible pour échanger</option>
+            </select>
+
+            <label>L'enfant peut-il écouter ou raisonner ?</label>
+            <div class="help-text">En pleine crise, le néocortex est déconnecté : inutile de faire la morale.</div>
+            <select id="pq-child-cognition">
+                <option value="none">Non, le cerveau est totalement submergé (impossible de parler)</option>
+                <option value="partial">Partiellement</option>
+                <option value="full">Oui, communication possible</option>
+            </select>
             <div class="btn-group"><button class="secondary" onclick="prevParentStep(4)">Précédent</button><button onclick="nextParentStep(4)">Suivant</button></div>
         </div>
+
         <div class="parent-step" id="pstep-5">
-            <h1 style="color: var(--teal);">5. Co-régulation Adulte</h1>
-            <label>Votre état :</label><select id="pq-adult-state"><option value="calm">Calme</option><option value="triggered">Déclenché</option><option value="exhausted">Épuisé</option></select>
-            <label>Besoin de pause :</label><select id="pq-adult-pause"><option value="yes">Oui</option><option value="no">Non</option></select>
+            <h1 style="color: var(--teal);">5. Votre État d'Adulte (Co-Régulation)</h1>
+            <label>Comment vous sentez-vous vous-même face à cette crise ?</label>
+            <div class="help-text">Pour calmer un enfant, le système nerveux de l'adulte doit d'abord être en sécurité (co-régulation).</div>
+            <select id="pq-adult-state">
+                <option value="calm">Je suis calme et capable de l'accueillir</option>
+                <option value="triggered">Je suis agacé(e), stressé(e) ou déclenché(e)</option>
+                <option value="exhausted">Je suis totalement épuisé(e) au bout du rouleau</option>
+            </select>
+
+            <label>Avez-vous besoin de souffler 5 minutes (déléguer ou faire une pause) ?</label>
+            <div class="help-text">Il n'y a aucune honte à passer le relais si vous saturez.</div>
+            <select id="pq-adult-pause">
+                <option value="yes">Oui, j'ai besoin de faire une micro-pause</option>
+                <option value="no">Non, je peux continuer</option>
+            </select>
             <div class="btn-group"><button class="secondary" onclick="prevParentStep(5)">Précédent</button><button onclick="nextParentStep(5)">Suivant</button></div>
         </div>
+
         <div class="parent-step" id="pstep-6">
-            <h1 style="color: var(--teal);">6. Urgence Immédiate</h1>
-            <label>Règle d'or :</label><select id="pq-immediate-action"><option value="zero_demand">Zéro exigence / Silence</option><option value="containment">Sécurisation douce</option><option value="repair">Connexion</option></select>
+            <h1 style="color: var(--teal);">6. Action Immédiate Conseillée</h1>
+            <label>Règle d'or à appliquer tout de suite :</label>
+            <div class="help-text">Adapté selon la théorie de Ross Greene et la sécurité affective.</div>
+            <select id="pq-immediate-action">
+                <option value="zero_demand">Zéro exigence, silence, baisse des lumières et présence sécure</option>
+                <option value="containment">Sécurisation douce (protéger l'enfant de lui-même sans contraindre)</option>
+                <option value="repair">Connexion et réassurance sans reparler de la consigne</option>
+            </select>
             <div class="btn-group"><button class="secondary" onclick="prevParentStep(6)">Précédent</button><button onclick="nextParentStep(6)">Suivant</button></div>
         </div>
+
         <div class="parent-step" id="pstep-7">
-            <h1 style="color: var(--teal);">7. Proactivité (Ross Greene)</h1>
-            <label>Cause racine :</label><textarea id="pq-root-cause" rows="4"></textarea>
+            <h1 style="color: var(--teal);">7. Recherche de la Cause (Proactivité)</h1>
+            <label>Quelle était la source cachée du problème (fatigue, faim, transition trop rapide, attente...) ?</label>
+            <div class="help-text">Identifier le problème en amont pour éviter que cela ne se reproduise demain.</div>
+            <textarea id="pq-root-cause" rows="4" placeholder="Ex: Trop de bruit dans le couloir en rentrant de l'école..."></textarea>
             <div class="btn-group"><button class="secondary" onclick="prevParentStep(7)">Précédent</button><button onclick="runParentAnalysis()" style="background:var(--teal); color:#000;">GÉNÉRER LE BILAN</button></div>
         </div>
     </div>
@@ -665,21 +738,18 @@
     </div>
 </div>
 
-<!-- MOTEUR APEX V14.4 (INDUSTRIEL & SOUVERAIN) -->
+<!-- MOTEUR APEX V14.5 -->
 <script>
 (function(){
     const _0x1a = { s: "standard", p: "parent", f: "flash", h: "fr-FR", d1: "apex_vault_encrypted", d2: "apex_wall", d3: "apex_dump", d4: "apex_timer_end", d5: "apex_safety", disclaimer: "apex_disclaimer_accepted" };
     let _0x1b = _0x1a.s, _0x1c = 1, _0x1d = 7, _0x1e = 1, _0x1f = {};
     let _currentActivePin = null;
 
-    // Sentinelle Protocole file://
     window.addEventListener('DOMContentLoaded', () => {
         if (window.location.protocol === 'file:') {
             const warningBanner = document.getElementById('protocol-warning');
             if (warningBanner) warningBanner.style.display = 'block';
         }
-        
-        // Vérification de l'Onboarding Disclaimer
         if (!localStorage.getItem(_0x1a.disclaimer)) {
             switchView('view-disclaimer');
         } else {
@@ -712,12 +782,7 @@
         const key = await getCryptoKey(pin, salt);
         const encoded = new TextEncoder().encode(JSON.stringify(dataObj));
         const ciphertext = await window.crypto.subtle.encrypt({ name: "AES-GCM", iv: iv }, key, encoded);
-        
-        return {
-            salt: Array.from(salt),
-            iv: Array.from(iv),
-            data: Array.from(new Uint8Array(ciphertext))
-        };
+        return { salt: Array.from(salt), iv: Array.from(iv), data: Array.from(new Uint8Array(ciphertext)) };
     }
 
     async function decryptData(pin, encryptedContainer) {
@@ -728,9 +793,7 @@
             const key = await getCryptoKey(pin, salt);
             const decrypted = await window.crypto.subtle.decrypt({ name: "AES-GCM", iv: iv }, key, data);
             return JSON.parse(new TextDecoder().decode(decrypted));
-        } catch(e) {
-            return null;
-        }
+        } catch(e) { return null; }
     }
 
     const _0xScalesDB = {
@@ -999,7 +1062,7 @@
         doc.setFont("Helvetica", "bold");
         doc.setFontSize(14);
         doc.setTextColor(30, 41, 59);
-        doc.text("RAPPORT CLINIQUE EXPERT — BOUSSOLE APEX v14.4", 20, 20);
+        doc.text("RAPPORT CLINIQUE EXPERT — BOUSSOLE APEX v14.5", 20, 20);
         
         doc.setFontSize(9);
         doc.setFont("Helvetica", "normal");
@@ -1055,7 +1118,7 @@
         
         doc.setFontSize(8);
         doc.setTextColor(150, 150, 150);
-        doc.text("Document généré localement par la Boussole Décisionnelle Apex v14.4 — Crypté & Souverain.", 20, 285);
+        doc.text("Document généré localement par la Boussole Décisionnelle Apex v14.5 — Crypté & Souverain.", 20, 285);
         
         doc.save("Rapport_Clinique_Apex_Expert.pdf");
     };
@@ -1221,7 +1284,7 @@
         _0x1f.reserves = document.getElementById('q-reserves').value;
         _0x1f.ifs = document.getElementById('q-ifs-part').value;
         let _0x38 = 80, _0x39 = 85, _0x3a = "Faible";
-        let _0x3b = `<div class="insight-item insight-success">✨ Analyse multi-axiale APEX v14.4 réussie.</div>`;
+        let _0x3b = `<div class="insight-item insight-success">✨ Analyse multi-axiale APEX v14.5 réussie.</div>`;
         if (_0x1f.somatics === 'freeze' || _0x1f.reserves === 'critical') {
             _0x38 = 35; _0x39 = 30; _0x3a = "ÉLEVÉ";
             _0x3b += `<div class="insight-item insight-warning">🚨 <strong>Shutdown Dorsal :</strong> Interdiction formelle de prendre une décision majeure aujourd'hui. Activez le minuteur de décantation.</div>`;
@@ -1253,7 +1316,7 @@
     };
 
     window.copyTherapistReport = function() {
-        const _0x3d = `### RAPPORT CLINIQUE APEX — BOUSSOLE DÉCISIONNELLE v14.4\n- Date: ${new Date().toLocaleString(_0x1a.h)}\n- Situation: ${_0x1f.decision || _0x1f.situation || 'N/A'}\n- Risque Agir: ${_0x1f.results ? _0x1f.results.actingRisk : 'N/A'}`;
+        const _0x3d = `### RAPPORT CLINIQUE APEX — BOUSSOLE DÉCISIONNELLE v14.5\n- Date: ${new Date().toLocaleString(_0x1a.h)}\n- Situation: ${_0x1f.decision || _0x1f.situation || 'N/A'}\n- Risque Agir: ${_0x1f.results ? _0x1f.results.actingRisk : 'N/A'}`;
         navigator.clipboard.writeText(_0x3d).then(() => alert("Rapport copié pour le thérapeute !"));
     };
 
@@ -1468,7 +1531,6 @@
         while(list.firstChild) list.removeChild(list.firstChild);
 
         if(hist && hist.length > 0) {
-            // Indicateur de tendance simple (comparaison chronologique)
             hist.forEach((i, idx) => {
                 let itemBox = document.createElement('div'); itemBox.className = 'vault-item';
                 let dateDiv = document.createElement('div'); dateDiv.className = 'date'; dateDiv.textContent = i.date;
@@ -1499,7 +1561,6 @@
         a.download = 'boussole_apex_encrypted_backup.json'; a.click();
     };
 
-    // Fonction d'import de sauvegarde chiffrée
     window.importVaultData = function(event) {
         const file = event.target.files[0];
         if(!file) return;
@@ -1507,7 +1568,6 @@
         reader.onload = async function(e) {
             try {
                 const content = e.target.result;
-                // Validation JSON structure
                 JSON.parse(content);
                 let pinTest = prompt("Entrez le code PIN associé à cette sauvegarde pour valider l'intégrité :");
                 if(!pinTest) return;
