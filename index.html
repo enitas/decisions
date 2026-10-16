@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Boussole Décisionnelle v14.3 APEX — Sécurisée & Souveraine</title>
+    <title>Boussole Décisionnelle v14.4 APEX — Édition Industrielle & Souveraine</title>
     
     <!-- PWA / Mobile -->
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -118,6 +118,7 @@
         .timer-display { font-size: 3rem; text-align: center; font-weight: bold; color: var(--amber); margin: 20px 0; font-variant-numeric: tabular-nums; letter-spacing: 2px;}
         .certificate-box { background: linear-gradient(135deg, #0b0f17 0%, #1e1b4b 100%); border: 2px solid var(--rose); border-radius: 12px; padding: 25px; text-align: center; margin-top: 15px; }
         .crisis-alert-banner { background: rgba(244, 63, 94, 0.2); border: 2px solid var(--warning); border-radius: 12px; padding: 20px; margin-bottom: 20px; display: none; }
+        .protocol-warning-banner { background: rgba(245, 158, 11, 0.15); border: 1px solid var(--amber); border-radius: 10px; padding: 12px 16px; margin-bottom: 15px; font-size: 0.85rem; color: var(--amber); display: none; }
         
         .scale-q-box { background: #04060a; border: 1px solid var(--border); padding: 15px; border-radius: 8px; margin-bottom: 15px; }
         .scale-q-title { font-weight: 600; margin-bottom: 10px; font-size: 0.92rem; color: #f1f5f9; }
@@ -139,8 +140,29 @@
 <body>
 
 <div class="container">
+    <!-- BANDEAU D'AVERTISSEMENT PROTOCOLE FILE:// -->
+    <div class="protocol-warning-banner" id="protocol-warning">
+        ⚠️ <strong>Avertissement technique :</strong> Vous ouvrez cette application directement via un fichier local (<code style="color:#fff;">file://</code>). Pour garantir le fonctionnement optimal du chiffrement sécurisé et de l'export PDF, il est recommandé de l'exécuter via un mini-serveur local (ex: <code style="color:#fff;">npx http-server</code>).
+    </div>
+
+    <!-- VUE DISCLAIMER / ONBOARDING LÉGAL -->
+    <div class="view" id="view-disclaimer" style="text-align: center; padding: 20px;">
+        <h1 style="color: var(--accent); margin-bottom: 15px;">🧭 Bienvenue dans la Boussole Apex v14.4</h1>
+        <div class="diagnostic-card" style="text-align: left; margin-bottom: 25px; border-color: var(--accent);">
+            <h3>Mentions Légales & Avertissement Clinique</h3>
+            <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.6;">
+                La Boussole Décisionnelle APEX est un outil souverain d'auto-observation, de structuration cognitive et d'aide à la décision. 
+                <strong>Elle ne se substitue en aucun cas à un diagnostic médical formel, un suivi psychiatrique ou une prise en charge thérapeutique professionnelle.</strong>
+            </p>
+            <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.6;">
+                Toutes vos données de santé sont chiffrées localement sur votre terminal (AES-GCM 256 bits). Aucun serveur tiers n'y a accès. En cas de crise aiguë ou de détresse vitale, veuillez contacter immédiatement le <strong>3114</strong> (Prévention Suicide) ou le <strong>15</strong> (SAMU).
+            </p>
+        </div>
+        <button onclick="acceptDisclaimer()" style="background: var(--accent); color: #030712; font-size: 1rem; padding: 14px 30px;">J'ai compris et j'accepte d'entrer</button>
+    </div>
+
     <div class="top-bar">
-        <div class="brand">🧭 BOUSSOLE DÉCISIONNELLE v14.3 APEX — Crypté & Souverain</div>
+        <div class="brand">🧭 BOUSSOLE DÉCISIONNELLE v14.4 APEX — Industriel & Souverain</div>
         <div class="controls">
             <button class="secondary" style="padding: 5px 10px; font-size: 0.75rem; border-color: var(--accent); color: var(--accent);" onclick="toggleLanguageMode()" id="lang-toggle-btn">Mode : Expert</button>
             <button class="secondary" style="padding: 5px 10px; font-size: 0.75rem;" onclick="toggleDysFont()">Police Dys</button>
@@ -150,25 +172,25 @@
 
     <div class="crisis-alert-banner" id="crisis-banner">
         <h3 style="color: var(--warning); margin-bottom: 8px;">🚨 Alerte de Sécurité & Plan de Crise Stanley-Brown</h3>
-        <p style="font-size: 0.9rem; margin-bottom: 12px;">Votre niveau de détresse indique un risque d'effondrement ou une idéation critique. Activez immédiatement votre protocole de sécurité et contactez le <strong>3114</strong>[cite: 1].</p>
+        <p style="font-size: 0.9rem; margin-bottom: 12px;">Votre niveau de détresse indique un risque d'effondrement ou une idéation critique. Activez immédiatement votre protocole de sécurité et contactez le <strong>3114</strong>.</p>
         <div style="display: flex; gap: 10px; flex-wrap: wrap;">
             <button onclick="openSafetyPlan()" style="background: var(--warning); color: #fff;">Ouvrir le Plan de Sécurité Guidé</button>
             <a href="tel:3114" style="text-decoration: none;"><button style="background: var(--accent); color: #030712;">Appeler le 3114</button></a>
         </div>
     </div>
 
-    <div class="view active" id="view-home">
-        <h1><span class="clinical-text">Méta-Diagnostic & Suite Apex v14.3</span><span class="simple-text">Tableau de Bord & Boussole Personnelle</span></h1>
-        <div class="subtitle"><span class="clinical-text">Architecture clinique multi-axiale sécurisée (Chiffrement AES-GCM 256 bits local), export PDF expert, échelles validées[cite: 1] et plan de crise Stanley-Brown[cite: 1].</span><span class="simple-text">Outils complets pour trier vos choix, suivre votre état et protéger votre énergie[cite: 1].</span></div>
+    <div class="view" id="view-home">
+        <h1><span class="clinical-text">Méta-Diagnostic & Suite Apex v14.4</span><span class="simple-text">Tableau de Bord & Boussole Personnelle</span></h1>
+        <div class="subtitle"><span class="clinical-text">Architecture clinique multi-axiale sécurisée (Chiffrement AES-GCM 256 bits local), portabilité des données, export PDF expert et plan de crise Stanley-Brown.</span><span class="simple-text">Outils complets pour trier vos choix, suivre votre état et protéger votre énergie.</span></div>
 
         <div class="mode-grid">
             <div class="mode-card" style="border-color: rgba(192, 132, 252, 0.8); background: linear-gradient(145deg, #06080d 0%, #170d24 100%); grid-column: span 2;" onclick="switchView('view-scales-hub')">
                 <h3 style="color: var(--purple); font-size: 1.15rem;">📊 Hub d'Auto-Évaluation Apex (7 Échelles Officielles)</h3>
-                <p><span class="clinical-text">PHQ-9, GAD-7, OCI-R, MDQ, ISI, ASRS (TDAH) et AQ-10 (Autisme) avec calcul automatique et coffre-fort crypté[cite: 1].</span><span class="simple-text">Évaluez votre anxiété, sommeil, moral et profil neurodéveloppemental avec les tests médicaux de référence.</span></p>
+                <p><span class="clinical-text">PHQ-9, GAD-7, OCI-R, MDQ, ISI, ASRS (TDAH) et AQ-10 (Autisme) avec calcul automatique et coffre-fort crypté.</span><span class="simple-text">Évaluez votre anxiété, sommeil, moral et profil neurodéveloppemental avec les tests médicaux de référence.</span></p>
             </div>
             <div class="mode-card" style="border-color: rgba(244, 63, 94, 0.8); background: linear-gradient(145deg, #06080d 0%, #240d12 100%);" onclick="openSafetyPlan()">
-                <h3 style="color: var(--warning);">🛡️ Plan de Sécurité Stanley-Brown[cite: 1]</h3>
-                <p>Protocole d'urgence structuré en 6 étapes pour traverser les crises aiguës en toute sécurité.</p>
+                <h3 style="color: var(--warning);">🛡️ Plan de Sécurité Stanley-Brown</h3>
+                <p>Protocole d'urgence en 6 étapes avec contacts d'urgence personnalisables.</p>
             </div>
             <div class="mode-card" style="border-color: rgba(20, 184, 166, 0.6); background: linear-gradient(145deg, #06080d 0%, #081a17 100%);" onclick="startParentProtocol()">
                 <h3 style="color: var(--teal);"><span class="clinical-text">👨‍👩‍👧 Espace Parent & Éducateur (7 Étapes)</span><span class="simple-text">👨‍👩‍👧 Guide de Crise Enfant</span></h3>
@@ -210,48 +232,48 @@
                 <h3 style="color: var(--amber);">⏳ Minuteur de Décantation</h3><p>Verrouillage temporaire 24h ou 72h.</p>
             </div>
             <div class="mode-card" onclick="switchView('view-resources')">
-                <h3>📚 Échelles & PDF Officiels Réf[cite: 1]</h3><p>Accès direct aux grilles de référence originales.</p>
+                <h3>📚 Échelles & PDF Officiels Réf</h3><p>Accès direct aux grilles de référence originales.</p>
             </div>
         </div>
-        <button class="secondary" onclick="openVault()" style="width: 100%;">🔒 Ouvrir le Coffre-Fort Crypté (Chiffrement AES-GCM)</button>
+        <button class="secondary" onclick="openVault()" style="width: 100%;">🔒 Ouvrir le Coffre-Fort Crypté (Chiffrement AES-GCM & Portabilité)</button>
     </div>
 
     <!-- HUB DES ÉCHELLES CLINIQUES APEX -->
     <div class="view" id="view-scales-hub">
         <h1>📊 Hub d'Auto-Évaluation Apex (7 Échelles)</h1>
-        <div class="subtitle">Questionnaires cliniques validés. Vos scores sont calculés instantanément et stockés de façon cryptée dans votre coffre-fort[cite: 1].</div>
+        <div class="subtitle">Questionnaires cliniques validés. Vos scores sont calculés instantanément et stockés de façon cryptée dans votre coffre-fort.</div>
         
         <div class="mode-grid">
             <div class="mode-card" style="border-color: var(--purple);" onclick="openInteractiveScale('phq9')">
-                <h3 style="color: var(--purple);">📉 PHQ-9 — Dépression & Anhédonie[cite: 1]</h3>
-                <p>Évaluation de la sévérité thymique sur 14 jours (avec alerte de sécurité intégrée)[cite: 1].</p>
+                <h3 style="color: var(--purple);">📉 PHQ-9 — Dépression & Anhédonie</h3>
+                <p>Évaluation de la sévérité thymique sur 14 jours (avec alerte de sécurité intégrée).</p>
             </div>
             <div class="mode-card" style="border-color: var(--accent);" onclick="openInteractiveScale('gad7')">
-                <h3 style="color: var(--accent);">😰 GAD-7 — Anxiété Généralisée[cite: 1]</h3>
+                <h3 style="color: var(--accent);">😰 GAD-7 — Anxiété Généralisée</h3>
                 <p>Mesure de l'intensité de l'anxiété et de la rumination d'inquiétude.</p>
             </div>
             <div class="mode-card" style="border-color: var(--rose);" onclick="openInteractiveScale('ocir')">
-                <h3 style="color: var(--rose);">🔄 OCI-R — Obsessions & Compulsions[cite: 1]</h3>
+                <h3 style="color: var(--rose);">🔄 OCI-R — Obsessions & Compulsions</h3>
                 <p>Inventaire des rituels de vérification, lavage et ordre (TOC).</p>
             </div>
             <div class="mode-card" style="border-color: var(--amber);" onclick="openInteractiveScale('mdq')">
-                <h3 style="color: var(--amber);">📈 MDQ — Spectre Bipolaire & Énergie[cite: 1]</h3>
+                <h3 style="color: var(--amber);">📈 MDQ — Spectre Bipolaire & Énergie</h3>
                 <p>Dépistage des épisodes d'hypomanie et de variation cyclique.</p>
             </div>
             <div class="mode-card" style="border-color: var(--teal);" onclick="openInteractiveScale('isi')">
-                <h3 style="color: var(--teal);">😴 ISI — Sévérité de l'Insomnie[cite: 1]</h3>
+                <h3 style="color: var(--teal);">😴 ISI — Sévérité de l'Insomnie</h3>
                 <p>Quantification de la qualité du sommeil et de son impact diurne.</p>
             </div>
             <div class="mode-card" style="border-color: var(--success);" onclick="openInteractiveScale('asrs')">
-                <h3 style="color: var(--success);">🌪️ ASRS v1.1 — TDAH Adulte[cite: 1]</h3>
+                <h3 style="color: var(--success);">🌪️ ASRS v1.1 — TDAH Adulte</h3>
                 <p>Échelle de dépistage de l'inattention et de l'hyperactivité chez l'adulte.</p>
             </div>
             <div class="mode-card" style="border-color: var(--purple);" onclick="openInteractiveScale('aq10')">
-                <h3 style="color: var(--purple);">🧩 AQ-10 — Spectre Autistique[cite: 1]</h3>
+                <h3 style="color: var(--purple);">🧩 AQ-10 — Spectre Autistique</h3>
                 <p>Dépistage rapide des traits autistiques et de la communication sociale.</p>
             </div>
             <div class="mode-card" style="border-color: var(--text-muted);" onclick="switchView('view-resources')">
-                <h3 style="color: var(--text-main);">📑 Accès Direct aux PDF Officiels[cite: 1]</h3>
+                <h3 style="color: var(--text-main);">📑 Accès Direct aux PDF Officiels</h3>
                 <p>Téléchargement des sources originales des grilles d'experts.</p>
             </div>
         </div>
@@ -265,14 +287,14 @@
         <div id="scale-runner-questions"></div>
         <div class="btn-group">
             <button class="secondary" onclick="switchView('view-scales-hub')">Annuler</button>
-            <button onclick="submitInteractiveScale()" style="background: var(--purple); color:#fff;">Valider & Enregistrer dans le Coffre-Fort[cite: 1]</button>
+            <button onclick="submitInteractiveScale()" style="background: var(--purple); color:#fff;">Valider & Enregistrer dans le Coffre-Fort</button>
         </div>
     </div>
 
-    <!-- PLAN DE SÉCURITÉ STANLEY-BROWN -->
+    <!-- PLAN DE SÉCURITÉ STANLEY-BROWN PERSONNALISABLE -->
     <div class="view" id="view-safety-plan">
-        <h1 style="color: var(--warning);">🛡️ Plan de Sécurité Personnel (Stanley-Brown)[cite: 1]</h1>
-        <div class="subtitle">Outil clinique de prévention du suicide et d'effondrement aigu. Remplissez ce plan à l'avance ou suivez-le pas à pas en cas de crise.</div>
+        <h1 style="color: var(--warning);">🛡️ Plan de Sécurité Personnel (Stanley-Brown)</h1>
+        <div class="subtitle">Outil clinique de prévention du suicide et d'effondrement aigu. Personnalisez vos contacts et consignes ci-dessous.</div>
         
         <div class="diagnostic-card" style="border-color: var(--warning);">
             <label>1. Signes avant-coureurs (Comment je sais que la crise commence ?)</label>
@@ -284,13 +306,13 @@
             <label>3. Personnes de distraction & Lieux sécurisants</label>
             <textarea id="sp-step3" rows="2" placeholder="Ex: Appeler un proche, aller marcher dans le parc municipal..."></textarea>
 
-            <label>4. Personnes ressources à contacter en cas de besoin absolu</label>
-            <textarea id="sp-step4" rows="2" placeholder="Ex: Nom et numéro d'un proche de confiance..."></textarea>
+            <label>4. Personnes ressources & Référents cliniques</label>
+            <textarea id="sp-step4" rows="2" placeholder="Ex: Dr Martin (Psychiatre) : 06 00 00 00 00 / Proche de confiance..."></textarea>
 
-            <label>5. Professionnels de santé & Urgences institutionnelles</label>
+            <label>5. Lignes d'urgence nationales / locales (Éditable)</label>
+            <input type="text" id="sp-emergency-line" value="France : 3114 (24/7, Gratuit) | Suisse : 143 | Belgique : 1813 | Québec : 1 866 APPELLE" style="margin-bottom: 15px;">
             <div style="background: #030508; padding: 12px; border-radius: 8px; margin-bottom: 20px; font-size: 0.9rem;">
-                📞 <strong>3114</strong> (Prévention Suicide - 24/7, Gratuit)[cite: 1]<br>
-                📞 <strong>15</strong> (SAMU) ou <strong>112</strong> (Urgences Européennes)
+                📞 <strong>SAMU : 15</strong> ou <strong>Urgences Européennes : 112</strong>
             </div>
 
             <label>6. Sécurisation de l'environnement (Retirer tout objet dangereux)</label>
@@ -582,7 +604,7 @@
 
     <!-- RESSOURCES & LIENS OFFICIELS -->
     <div class="view" id="view-resources">
-        <h1>📚 Échelles & PDF Officiels de Référence[cite: 1]</h1>
+        <h1>📚 Échelles & PDF Officiels de Référence</h1>
         <div class="subtitle">Accès direct aux questionnaires originaux et grilles de dépistage médicales en PDF :</div>
         <div class="diagnostic-card">
             <h3 style="color: var(--purple);">Humeur & Dépression</h3>
@@ -618,9 +640,9 @@
         <div class="btn-group"><button class="secondary" onclick="returnHome()">Retour</button></div>
     </div>
 
-    <!-- COFFRE-FORT CRYPTÉ AES-GCM -->
+    <!-- COFFRE-FORT CRYPTÉ AES-GCM AVEC IMPORT / EXPORT -->
     <div class="view" id="view-vault">
-        <h1>🔒 Coffre-Fort Crypté (Chiffrement AES-GCM 256 bits)</h1>
+        <h1>🔒 Coffre-Fort Crypté (AES-GCM & Portabilité)</h1>
         
         <div id="vault-auth-box" class="diagnostic-card" style="text-align: center; padding: 30px;">
             <p style="color: var(--text-muted); margin-bottom: 15px;">Entrez votre code PIN secret pour déchiffrer le coffre-fort local :</p>
@@ -631,7 +653,11 @@
 
         <div id="vault-content-box" style="display: none;">
             <div class="diagnostic-card"><div id="vault-history-list"></div><p id="vault-history-empty" style="font-style:italic; color:var(--text-muted);">Aucune donnée enregistrée.</p></div>
-            <button onclick="exportVaultData()" class="secondary" style="margin-right: 10px;">Exporter mes données (JSON chiffré)</button>
+            <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 15px;">
+                <button onclick="exportVaultData()" class="secondary">Exporter (Backup JSON)</button>
+                <button onclick="document.getElementById('import-vault-input').click()" class="secondary">Importer (Restaurer JSON)</button>
+                <input type="file" id="import-vault-input" style="display:none" accept=".json" onchange="importVaultData(event)">
+            </div>
             <button onclick="clearVaultData()" class="secondary danger">Effacer l'historique</button>
         </div>
 
@@ -639,14 +665,33 @@
     </div>
 </div>
 
-<!-- MOTEUR APEX V14.3 SÉCURISÉ (CRYPTOGRAPHIE WEB CRYPTO API) -->
+<!-- MOTEUR APEX V14.4 (INDUSTRIEL & SOUVERAIN) -->
 <script>
 (function(){
-    const _0x1a = { s: "standard", p: "parent", f: "flash", h: "fr-FR", d1: "apex_vault_encrypted", d2: "apex_wall", d3: "apex_dump", d4: "apex_timer_end", d5: "apex_safety" };
+    const _0x1a = { s: "standard", p: "parent", f: "flash", h: "fr-FR", d1: "apex_vault_encrypted", d2: "apex_wall", d3: "apex_dump", d4: "apex_timer_end", d5: "apex_safety", disclaimer: "apex_disclaimer_accepted" };
     let _0x1b = _0x1a.s, _0x1c = 1, _0x1d = 7, _0x1e = 1, _0x1f = {};
     let _currentActivePin = null;
 
-    // --- MOTEUR DE CHIFFREMENT AES-GCM & PBKDF2 ---
+    // Sentinelle Protocole file://
+    window.addEventListener('DOMContentLoaded', () => {
+        if (window.location.protocol === 'file:') {
+            const warningBanner = document.getElementById('protocol-warning');
+            if (warningBanner) warningBanner.style.display = 'block';
+        }
+        
+        // Vérification de l'Onboarding Disclaimer
+        if (!localStorage.getItem(_0x1a.disclaimer)) {
+            switchView('view-disclaimer');
+        } else {
+            switchView('view-home');
+        }
+    });
+
+    window.acceptDisclaimer = function() {
+        localStorage.setItem(_0x1a.disclaimer, 'true');
+        switchView('view-home');
+    };
+
     async function getCryptoKey(pin, salt) {
         const enc = new TextEncoder();
         const keyMaterial = await window.crypto.subtle.importKey(
@@ -684,15 +729,13 @@
             const decrypted = await window.crypto.subtle.decrypt({ name: "AES-GCM", iv: iv }, key, data);
             return JSON.parse(new TextDecoder().decode(decrypted));
         } catch(e) {
-            return null; // Échec du déchiffrement (mauvais PIN ou altération)
+            return null;
         }
     }
-    // ----------------------------------------------
 
-    // BASE DE DONNÉES CLINIQUES APEX v14.3
     const _0xScalesDB = {
         phq9: {
-            title: "📉 PHQ-9 — Dépression, Anhédonie & Risque Vital[cite: 1]",
+            title: "📉 PHQ-9 — Dépression, Anhédonie & Risque Vital",
             subtitle: "Au cours des 14 derniers jours, évaluez la fréquence de ces manifestations sémiologiques :",
             opts: ["Absence (0)", "Plusieurs jours (1)", "Plus de 50% du temps (2)", "Quasiment tous les jours (3)"],
             questions: [
@@ -718,7 +761,7 @@
             }
         },
         gad7: {
-            title: "😰 GAD-7 — Anxiété Généralisée[cite: 1]",
+            title: "😰 GAD-7 — Anxiété Généralisée",
             subtitle: "Au cours des 2 dernières semaines, à quelle fréquence avez-vous été gêné(e) par :",
             opts: ["Jamais (0)", "Plusieurs jours (1)", "Plus d'1 jour sur 2 (2)", "Presque tous les jours (3)"],
             questions: [
@@ -740,7 +783,7 @@
             }
         },
         ocir: {
-            title: "🔄 OCI-R — Inventaire des Obsessions et Compulsions (TOC)[cite: 1]",
+            title: "🔄 OCI-R — Inventaire des Obsessions et Compulsions (TOC)",
             subtitle: "À quel point ces expériences vous ont-elles gêné(e) au cours du mois dernier ?",
             opts: ["Pas du tout (0)", "Un peu (1)", "Moyennement (2)", "Beaucoup (3)", "Extrêmement (4)"],
             questions: [
@@ -758,7 +801,7 @@
             }
         },
         mdq: {
-            title: "📈 MDQ — Spectre Bipolaire & Énergie[cite: 1]",
+            title: "📈 MDQ — Spectre Bipolaire & Énergie",
             subtitle: "Y a-t-il eu une période où vous étiez si exalté(e) ou hyperactif(ve) que cela vous a posé problème ?",
             opts: ["Non (0)", "Oui (1)"],
             questions: [
@@ -777,7 +820,7 @@
             }
         },
         isi: {
-            title: "😴 ISI — Index de Sévérité de l'Insomnie[cite: 1]",
+            title: "😴 ISI — Index de Sévérité de l'Insomnie",
             subtitle: "Veuillez évaluer la sévérité de vos difficultés de sommeil sur le dernier mois :",
             opts: ["Aucune (0)", "Légère (1)", "Moyenne (2)", "Sévère (3)", "Très sévère (4)"],
             questions: [
@@ -797,7 +840,7 @@
             }
         },
         asrs: {
-            title: "🌪️ ASRS v1.1 — Dépistage TDAH Adulte[cite: 1]",
+            title: "🌪️ ASRS v1.1 — Dépistage TDAH Adulte",
             subtitle: "Fréquence des manifestations cliniques au cours des 6 derniers mois :",
             opts: ["Jamais (0)", "Rarement (1)", "Parfois (2)", "Souvent (3)", "Très souvent (4)"],
             questions: [
@@ -815,7 +858,7 @@
             }
         },
         aq10: {
-            title: "🧩 AQ-10 — Dépistage Rapide du Spectre Autistique[cite: 1]",
+            title: "🧩 AQ-10 — Dépistage Rapide du Spectre Autistique",
             subtitle: "Indiquez votre degré d'accord avec les affirmations suivantes :",
             opts: ["Tout à fait d'accord (1)", "Plutôt d'accord (1)", "Plutôt pas d'accord (0)", "Pas du tout d'accord (0)"],
             questions: [
@@ -912,7 +955,7 @@
             console.error("Erreur d'écriture sécurisée cryptée :", e);
         }
         
-        alert(`Résultat calculé :\n\n${res.text}\n\nEnregistré et chiffré dans le coffre-fort[cite: 1].`);
+        alert(`Résultat calculé :\n\n${res.text}\n\nEnregistré et chiffré dans le coffre-fort.`);
         window.openVault();
     };
 
@@ -926,6 +969,7 @@
                 document.getElementById('sp-step2').value = data.s2 || '';
                 document.getElementById('sp-step3').value = data.s3 || '';
                 document.getElementById('sp-step4').value = data.s4 || '';
+                document.getElementById('sp-emergency-line').value = data.s5 || '';
                 document.getElementById('sp-step6').value = data.s6 || '';
             } catch(e) {}
         }
@@ -937,13 +981,13 @@
             s2: document.getElementById('sp-step2').value,
             s3: document.getElementById('sp-step3').value,
             s4: document.getElementById('sp-step4').value,
+            s5: document.getElementById('sp-emergency-line').value,
             s6: document.getElementById('sp-step6').value
         };
         localStorage.setItem(_0x1a.d5, JSON.stringify(plan));
         alert("Plan de Sécurité Stanley-Brown enregistré avec succès dans votre espace souverain.");
     };
 
-    // GÉNÉRATION DE RAPPORT EXPERT PDF LOCAL (jsPDF)
     window.generateExpertPDF = function() {
         if (!window.jspdf) {
             alert("Erreur : La bibliothèque jsPDF n'a pas pu être chargée.");
@@ -955,7 +999,7 @@
         doc.setFont("Helvetica", "bold");
         doc.setFontSize(14);
         doc.setTextColor(30, 41, 59);
-        doc.text("RAPPORT CLINIQUE EXPERT — BOUSSOLE APEX v14.3", 20, 20);
+        doc.text("RAPPORT CLINIQUE EXPERT — BOUSSOLE APEX v14.4", 20, 20);
         
         doc.setFontSize(9);
         doc.setFont("Helvetica", "normal");
@@ -995,7 +1039,7 @@
         doc.setFont("Helvetica", "bold");
         doc.setFontSize(11);
         doc.setTextColor(15, 23, 42);
-        doc.text("3. Plan de Sécurité & Vigilances Actives (Stanley-Brown)[cite: 1] :", 20, y);
+        doc.text("3. Plan de Sécurité & Vigilances Actives (Stanley-Brown) :", 20, y);
         y += 7;
         
         doc.setFont("Helvetica", "normal");
@@ -1003,14 +1047,15 @@
         const s1 = document.getElementById('sp-step1')?.value || "Non renseigné";
         const s2 = document.getElementById('sp-step2')?.value || "Non renseigné";
         const s4 = document.getElementById('sp-step4')?.value || "Non renseigné";
+        const s5 = document.getElementById('sp-emergency-line')?.value || "3114";
         
-        const planText = `• Signes avant-coureurs : ${s1}\n• Stratégies d'auto-apaisement : ${s2}\n• Personnes ressources : ${s4}\n\nUrgences Médicales : SAMU (15) ou 3114 (Prévention Suicide 24/7)[cite: 1].`;
+        const planText = `• Signes avant-coureurs : ${s1}\n• Stratégies d'auto-apaisement : ${s2}\n• Personnes ressources : ${s4}\n• Contacts d'urgence : ${s5}\n\nUrgences Médicales : SAMU (15) ou Urgences (112).`;
         const splitPlan = doc.splitTextToSize(planText, 170);
         doc.text(splitPlan, 20, y);
         
         doc.setFontSize(8);
         doc.setTextColor(150, 150, 150);
-        doc.text("Document généré localement par la Boussole Décisionnelle Apex v14.3 — Crypté & Souverain[cite: 1].", 20, 285);
+        doc.text("Document généré localement par la Boussole Décisionnelle Apex v14.4 — Crypté & Souverain.", 20, 285);
         
         doc.save("Rapport_Clinique_Apex_Expert.pdf");
     };
@@ -1147,7 +1192,7 @@
         }
         _0x1f.results = { integrity: _0x33, nervous: _0x34, actingRisk: _0x35, insights: _0x36, date: new Date().toLocaleString(_0x1a.h) };
         
-        if(_0x0activePin) {
+        if(_currentActivePin) {
             try {
                 let encryptedRaw = localStorage.getItem(_0x1a.d1);
                 let hist = [];
@@ -1176,14 +1221,14 @@
         _0x1f.reserves = document.getElementById('q-reserves').value;
         _0x1f.ifs = document.getElementById('q-ifs-part').value;
         let _0x38 = 80, _0x39 = 85, _0x3a = "Faible";
-        let _0x3b = `<div class="insight-item insight-success">✨ Analyse multi-axiale APEX v14.3 réussie.</div>`;
+        let _0x3b = `<div class="insight-item insight-success">✨ Analyse multi-axiale APEX v14.4 réussie.</div>`;
         if (_0x1f.somatics === 'freeze' || _0x1f.reserves === 'critical') {
             _0x38 = 35; _0x39 = 30; _0x3a = "ÉLEVÉ";
             _0x3b += `<div class="insight-item insight-warning">🚨 <strong>Shutdown Dorsal :</strong> Interdiction formelle de prendre une décision majeure aujourd'hui. Activez le minuteur de décantation.</div>`;
         }
         _0x1f.results = { integrity: _0x38, nervous: _0x39, actingRisk: _0x3a, insights: _0x3b, date: new Date().toLocaleString(_0x1a.h) };
         
-        if(_0xcurrentActivePin) {
+        if(_currentActivePin) {
             try {
                 let encryptedRaw = localStorage.getItem(_0x1a.d1);
                 let hist = [];
@@ -1208,7 +1253,7 @@
     };
 
     window.copyTherapistReport = function() {
-        const _0x3d = `### RAPPORT CLINIQUE APEX — BOUSSOLE DÉCISIONNELLE v14.3\n- Date: ${new Date().toLocaleString(_0x1a.h)}\n- Situation: ${_0x1f.decision || _0x1f.situation || 'N/A'}\n- Risque Agir: ${_0x1f.results ? _0x1f.results.actingRisk : 'N/A'}`;
+        const _0x3d = `### RAPPORT CLINIQUE APEX — BOUSSOLE DÉCISIONNELLE v14.4\n- Date: ${new Date().toLocaleString(_0x1a.h)}\n- Situation: ${_0x1f.decision || _0x1f.situation || 'N/A'}\n- Risque Agir: ${_0x1f.results ? _0x1f.results.actingRisk : 'N/A'}`;
         navigator.clipboard.writeText(_0x3d).then(() => alert("Rapport copié pour le thérapeute !"));
     };
 
@@ -1383,7 +1428,6 @@
         }
     };
 
-    // GESTION DU COFFRE-FORT CRYPTÉ (AES-GCM)
     window.openVault = function() {
         window.switchView('view-vault');
         document.getElementById('vault-auth-box').style.display = 'block';
@@ -1397,7 +1441,6 @@
 
         let encryptedRaw = localStorage.getItem(_0x1a.d1);
         if(!encryptedRaw) {
-            // Premier enregistrement : initialisation du coffre chiffré
             let initialContainer = await encryptData(pinInput, []);
             localStorage.setItem(_0x1a.d1, JSON.stringify(initialContainer));
             _currentActivePin = pinInput;
@@ -1425,7 +1468,8 @@
         while(list.firstChild) list.removeChild(list.firstChild);
 
         if(hist && hist.length > 0) {
-            hist.forEach(i => {
+            // Indicateur de tendance simple (comparaison chronologique)
+            hist.forEach((i, idx) => {
                 let itemBox = document.createElement('div'); itemBox.className = 'vault-item';
                 let dateDiv = document.createElement('div'); dateDiv.className = 'date'; dateDiv.textContent = i.date;
                 let typeDiv = document.createElement('div'); typeDiv.className = 'type';
@@ -1453,6 +1497,36 @@
         const blob = new Blob([encryptedRaw], {type: 'application/json'});
         const a = document.createElement('a'); a.href = URL.createObjectURL(blob);
         a.download = 'boussole_apex_encrypted_backup.json'; a.click();
+    };
+
+    // Fonction d'import de sauvegarde chiffrée
+    window.importVaultData = function(event) {
+        const file = event.target.files[0];
+        if(!file) return;
+        const reader = new FileReader();
+        reader.onload = async function(e) {
+            try {
+                const content = e.target.result;
+                // Validation JSON structure
+                JSON.parse(content);
+                let pinTest = prompt("Entrez le code PIN associé à cette sauvegarde pour valider l'intégrité :");
+                if(!pinTest) return;
+                let check = await decryptData(pinTest, JSON.parse(content));
+                if(check !== null) {
+                    localStorage.setItem(_0x1a.d1, content);
+                    alert("Sauvegarde importée et restaurée avec succès !");
+                    _currentActivePin = pinTest;
+                    document.getElementById('vault-auth-box').style.display = 'none';
+                    document.getElementById('vault-content-box').style.display = 'block';
+                    _0xLoadVaultData(check);
+                } else {
+                    alert("Échec de la restauration : Code PIN incorrect ou fichier invalide.");
+                }
+            } catch(err) {
+                alert("Erreur critique lors de la lecture du fichier de sauvegarde.");
+            }
+        };
+        reader.readAsText(file);
     };
 
     window.clearVaultData = function() {
